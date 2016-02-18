@@ -9,9 +9,3 @@ void Image::draw(ShadowBuffer& sb) {
         sb.plot((int)(points[i].x), (int)(points[i].y), color);
     }
 }
-
-void Image::clear(ShadowBuffer& sb) {
-    for (int i = 0; i < points.size(); ++i) {
-        sb.plot(points[i].x, points[i].y, sb.backgroundColor);
-    }
-}

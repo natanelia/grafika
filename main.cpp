@@ -2,6 +2,7 @@
 #include "ShadowBuffer.h"
 #include "util.cpp"
 #include "Image.h"
+#include "Line.h"
 
 #include "test.cpp"
 
@@ -13,8 +14,11 @@ using namespace std;
 
 int performTests() {
     Test test;
-    test.testRedraw();
+    test.testShapeGroup();
+    test.testShape();
+    test.testLine();
     test.testImage();
+    test.testRedraw();
 }
 
 int main() {

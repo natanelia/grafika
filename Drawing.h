@@ -22,7 +22,6 @@ class Drawing {
         Drawing(vector<Point>& points);
 
         virtual void draw(ShadowBuffer& sb)=0;
-        //virtual void clear()=0;
 
         virtual void rotate(Point axis, float angle);
         virtual void translate(float dX, float dY);

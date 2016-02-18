@@ -13,7 +13,6 @@ public:
     Image(Point points[], int n);
 
     void draw(ShadowBuffer &sb);
-    void clear(ShadowBuffer &sb);
 };
 
 #endif
