@@ -14,11 +14,11 @@ using namespace std;
 
 int performTests() {
     Test test;
+    test.testRedraw();
     test.testShapeGroup();
     test.testShape();
     test.testLine();
     test.testImage();
-    test.testRedraw();
 }
 
 int main() {

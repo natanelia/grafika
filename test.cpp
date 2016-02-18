@@ -191,6 +191,8 @@ public:
                     }
                 }
             }
+            sb3.offsetX -= 2;
+            sb3.offsetY += 4;
             //END create boxes
 
             sb.draw();
