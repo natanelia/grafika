@@ -3,6 +3,7 @@
 Shape::Shape(vector<Point>& points) : Drawing(points) {}
 
 Shape::Shape(Point points[], int n) : Drawing(points, n) {}
+Shape::~Shape(){}
 
 void Shape::draw(ShadowBuffer& sb) {
     vector<Triangle> triangles = Triangulate::VectorToTriangleVector(points);
@@ -74,6 +75,13 @@ vector<Point> Shape::listAllPointinLine (Point P1, Point P2) {
   }
   return v;
 }
+
+
+void Shape::setColor(Color color){
+    this->color = color;
+}
+
+
 
 void Shape::fillTriangle(Point P1, Point P2, Point P3, Color c, ShadowBuffer& sb) {
     vector<Point> v1;

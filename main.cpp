@@ -10,21 +10,25 @@
 #include <ctime>
 #include <iostream>
 
+
 using namespace std;
 
 int performTests() {
     Test test;
-    test.testRedraw();
+    //test.testRedraw();
     test.testShapeGroup();
-    test.testShape();
-    test.testLine();
-    test.testImage();
+    //test.testShape();
+   /* test.testLine();
+    test.testImage();*/
 }
 
 int main() {
     srand(time(NULL));
 
     performTests();
+
+
+
 
     return 0;
 }

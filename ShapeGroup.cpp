@@ -2,12 +2,14 @@
 
 ShapeGroup::ShapeGroup(string objName) {
     Util util;
-    map<string, vector<Point> > point = util.readObject("point.txt");
-    vector<vector<Point> > points = util.convertPoint(point, objName, 0, 0, 1, 1);
+    map<string, vector<Point> > point = util.readObject("peta.txt");
+    vector<vector<Point> > points = util.convertPoint(point, objName, 0, 0, 10, 10);
 
+    cout<< points.size()<<endl;
     for (int j = 0; j < points.size(); j++) {
         Shape shape(points[j]);
         shapes.push_back(shape);
+        cout<< points[j].size() <<endl;
     }
 }
 

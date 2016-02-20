@@ -16,8 +16,11 @@ public:
 
     Shape(vector<Point>& points);
     Shape(Point points[], int n);
+    ~Shape();
 
     void draw(ShadowBuffer& sb);
+
+    void setColor(Color color);
 };
 
 #endif
