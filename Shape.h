@@ -19,7 +19,8 @@ public:
     ~Shape();
 
     void draw(ShadowBuffer& sb);
-
+    void drawView(ShadowBuffer& sb);
+	void drawBorder(Color c, ShadowBuffer& sb);
     void setColor(Color color);
 };
 

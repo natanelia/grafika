@@ -12,6 +12,13 @@ void Shape::draw(ShadowBuffer& sb) {
     }
 }
 
+void Shape::drawView(ShadowBuffer& sb) {
+    vector<Triangle> triangles = Triangulate::VectorToTriangleVector(clippedPoint);
+    for (int i = 0; i < triangles.size(); i++){
+        fillTriangle(triangles[i].P1, triangles[i].P2,triangles[i].P3, this->color, sb);
+    }
+}
+
 vector<Point> Shape::listAllPointinLine (Point P1, Point P2) {
     //this->drawToBuffer();
     long int location;
@@ -76,12 +83,26 @@ vector<Point> Shape::listAllPointinLine (Point P1, Point P2) {
   return v;
 }
 
+void Shape::drawBorder(Color c, ShadowBuffer& sb){
+    for(int i=0; i< points.size(); i++){
+        vector<Point> p;
+        if(i==points.size()-1){
+            p.push_back(points[i]);
+            p.push_back(points[0]);
+    
+        }else{
+            p.push_back(points[i]);
+            p.push_back(points[i+1]);
+        }
+        Line line(p);
+        line.color = c;
+        line.draw(sb);
+    }
+}
 
 void Shape::setColor(Color color){
     this->color = color;
 }
-
-
 
 void Shape::fillTriangle(Point P1, Point P2, Point P3, Color c, ShadowBuffer& sb) {
     vector<Point> v1;

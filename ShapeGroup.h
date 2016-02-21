@@ -12,9 +12,11 @@ public:
     ShapeGroup(string objName);
 
     void draw(ShadowBuffer& sb);
+    void drawView(ShadowBuffer& sb);
     void translate(float dX, float dY);
     void scale(Point axis, float scalingFactorX, float scalingFactorY);
     void rotate(Point axis, float angle);
+    void clip(Point min, Point max, float scale);
 
     Point * getTipPoints();
 };

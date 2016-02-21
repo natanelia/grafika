@@ -16,6 +16,7 @@ class Drawing {
     public:
         Point anchor;
         vector<Point> points;
+        vector<Point> clippedPoint;
 
         Drawing() {}
         Drawing(Point points[], int n);
@@ -28,5 +29,10 @@ class Drawing {
         virtual void scale(Point axis, float scalingFactorX, float scalingFactorY);
 
         virtual Point * getTipPoints();
+        virtual void clip(Point min, Point max, float scale);
+        virtual int getBinaryCode(Point P, Point min, Point max);
+        virtual Point* getIntersection(Point P, Point Q, Point min, Point max);
+        virtual int andBinary(int code1, int code2);
+        virtual Point findNearestPoint(Point P, Point min, Point max);
 };
 #endif

@@ -5,17 +5,23 @@ ShapeGroup::ShapeGroup(string objName) {
     map<string, vector<Point> > point = util.readObject("peta.txt");
     vector<vector<Point> > points = util.convertPoint(point, objName, 0, 0, 10, 10);
 
-    cout<< points.size()<<endl;
     for (int j = 0; j < points.size(); j++) {
         Shape shape(points[j]);
         shapes.push_back(shape);
-        cout<< points[j].size() <<endl;
     }
 }
 
 void ShapeGroup::draw(ShadowBuffer& sb) {
     for (int i = 0; i < shapes.size(); i++) {
         shapes[i].draw(sb);
+        Color c(225,225,0);
+        //shapes[i].drawBorder(c, sb);
+    }
+}
+
+void ShapeGroup::drawView(ShadowBuffer& sb) {
+    for (int i = 0; i < shapes.size(); i++) {
+        shapes[i].drawView(sb);
     }
 }
 
@@ -28,12 +34,27 @@ void ShapeGroup::translate(float dX, float dY) {
 void ShapeGroup::scale(Point axis, float scalingFactorX, float scalingFactorY) {
     for (int i = 0; i < shapes.size(); i++) {
         shapes[i].scale(axis, scalingFactorX, scalingFactorY);
+
+        /*for (int i = 0 ; i < shapes[i].points.size() ; i++){
+            shapes[i].points[i].x += axis.x;
+            shapes[i].points[i].y +=  axis.y;
+            shapes[i].points[i].x *= scalingFactorX;
+            shapes[i].points[i].y *=  scalingFactorY;
+            shapes[i].points[i].x -= axis.x;
+            shapes[i].points[i].y -=  axis.y;
+        }*/
     }
 }
 
 void ShapeGroup::rotate(Point axis, float angle) {
     for (int i = 0; i < shapes.size(); i++) {
         shapes[i].rotate(axis, angle);
+    }
+}
+
+void ShapeGroup::clip(Point min, Point max, float scale) {
+    for (int i = 0; i < shapes.size(); i++) {
+        shapes[i].clip(min,max,scale);
     }
 }
 

@@ -47,7 +47,7 @@ public:
         fb.backgroundColor = Color(0, 20, 30);
         sb.backgroundColor = Color(0, 20, 30);
 
-        map<string, vector<Point> > point = util.readObject("point.txt");
+        map<string, vector<Point> > point = util.readObject("Peta.txt");
         Shape shape(util.convertPoint(point, "Baling", 0, 0, 2, 2)[0]);
 
         for (int i = 0; i < 360; i++) {
@@ -70,22 +70,20 @@ public:
         fb.backgroundColor = Color(0, 20, 30);
         sb.backgroundColor = Color(0, 20, 30);
 
-        ShapeGroup helikopter("Helikopter");
-
-        helikopter.translate(500, 500);
+        ShapeGroup indonesia("Peta");
 
         for (int i = 0; i < 180; i++) {
-            Point * tipPoints = helikopter.getTipPoints();
+            Point * tipPoints = indonesia.getTipPoints();
             Point midAxis((tipPoints[0].x + tipPoints[1].x) / 2, (tipPoints[0].y + tipPoints[1].y) / 2);
-            helikopter.rotate(midAxis, 5);
-            helikopter.scale(midAxis, 1.005, 1.005);
+            indonesia.rotate(midAxis, 5);
+            indonesia.scale(midAxis, 1.005, 1.005);
 
-            for (int i = 0; i < helikopter.shapes.size(); i++) {
-                helikopter.shapes[i].color = Color(rand() % 255, rand() % 255, rand() % 255);
+            for (int i = 0; i < indonesia.shapes.size(); i++) {
+                indonesia.shapes[i].color = Color(rand() % 255, rand() % 255, rand() % 255);
             }
 
             sb.clear();
-            helikopter.draw(sb);
+            indonesia.draw(sb);
             fb.draw(sb);
         }
     }

@@ -46,6 +46,7 @@ public:
         for (int j = 0; j < points.size(); j++){
             if (points[j].x == -1000 && points[j].y == -1000) {
                 image.push_back(component);
+                component.clear();
             } else {
                 p.x = a + points[j].x * x;
                 p.y = b + points[j].y * y;
