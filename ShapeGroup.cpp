@@ -3,16 +3,16 @@
 ShapeGroup::ShapeGroup(string objName) {
     Util util;
     map<string, vector<Point> > point = util.readObject("point3d.txt");
-    vector<vector<Point> > points = util.convertPoint(point, objName, 20, 20, 20, 10,  10, 10);
+    vector<vector<Point> > points = util.convertPoint(point, objName, 20, 20, 0, 10,  10, 10);
 
     for (int j = 0; j < points.size(); j++) {
         Shape shape(points[j]);
         shape.color= Color(225,0,0);
         shapes.push_back(shape);
-        cout<<j<<endl;
-        for(int i = 0; i < points[j].size(); i++){
-            cout<<i<<". x: "<<points[j][i].x<<" y; "<<points[j][i].y<<" z: "<<points[j][i].z<<endl;
-        }
+        // cout<<j<<endl;
+        // for(int i = 0; i < points[j].size(); i++){
+        //     cout<<i<<". x: "<<points[j][i].x<<" y; "<<points[j][i].y<<" z: "<<points[j][i].z<<endl;
+        // }
     }
 }
 
@@ -119,13 +119,15 @@ void ShapeGroup::setPointToDraw(){
     pointToPrint.clear();
     int offsetX = 20;
     int offsetY = 20;
-    cout<<"CEK"<<endl;
+    //cout<<"CEK"<<endl;
     for(int i=0; i<shapes.size(); i++){
         vector<Point> temp;
-        cout<<i<<endl;
+        //cout<<i<<endl;
         for(int j=0; j<shapes[i].points.size(); j++){
-            Point p((offsetX + (shapes[i].points[j].x - offsetX) * pow((1.3),(shapes[i].points[j].z - offsetX) * 0.1)), (offsetY + (shapes[i].points[j].y - offsetY) * pow((1.3),(shapes[i].points[j].z - offsetY) * 0.1)), shapes[i].points[j].z );
-            cout<<j<<" x: "<<shapes[i].points[j].x * pow((1.3),shapes[i].points[j].z * 0.1)<<" y: "<<shapes[i].points[j].y * pow((1.3),shapes[i].points[j].z * 0.1)<<endl;
+            float newX = (offsetX + (shapes[i].points[j].x - offsetX) * pow((1.3),shapes[i].points[j].z * 0.1));
+            float newY = (offsetY + (shapes[i].points[j].y - offsetY) * pow((1.3),shapes[i].points[j].z * 0.1));
+            Point p(newX, newY, shapes[i].points[j].z );
+            //cout<<j<<" x: "<<newX<<" y: "<<newY<<endl;
             temp.push_back(p);
         }
         pointToPrint.push_back(temp);
