@@ -1,6 +1,6 @@
 #ifndef _DRAWING
 #define _DRAWING
-#include "Point.cpp"
+#include "Point.h"
 #include "Color.h"
 #include "ShadowBuffer.h"
 #include <vector>

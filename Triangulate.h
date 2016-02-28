@@ -37,7 +37,7 @@
 
 
 #include <vector>  // Include STL vector class.
-#include "Point.cpp"
+#include "Point.h"
 #include "Triangle.h"
 
 using namespace std;

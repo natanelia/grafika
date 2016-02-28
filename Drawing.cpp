@@ -99,8 +99,8 @@ void Drawing::scale(Point axis, float scalingFactorX, float scalingFactorY) {
 Point * Drawing::getTipPoints() {
     Point * p = new Point[2];
 
-    p[0] = Point(points.at(0).x, points.at(0).y);
-    p[1] = Point(points.at(0).x, points.at(0).y);
+    p[0] = Point(points.at(0).x, points.at(0).y, points.at(0).z);
+    p[1] = Point(points.at(0).x, points.at(0).y, points.at(0).z);
 
     for (int i = 1; i < points.size(); i++) {
         if (p[0].x > points[i].x) {

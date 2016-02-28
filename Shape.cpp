@@ -79,7 +79,7 @@ void Shape::scanLineFill(vector<Point> v, ShadowBuffer& sb)
                 if(p1.y > p2.y){
                     std::swap(p1,p2);
                 }
-                Point intersect(intersectX, i);
+                Point intersect(intersectX, i, 0);
                 if(intersect.y == p2.y)
                     continue;
                     ListOfIntersectPoints.push_back(intersect);

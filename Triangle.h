@@ -1,7 +1,7 @@
 #ifndef __TRIANGLE
 #define __TRIANGLE
 
-#include "Point.cpp"
+#include "Point.h"
 
 class Triangle {
 public:

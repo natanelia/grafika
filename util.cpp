@@ -1,7 +1,7 @@
 #ifndef __UTIL
 #define __UTIL
 
-#include "Point.cpp"
+#include "Point.h"
 
 #include <iostream>
 #include <fstream>
@@ -14,7 +14,7 @@ using namespace std;
 
 class Util {
 public:
-    static vector<Point>& convertImageFile(string fileName) {
+    /*static vector<Point>& convertImageFile(string fileName) {
         ifstream file(fileName.c_str());
         string str;
         int x, y;
@@ -35,21 +35,22 @@ public:
 
         file.close();
         return *points;
-    }
+    }*/
 
-    static vector<vector<Point> > convertPoint(map<string, vector<Point> > object, string word, int a, int b, int x, int y) {
+    static vector<vector<Point> > convertPoint(map<string, vector<Point> > object, string word, int a, int b, int c, int x, int y, int z) {
         Point p;
 
         vector<vector<Point> > image;
         vector<Point> points = object.find(word)->second;
         vector<Point> component;
         for (int j = 0; j < points.size(); j++){
-            if (points[j].x == -1000 && points[j].y == -1000) {
+            if (points[j].x == -1000 && points[j].y == -1000 && points[j].z == -1000) {
                 image.push_back(component);
                 component.clear();
             } else {
                 p.x = a + points[j].x * x;
                 p.y = b + points[j].y * y;
+                p.z = c + points[j].z * z;
                 component.push_back(p);
             }
         }
@@ -63,6 +64,7 @@ public:
         string str;
         map<string, vector<Point> > objects;
         while(getline(file,str)) {
+
             string key = "";
 
             //ambil key
@@ -86,19 +88,29 @@ public:
                     }
 
                     int x = atoi(temp.c_str());
-
                     //Ambil y
+                    i++;
+                    temp = "";
+                    while(str[i]!=',') {
+                        temp += str[i];
+                        i++;
+                    }
+                    int y = atoi(temp.c_str());
+
+                    
+                    //Ambil z
                     i++;
                     temp = "";
                     while(str[i]!=' ' && str[i]!=';') {
                         temp += str[i];
                         i++;
                     }
-                    int y = atoi(temp.c_str());
+                    int z = atoi(temp.c_str());
 
                     //Isi point
                     point.x = x;
                     point.y = y;
+                    point.z = z;
 
                     points.push_back(point);
                 } else {

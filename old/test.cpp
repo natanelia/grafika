@@ -24,13 +24,13 @@ public:
         sb.backgroundColor = Color(0, 20, 30);
 
         vector<Point> points;
-        points.push_back(Point(0, 20));
-        points.push_back(Point(800, 500));
+        points.push_back(Point(0, 20,20));
+        points.push_back(Point(800, 500, 300));
         Line line(points);
 
         for (int i = 0; i < 360; i++) {
             Point * tipPoints = line.getTipPoints();
-            Point midAxis((tipPoints[0].x + tipPoints[1].x) / 2, (tipPoints[0].y + tipPoints[1].y) / 2);
+            Point midAxis((tipPoints[0].x + tipPoints[1].x) / 2, (tipPoints[0].y + tipPoints[1].y) / 2, 0);
             line.rotate(midAxis, 5);
             line.color = Color(rand() % 255, rand() % 255, rand() % 255);
 
@@ -52,7 +52,7 @@ public:
 
         for (int i = 0; i < 360; i++) {
             Point * tipPoints = shape.getTipPoints();
-            Point midAxis((tipPoints[0].x + tipPoints[1].x) / 2, (tipPoints[0].y + tipPoints[1].y) / 2);
+            Point midAxis((tipPoints[0].x + tipPoints[1].x) / 2, (tipPoints[0].y + tipPoints[1].y) / 2, 0 );
             shape.rotate(midAxis, 5);
             shape.scale(midAxis, 1.005, 1.005);
             shape.color = Color(rand() % 255, rand() % 255, rand() % 255);
@@ -74,7 +74,7 @@ public:
 
         for (int i = 0; i < 180; i++) {
             Point * tipPoints = indonesia.getTipPoints();
-            Point midAxis((tipPoints[0].x + tipPoints[1].x) / 2, (tipPoints[0].y + tipPoints[1].y) / 2);
+            Point midAxis((tipPoints[0].x + tipPoints[1].x) / 2, (tipPoints[0].y + tipPoints[1].y) / 2, 0);
             indonesia.rotate(midAxis, 5);
             indonesia.scale(midAxis, 1.005, 1.005);
 
@@ -106,7 +106,7 @@ public:
         while (ship.points[0].y > -200) {
             ship.translate(5, -10);
             Point * tipPoints = ship.getTipPoints();
-            Point midAxis((tipPoints[0].x + tipPoints[1].x) / 2, (tipPoints[0].y + tipPoints[1].y) / 2);
+            Point midAxis((tipPoints[0].x + tipPoints[1].x) / 2, (tipPoints[0].y + tipPoints[1].y) / 2, 0);
             ship.rotate(midAxis, 5);
             ship.scale(midAxis, 1.02, 1.02);
 
@@ -114,7 +114,7 @@ public:
 
             ship2.translate(5, 10);
             Point * tipPoints2 = ship2.getTipPoints();
-            Point midAxis2((tipPoints2[0].x + tipPoints2[1].x) / 2, (tipPoints2[0].y + tipPoints2[1].y) / 2);
+            Point midAxis2((tipPoints2[0].x + tipPoints2[1].x) / 2, (tipPoints2[0].y + tipPoints2[1].y) / 2, 0);
             ship2.rotate(midAxis2, 5);
             ship2.scale(midAxis2, 0.98, 0.98);
 
@@ -130,7 +130,7 @@ public:
             ship.translate(5, 10);
 
             Point * tipPoints = ship.getTipPoints();
-            Point midAxis((tipPoints[0].x + tipPoints[1].x) / 2, (tipPoints[0].y + tipPoints[1].y) / 2);
+            Point midAxis((tipPoints[0].x + tipPoints[1].x) / 2, (tipPoints[0].y + tipPoints[1].y) / 2, 0);
             ship.rotate(midAxis, 5);
 
             ship.scale(midAxis, 0.98, 0.98);
@@ -141,7 +141,7 @@ public:
             ship2.translate(5, -10);
 
             Point * tipPoints2 = ship2.getTipPoints();
-            Point midAxis2((tipPoints2[0].x + tipPoints2[1].x) / 2, (tipPoints2[0].y + tipPoints2[1].y) / 2);
+            Point midAxis2((tipPoints2[0].x + tipPoints2[1].x) / 2, (tipPoints2[0].y + tipPoints2[1].y) / 2, 0);
             ship2.rotate(midAxis2, 5);
 
             ship2.scale(midAxis, 1.02, 1.02);
