@@ -1,9 +1,9 @@
 #include "ShapeGroup.h"
 
-ShapeGroup::ShapeGroup(string objName) {
+ShapeGroup::ShapeGroup(string objName, float offsetX, float offsetY, int scale) {
     Util util;
     map<string, vector<Point> > point = util.readObject("point3d.txt");
-    vector<vector<Point> > points = util.convertPoint(point, objName, 20, 20, 0, 10,  10, 10);
+    vector<vector<Point> > points = util.convertPoint(point, objName, offsetX, offsetY, 0, scale,  scale, scale);
 
     for (int j = 0; j < points.size(); j++) {
         Shape shape(points[j]);
@@ -16,14 +16,32 @@ ShapeGroup::ShapeGroup(string objName) {
     }
 }
 
-void ShapeGroup::draw(ShadowBuffer& sb) {
-    // for (int i = 0; i < shapes.size(); i++) {
-    //     shapes[i].draw(sb);
-    //     Color c(225,225,0);
-    //     //shapes[i].drawBorder(c, sb);
-    // }
-    setPointToDraw();
+void ShapeGroup::draw(ShadowBuffer& sb, float offsetX, float offsetY) {
+    /*for (int i = 0; i < shapes.size(); i++) {
+        // shapes[i].draw(sb);
+        Color c(225,225,0);
+        shapes[i].drawBorder(c, sb);
+    }*/
+    setPointToDraw(offsetX,offsetY);
     //scanLineFill3D(sb);
+
+    for (int j = 0; j < pointToPrint.size(); j++) {
+        Color c = Color(j*j*4,j*20,250-j*15);
+        for(int i=0; i< pointToPrint[j].size(); i++){
+            vector<Point> p;
+            if(i==pointToPrint[j].size()-1){
+                p.push_back(pointToPrint[j][i]);
+                p.push_back(pointToPrint[j][0]);
+        
+            }else{
+                p.push_back(pointToPrint[j][i]);
+                p.push_back(pointToPrint[j][i+1]);
+            }
+            Line line(p);
+            line.color = c;
+            line.draw(sb);
+        }
+    }
 }
 
 void ShapeGroup::drawView(ShadowBuffer& sb) {
@@ -32,31 +50,78 @@ void ShapeGroup::drawView(ShadowBuffer& sb) {
     }
 }
 
-void ShapeGroup::translate(float dX, float dY) {
+void ShapeGroup::translate(float dX, float dY, float dZ) {
     for (int i = 0; i < shapes.size(); i++) {
-        shapes[i].translate(dX, dY);
+        for (int j=0; j<shapes[i].points.size();j++){
+             shapes[i].points[j].translation(dX, dY, dZ);
+
+
+  //pembulatan
+             shapes[i].points[j].setX(roundf(shapes[i].points[j].x * 100) / 100);
+             shapes[i].points[j].setY(roundf(shapes[i].points[j].y * 100) / 100);
+             shapes[i].points[j].setZ(roundf(shapes[i].points[j].z * 100) / 100);
+        }
     }
 }
 
-void ShapeGroup::scale(Point axis, float scalingFactorX, float scalingFactorY) {
+void ShapeGroup::scale(float scaleX, float scaleY, float scaleZ, float offsetX, float offsetY, float offsetZ) {
+    translate(offsetX*(-1),offsetY*(-1), offsetZ*(-1));
     for (int i = 0; i < shapes.size(); i++) {
-        shapes[i].scale(axis, scalingFactorX, scalingFactorY);
+        for (int j=0; j<shapes[i].points.size();j++){
+             shapes[i].points[j].scale(scaleX, scaleY, scaleZ);
 
-        /*for (int i = 0 ; i < shapes[i].points.size() ; i++){
-            shapes[i].points[i].x += axis.x;
-            shapes[i].points[i].y +=  axis.y;
-            shapes[i].points[i].x *= scalingFactorX;
-            shapes[i].points[i].y *=  scalingFactorY;
-            shapes[i].points[i].x -= axis.x;
-            shapes[i].points[i].y -=  axis.y;
-        }*/
+                 //pembulatan
+             shapes[i].points[j].setX(roundf(shapes[i].points[j].x * 100) / 100);
+             shapes[i].points[j].setY(roundf(shapes[i].points[j].y * 100) / 100);
+             shapes[i].points[j].setZ(roundf(shapes[i].points[j].z * 100) / 100);
+        }
     }
+    translate(offsetX,offsetY, offsetZ);
 }
 
-void ShapeGroup::rotate(Point axis, float angle) {
+void ShapeGroup::rotateX(float degree, float offsetX, float offsetY, float offsetZ) {
+    translate(offsetX*(-1),offsetY*(-1), offsetZ*(-1));
     for (int i = 0; i < shapes.size(); i++) {
-        shapes[i].rotate(axis, angle);
+        for (int j=0; j<shapes[i].points.size();j++){
+             shapes[i].points[j].rotateX(degree);
+
+                 //pembulatan
+             shapes[i].points[j].setX(roundf(shapes[i].points[j].x * 100) / 100);
+             shapes[i].points[j].setY(roundf(shapes[i].points[j].y * 100) / 100);
+             shapes[i].points[j].setZ(roundf(shapes[i].points[j].z * 100) / 100);
+        }
     }
+    translate(offsetX,offsetY, offsetZ);
+}
+
+void ShapeGroup::rotateY(float degree, float offsetX, float offsetY, float offsetZ) {
+    translate(offsetX*(-1),offsetY*(-1), offsetZ*(-1));
+    for (int i = 0; i < shapes.size(); i++) {
+        for (int j=0; j<shapes[i].points.size();j++){
+             shapes[i].points[j].rotateY(degree);
+
+                 //pembulatan
+             shapes[i].points[j].setX(roundf(shapes[i].points[j].x * 100) / 100);
+             shapes[i].points[j].setY(roundf(shapes[i].points[j].y * 100) / 100);
+             shapes[i].points[j].setZ(roundf(shapes[i].points[j].z * 100) / 100);
+        }
+    }
+    translate(offsetX,offsetY, offsetZ);
+}
+
+void ShapeGroup::rotateZ(float degree, float offsetX, float offsetY, float offsetZ) {
+    translate(offsetX*(-1),offsetY*(-1), offsetZ*(-1));
+    for (int i = 0; i < shapes.size(); i++) {
+        for (int j=0; j<shapes[i].points.size();j++){
+             shapes[i].points[j].rotateZ(degree);
+
+                 //pembulatan
+             shapes[i].points[j].setX(roundf(shapes[i].points[j].x * 100) / 100);
+             shapes[i].points[j].setY(roundf(shapes[i].points[j].y * 100) / 100);
+             shapes[i].points[j].setZ(roundf(shapes[i].points[j].z * 100) / 100);
+        }
+    }
+    translate(offsetX,offsetY, offsetZ);
 }
 
 void ShapeGroup::clip(Point min, Point max, float scale) {
@@ -115,24 +180,28 @@ void ShapeGroup::sortLayer(){
      }
 }
 
-void ShapeGroup::setPointToDraw(){
+void ShapeGroup::setPointToDraw(float offsetX, float offsetY){
     pointToPrint.clear();
-    int offsetX = 20;
-    int offsetY = 20;
     //cout<<"CEK"<<endl;
     for(int i=0; i<shapes.size(); i++){
         vector<Point> temp;
         //cout<<i<<endl;
         for(int j=0; j<shapes[i].points.size(); j++){
-            float newX = (offsetX + (shapes[i].points[j].x - offsetX) * pow((1.3),shapes[i].points[j].z * 0.1));
-            float newY = (offsetY + (shapes[i].points[j].y - offsetY) * pow((1.3),shapes[i].points[j].z * 0.1));
+            float newX = (offsetX + (shapes[i].points[j].x - offsetX) * pow((1.01),shapes[i].points[j].z * 0.1));
+            float newY = (offsetY + (shapes[i].points[j].y - offsetY) * pow((1.01),shapes[i].points[j].z * 0.1));
             Point p(newX, newY, shapes[i].points[j].z );
             //cout<<j<<" x: "<<newX<<" y: "<<newY<<endl;
             temp.push_back(p);
         }
         pointToPrint.push_back(temp);
     }
-    sortLayer();
+    for (int i = 0; i < pointToPrint.size(); i++){
+        cout<<i<<endl;
+        for(int j = 0; j < pointToPrint[i].size();j++){
+            cout<<j<<" x: "<<pointToPrint[i][j].x<<" y: "<<pointToPrint[i][j].y<<" z: "<<pointToPrint[i][j].z<<endl;
+        }
+    }
+    //sortLayer();
 }
 
 vector<Point> ShapeGroup::sortVector(vector<Point> v) {

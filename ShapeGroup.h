@@ -11,14 +11,16 @@ public:
     vector<vector<Point> > pointToPrint;
 
 
-    ShapeGroup(string objName);
+    ShapeGroup(string objName, float offsetX, float offsetY, int scale);
 
-    void setPointToDraw();
-    void draw(ShadowBuffer& sb);
+    void setPointToDraw(float offsetX, float offsetY);
+    void draw(ShadowBuffer& sb, float offsetX, float offsetY);
     void drawView(ShadowBuffer& sb);
-    void translate(float dX, float dY);
-    void scale(Point axis, float scalingFactorX, float scalingFactorY);
-    void rotate(Point axis, float angle);
+    void translate(float dX, float dY,float dZ);
+    void scale(float scaleX, float scaleY, float scaleZ, float offsetX, float offsetY, float offsetZ);
+    void rotateX(float degree, float offsetX, float offsetY, float offsetZ);
+    void rotateY(float degree, float offsetX, float offsetY, float offsetZ);
+    void rotateZ(float degree, float offsetX, float offsetY, float offsetZ);
     void clip(Point min, Point max, float scale);
     vector<vector<Line> > initAvailable(int x1, int x2);
     bool findIntersection(Point p1, Point p2, int y, int &x, int &z);
