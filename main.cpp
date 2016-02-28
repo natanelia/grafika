@@ -56,7 +56,10 @@ int main(int argc, char *argv[]) {
     fb.backgroundColor = Color(0, 20, 30);
     sb.backgroundColor = Color(0, 20, 30);
 
-    ShapeGroup Logothesims("Diamond",510,200,70);
+    int offSetX = 670;
+    int offSetY = 350;
+
+    ShapeGroup Logothesims("Diamond",offSetX,offSetY,70);
     int position = 0;
     int translation = 2;
     while(true){
@@ -68,7 +71,7 @@ int main(int argc, char *argv[]) {
     	}
     	Logothesims.translate(0,translation,0);
     	position += translation;
-    	Logothesims.rotateY(3,510,200,0);
+    	Logothesims.rotateY(3,offSetX,offSetY,0);
 	    // for(int i = 0; i < Logothesims.shapes.size(); i++){
 	    // 	cout<<i<<endl;
 	    // 	for (int j = 0; j < Logothesims.shapes[i].points.size(); j++){
@@ -78,7 +81,7 @@ int main(int argc, char *argv[]) {
 	    //Logothesims.translate(-20,-20,0);
 	    sb.clear();
 
-	    Logothesims.draw(sb,510,200);
+	    Logothesims.draw(sb,offSetX,offSetY);
 
 	    fb.draw(sb);
 	    usleep(50000);

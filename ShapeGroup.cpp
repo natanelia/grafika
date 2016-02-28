@@ -23,7 +23,7 @@ void ShapeGroup::draw(ShadowBuffer& sb, float offsetX, float offsetY) {
         shapes[i].drawBorder(c, sb);
     }*/
     setPointToDraw(offsetX,offsetY);
-    //scanLineFill3D(sb);
+    scanLineFill3D(sb);
 
     for (int j = 0; j < pointToPrint.size(); j++) {
         Color c = Color(j*j*4,j*20,250-j*15);
@@ -195,12 +195,12 @@ void ShapeGroup::setPointToDraw(float offsetX, float offsetY){
         }
         pointToPrint.push_back(temp);
     }
-    for (int i = 0; i < pointToPrint.size(); i++){
+    /*for (int i = 0; i < pointToPrint.size(); i++){
         cout<<i<<endl;
         for(int j = 0; j < pointToPrint[i].size();j++){
             cout<<j<<" x: "<<pointToPrint[i][j].x<<" y: "<<pointToPrint[i][j].y<<" z: "<<pointToPrint[i][j].z<<endl;
         }
-    }
+    }*/
     //sortLayer();
 }
 
@@ -242,11 +242,12 @@ bool ShapeGroup::findIntersection(Point p1, Point p2, int y, int &x, int &z) {
 
 
 void ShapeGroup::splitAvailable(vector<vector<Line> > &Available, vector<Point> demand, ShadowBuffer& sb, Color c){
-    vector<Line> available= Available.back();
-    for(int i= 0; i < available.size(); i++ ){
-        int j=0;
+    vector<Line> available= Available[Available.size()-1];
+
+    for(int j=0; j<demand.size();j+=2){
+        //int j=0;
         vector<Line> newAvailable;
-        for(j=0; j<demand.size();j+=2){
+        for(int i= 0; i < available.size(); i++ ){
             if(available[i].getPoint2().x<=available[i].getPoint1().x){//sudah tidak ada slot
                 newAvailable.push_back(available[i]);   
                 break;
@@ -318,40 +319,42 @@ void ShapeGroup::scanLineFill3D(ShadowBuffer& sb)
     int nShape = pointToPrint.size();
     //int edgesSize = v.size();
     int a=0;
-    for(int i = 0; i <= 800; i++) {
-        vector<vector<Line> > available= initAvailable(0,1020);
-
-        for(int k=0; k < nShape; k++){
-            Shape tempShape = pointToPrint[k];
-            int edgesSize = tempShape.points.size();
-            for(int j = 0; j < tempShape.points.size(); j++) {
-                if(j != (edgesSize - 1)){
-                    p1 = tempShape.points[j];
-                    p2 = tempShape.points[j+1];
-                }else{
-                    p1 = tempShape.points[j];
-                    p2 = tempShape.points[0];
-                }
-                int intersectX, intersectZ;
-                if (findIntersection(p1,p2,i,intersectX, intersectZ)){
-                    if(p1.y > p2.y){
-                        std::swap(p1,p2);
+    for(int k=0; k < nShape; k++){
+        Shape tempShape = pointToPrint[k];
+        Color c(225-a, 200-a, 200-a);
+        a+=10;
+        for(int i = 0; i <= 800; i++) {
+            vector<vector<Line> > available= initAvailable(0,1020);            
+                int edgesSize = tempShape.points.size();
+                for(int j = 0; j < tempShape.points.size(); j++) {
+                    if(j != (edgesSize - 1)){
+                        p1 = tempShape.points[j];
+                        p2 = tempShape.points[j+1];
+                    }else{
+                        p1 = tempShape.points[j];
+                        p2 = tempShape.points[0];
                     }
-                    Point intersect(intersectX, i,intersectZ);
-                    if(intersect.y == p2.y)
-                        continue;
-                    ListOfIntersectPoints.push_back(intersect);
+                    int intersectX, intersectZ;
+                    if (findIntersection(p1,p2,i,intersectX, intersectZ)){
+                        if(p1.y > p2.y){
+                            std::swap(p1,p2);
+                        }
+                        Point intersect(intersectX, i,intersectZ);
+                        if(intersect.y == p2.y)
+                            continue;
+                        ListOfIntersectPoints.push_back(intersect);
+                    }
                 }
-            }
 
-            vector<Point> result = sortVector(ListOfIntersectPoints);
-            //int intersectPointsSize = result.size();
-            Color c(225-a, 200-a, 200-a);
-            a+=10;
-            //for(int j = 0; j < intersectPointsSize-1; j+=2) {
-                splitAvailable(available, result, sb, c);
-            //}      
-            ListOfIntersectPoints.erase(ListOfIntersectPoints.begin(),ListOfIntersectPoints.end());
-        }
+                vector<Point> result = sortVector(ListOfIntersectPoints);
+                //int intersectPointsSize = result.size();
+                
+                //for(int j = 0; j < intersectPointsSize-1; j+=2) {
+                    splitAvailable(available, result, sb, c);
+                //}      
+                ListOfIntersectPoints.erase(ListOfIntersectPoints.begin(),ListOfIntersectPoints.end());
+                available.clear();
+            
+        } 
     }
 }
