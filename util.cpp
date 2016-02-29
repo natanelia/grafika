@@ -14,19 +14,19 @@ using namespace std;
 
 class Util {
 public:
-    /*static vector<Point>& convertImageFile(string fileName) {
+    static vector<Point>& convertImageFile(string fileName) {
         ifstream file(fileName.c_str());
         string str;
-        int x, y;
+        int x, y, z;
         vector<Point> * points = new vector<Point>();
 
-        y = 0;
+        y = 0; z = 0;
         while (getline(file, str))
         {
             x = 0;
             for (int i = 0; i < str.length() - 1; ++i) {
                 if (str[i] != ' ' && str[i] != '\n' && str[i] != '\r') {
-                    points->push_back(Point(x,y));
+                    points->push_back(Point(x,y,z));
                 }
                 ++x;
             }
@@ -35,7 +35,7 @@ public:
 
         file.close();
         return *points;
-    }*/
+    }
 
     static vector<vector<Point> > convertPoint(map<string, vector<Point> > object, string word, int a, int b, int c, int x, int y, int z) {
         Point p;

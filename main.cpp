@@ -57,11 +57,11 @@ void performTests() {
 
 
 int main(int argc, char *argv[]) {
-    //performTests();
+    Util util;
     FrameBuffer fb;
     ShadowBuffer sb(fb.width, fb.height, 0, 0, fb.finfo.line_length);
-    fb.backgroundColor = Color(0, 20, 30);
-    sb.backgroundColor = Color(0, 20, 30);
+    fb.backgroundColor = Color(255, 255, 255);
+    sb.backgroundColor = Color(255, 255, 255);
 
     int offSetX = 670;
     int offSetY = 350;
@@ -69,6 +69,18 @@ int main(int argc, char *argv[]) {
     ShapeGroup Logothesims("Diamond",offSetX,offSetY,70);
     int position = 0;
     int translation = 2;
+    //Logothesims.rotateX(5,offSetX, offSetY,0);
+
+    vector<Point> points = util.convertImageFile("assets/logo.txt");
+    Image logo(points);
+    logo.color = Color(0, 0, 255);
+    logo.translate(550,100);
+
+    Image logoShadow(points);
+    logoShadow.color = Color(220, 220, 220);
+    logoShadow.translate(550,110);
+
+
     while(true){
       if (position > 20){
         translation *= -1;
@@ -79,18 +91,17 @@ int main(int argc, char *argv[]) {
       Logothesims.translate(0,translation,0);
       position += translation;
       Logothesims.rotateY(3,offSetX,offSetY,0);
-      // for(int i = 0; i < Logothesims.shapes.size(); i++){
-      //  cout<<i<<endl;
-      //  for (int j = 0; j < Logothesims.shapes[i].points.size(); j++){
-      //    cout<<"x: "<<Logothesims.shapes[i].points[j].x<<" y: "<<Logothesims.shapes[i].points[j].y<<" z: "<<Logothesims.shapes[i].points[j].z<<endl;
-      //  }
-      // }
-      //Logothesims.translate(-20,-20,0);
-      sb.clear();
 
+      logo.translate(0, -translation / 2);
+      logoShadow.translate(0, -translation / 2);
+
+      sb.clear();
+      logoShadow.draw(sb);
+      logo.draw(sb);
       Logothesims.draw(sb,offSetX,offSetY);
 
       fb.draw(sb);
+      usleep(5000);
 	}
 
     return 0;
