@@ -19,7 +19,7 @@ public:
     ~Shape();
 
     vector<Point> sortVector(vector<Point> v);
-    bool findIntersection(Point p1, Point p2, int y, int &x);
+    int findIntersection(Point& p1, Point& p2, int y, int &x);
     void scanLineFill(vector<Point> v, ShadowBuffer& sb);
     void draw(ShadowBuffer& sb);
     void drawView(ShadowBuffer& sb);

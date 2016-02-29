@@ -8,14 +8,6 @@ Point::Point()
     y = 0;
     z = 0;
     tag = 1; //elemen terakhir sebagai pelengkap, untuk keperluan transformasi
-
-    //nilai default matrix (4x4)
-    for(int i=0; i<4; i++){
-        vector<float> row(4);
-        for(int j=0; j<4; j++){
-           matrix.push_back(row);
-        }
-    }
 }
 
 
@@ -25,14 +17,6 @@ Point::Point(float xnew, float ynew, float znew){
     y = ynew;
     z = znew;
     tag = 1; //elemen terakhir sebagai pelengkap, untuk keperluan transformasi
-
-    //nilai default matrix (4x4)
-    for(int i=0; i<4; i++){
-        vector<float> row(4);
-        for(int j=0; j<4; j++){
-           matrix.push_back(row);
-        }
-    }
 }
 
 Point::~Point()
@@ -41,7 +25,7 @@ Point::~Point()
 }
 
 
- void Point::transformation (){
+ void Point::transformation (float (&matrix)[4][4]){
     //melakukan transformasi "matrix" terhadap "point"
     vector<float> temp;
     for (int i=0; i<4; i++){
@@ -63,16 +47,13 @@ Point::~Point()
     tag = temp[3];
 }
 
-void Point::clearMatrix(){
-     for(int i=0; i<4; i++){
-        for(int j=0; j<4; j++){
-          matrix[j][i]=0;
+ void Point::translation(float dx, float dy, float dz){
+    float matrix[4][4];
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            matrix[i][j] = 0;
         }
     }
-}
-
- void Point::translation(float dx, float dy, float dz){
-    clearMatrix();
     matrix[0][0]=1; //Transform_XAxis
     matrix[1][1]=1; //Transform_YAxis
     matrix[2][2]=1; //Transform_ZAxis
@@ -82,63 +63,79 @@ void Point::clearMatrix(){
     matrix[3][0]=dx;
     matrix[3][1]=dy;
     matrix[3][2]=dz;
-    transformation();
+    transformation(matrix);
  }
 
 
 void Point::scale(float scaleX, float scaleY, float scaleZ){
-    clearMatrix();
+    float matrix[4][4];
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            matrix[i][j] = 0;
+        }
+    }
     matrix[0][0]=scaleX;
     matrix[1][1]=scaleY;
     matrix[2][2]=scaleZ;
     matrix[3][3]=1; //nilai akhir matrix
-    transformation();
+    transformation(matrix);
 }
 
 
 void Point::rotateX(float degree){
     //ClockWise
     float degreeRadian = degree * PI / 180.0;
-    clearMatrix();
+    float matrix[4][4];
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            matrix[i][j] = 0;
+        }
+    }
     matrix[0][0]=1;
     matrix[3][3]=1;
     matrix[1][1]=cos(degreeRadian);
     matrix[1][2]=sin(degreeRadian);
     matrix[2][1]=sin(degreeRadian)*(-1);
     matrix[2][2]=cos(degreeRadian);
-    transformation();
+    transformation(matrix);
 }
 
 
 void Point::rotateY(float degree){
     //ClockWise
     float degreeRadian = degree * PI / 180.0;
-    clearMatrix();
+    float matrix[4][4];
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            matrix[i][j] = 0;
+        }
+    }
     matrix[1][1]=1;
     matrix[3][3]=1;
     matrix[0][0]=cos(degreeRadian);
     matrix[2][0]=sin(degreeRadian);
     matrix[0][2]=sin(degreeRadian)*(-1);
     matrix[2][2]=cos(degreeRadian);
-    transformation();
+    transformation(matrix);
 }
 
 
 void Point::rotateZ(float degree){
      //ClockWise
     float degreeRadian = degree * PI / 180.0;
-    clearMatrix();
+    float matrix[4][4];
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            matrix[i][j] = 0;
+        }
+    }
     matrix[2][2]=1;
     matrix[3][3]=1;
     matrix[0][0]=cos(degreeRadian);
     matrix[0][1]=sin(degreeRadian);
     matrix[1][0]=sin(degreeRadian)*(-1);
     matrix[1][1]=cos(degreeRadian);
-    transformation();
-}
-
-vector< vector<float> > Point::getMatrix() {
-    return matrix;
+    transformation(matrix);
 }
 
 void Point::setX(float xnew) {

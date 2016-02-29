@@ -16,22 +16,19 @@ class Point
         float y;
         float z;
         float tag;
-        vector< vector<float> > matrix; //matrix transformasi
 
         Point();
         Point(float xnew, float ynew, float znew);
         virtual ~Point();
 
         //fungsi pendukung
-        void transformation (); //melakukan transformasi "matrix" terhadap "point"
-        void clearMatrix();
+        void transformation (float (&matrix)[4][4]); //melakukan transformasi "matrix" terhadap "point"
         void translation(float dx, float dy, float dz);
         void scale(float scaleX, float scaleY, float scaleZ);
         void rotateX(float degree); //ClockWise
         void rotateY(float degree);//ClockWise
         void rotateZ(float degree);//ClockWise
         float getZ();
-        vector< vector<float> > getMatrix();
 
         void setX(float xnew);
         void setY(float ynew);

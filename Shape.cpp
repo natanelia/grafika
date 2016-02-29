@@ -12,7 +12,6 @@ void Shape::draw(ShadowBuffer& sb) {
     // }
     scanLineFill(points,sb);
     drawBorder(Color(225,225,0), sb);
-
 }
 
 void Shape::drawView(ShadowBuffer& sb) {
@@ -41,12 +40,16 @@ vector<Point> Shape::sortVector(vector<Point> v) {
      return v;
 }
 
-bool Shape::findIntersection(Point p1, Point p2, int y, int &x) {
-    if(p1.y==p2.y)
+int Shape::findIntersection(Point& p1, Point& p2, int y, int &x) {
+    if (p1.y == p2.y) {
         return false;
-    x = (p2.x-p1.x)*(y-p1.y)/(p2.y-p1.y) + p1.x;
-    bool isInsideEdgeX;
-    bool isInsideEdgeY;
+    }
+
+    x = (p2.x - p1.x) * (y - p1.y) / (p2.y - p1.y) + p1.x;
+    
+    int isInsideEdgeX;
+    int isInsideEdgeY;
+
     if(p1.x < p2.x) 
         isInsideEdgeX = (p1.x <= x) && (x <= p2.x);
     else 
@@ -63,46 +66,49 @@ bool Shape::findIntersection(Point p1, Point p2, int y, int &x) {
 void Shape::scanLineFill(vector<Point> v, ShadowBuffer& sb)
 {       
     Point p1, p2;   
-    vector<Point> ListOfIntersectPoints;
     int edgesSize = v.size();
-    for(int i = 0; i <= 800; i++) {
+    Point * tipPoints = getTipPoints();
+    for(int i = tipPoints[0].y; i <= tipPoints[1].y; i++) {
+        vector<Point> ListOfIntersectPoints;
         for(int j = 0; j < edgesSize; j++) {
-            if(j != (edgesSize - 1)){
+            if (j != (edgesSize - 1)){
                 p1 = v[j];
                 p2 = v[j+1];
-            }else{
+            } else {
                 p1 = v[j];
                 p2 = v[0];
             }
             int intersectX;
             if (findIntersection(p1,p2,i,intersectX)){
-                if(p1.y > p2.y){
+                if(p1.y > p2.y) {
                     std::swap(p1,p2);
                 }
-                Point intersect(intersectX, i, 0);
-                if(intersect.y == p2.y)
-                    continue;
+
+                // i = y
+                if (i != p2.y) {
+                    Point intersect(intersectX, i, 0);
                     ListOfIntersectPoints.push_back(intersect);
-                    }
+                }
+                //ListOfIntersectPoints.push_back(intersect);
             }
-            vector<Point> result = sortVector(ListOfIntersectPoints);
-            int intersectPointsSize = result.size();
-            Color d(225, 0, 0);
-            for(int j = 0; j < intersectPointsSize-1; j+=2) {
-                    vector<Point> p;
-                    p.push_back(result[j]);
-                    p.push_back(result[j+1]);
-                    Line line(p);
-                    line.color = this->color;
-                    line.draw(sb);
-                    //drawLine(result[j].x,result[j].y,result[j+1].x,result[j+1].y,d);
-            }
-            ListOfIntersectPoints.erase(ListOfIntersectPoints.begin(),ListOfIntersectPoints.end());
+        }
+        vector<Point> result = sortVector(ListOfIntersectPoints);
+        int intersectPointsSize = result.size();
+        Color d(225, 0, 0);
+        for(int j = 0; j < intersectPointsSize-1; j+=2) {
+            vector<Point> p;
+            p.push_back(result[j]);
+            p.push_back(result[j+1]);
+            Line line(p);
+            line.color = this->color;
+            line.draw(sb);
+            //drawLine(result[j].x,result[j].y,result[j+1].x,result[j+1].y,d);
+        }
     }
 }
 
 void Shape::drawBorder(Color c, ShadowBuffer& sb){
-    for(int i=0; i< points.size(); i++){
+    for(int i = 0; i< points.size(); i++){
         vector<Point> p;
         if(i==points.size()-1){
             p.push_back(points[i]);

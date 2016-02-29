@@ -25,7 +25,7 @@ void ShapeGroup::draw(ShadowBuffer& sb, float offsetX, float offsetY) {
     setPointToDraw(offsetX,offsetY);
     scanLineFill3D(sb);
 
-    for (int j = 0; j < pointToPrint.size(); j++) {
+    /*for (int j = 0; j < pointToPrint.size(); j++) {
         Color c = Color(j*j*4,j*20,250-j*15);
         for(int i=0; i< pointToPrint[j].size(); i++){
             vector<Point> p;
@@ -41,7 +41,7 @@ void ShapeGroup::draw(ShadowBuffer& sb, float offsetX, float offsetY) {
             line.color = c;
             line.draw(sb);
         }
-    }
+    }*/
 }
 
 void ShapeGroup::drawView(ShadowBuffer& sb) {
@@ -242,7 +242,7 @@ bool ShapeGroup::findIntersection(Point p1, Point p2, int y, int &x, int &z) {
 
 
 void ShapeGroup::splitAvailable(vector<vector<Line> > &Available, vector<Point> demand, ShadowBuffer& sb, Color c){
-    vector<Line> available= Available[Available.size()-1];
+    vector<Line> available= Available[Available.size() - 1];
 
     for(int j=0; j<demand.size();j+=2){
         //int j=0;
@@ -268,9 +268,11 @@ void ShapeGroup::splitAvailable(vector<vector<Line> > &Available, vector<Point> 
                 newAvailable.push_back(split1);
                 newAvailable.push_back(split2);
 
-                Line line(demand[j], demand[j+1]);
-                line.color = c;
-                line.draw(sb);
+                if (j+1 < demand.size()) {
+                    Line line(demand[j], demand[j+1]);
+                    line.color = c;
+                    line.draw(sb);
+                }
 
             }else if(available[i].getPoint1().x <= demand[j].x){ //demand lebih banyak kebelakang
 
@@ -290,7 +292,6 @@ void ShapeGroup::splitAvailable(vector<vector<Line> > &Available, vector<Point> 
 
                 newAvailable.push_back(split);
             }
-
         }
     //update info available
     Available.push_back(newAvailable);
@@ -314,7 +315,6 @@ void ShapeGroup::scanLineFill3D(ShadowBuffer& sb)
 {    
 
     Point p1, p2;   
-    vector<Point> ListOfIntersectPoints;
 
     int nShape = pointToPrint.size();
     //int edgesSize = v.size();
@@ -323,38 +323,33 @@ void ShapeGroup::scanLineFill3D(ShadowBuffer& sb)
         Shape tempShape = pointToPrint[k];
         Color c(225-a, 200-a, 200-a);
         a+=10;
-        for(int i = 0; i <= 800; i++) {
-            vector<vector<Line> > available= initAvailable(0,1020);            
-                int edgesSize = tempShape.points.size();
-                for(int j = 0; j < tempShape.points.size(); j++) {
-                    if(j != (edgesSize - 1)){
-                        p1 = tempShape.points[j];
-                        p2 = tempShape.points[j+1];
-                    }else{
-                        p1 = tempShape.points[j];
-                        p2 = tempShape.points[0];
-                    }
-                    int intersectX, intersectZ;
-                    if (findIntersection(p1,p2,i,intersectX, intersectZ)){
-                        if(p1.y > p2.y){
-                            std::swap(p1,p2);
-                        }
-                        Point intersect(intersectX, i,intersectZ);
-                        if(intersect.y == p2.y)
-                            continue;
-                        ListOfIntersectPoints.push_back(intersect);
-                    }
+        Point * tipPoints = getTipPoints();
+        for(int i = tipPoints[0].y; i < tipPoints[1].y; i++) {
+            vector<vector<Line> > available= initAvailable(0,1020);
+            vector<Point> ListOfIntersectPoints;
+            int edgesSize = tempShape.points.size();
+            for(int j = 0; j < tempShape.points.size(); j++) {
+                if(j != (edgesSize - 1)){
+                    p1 = tempShape.points[j];
+                    p2 = tempShape.points[j+1];
+                }else{
+                    p1 = tempShape.points[j];
+                    p2 = tempShape.points[0];
                 }
+                int intersectX, intersectZ;
+                if (findIntersection(p1,p2,i,intersectX, intersectZ)){
+                    if(p1.y > p2.y){
+                        std::swap(p1,p2);
+                    }
+                    Point intersect(intersectX, i,intersectZ);
+                    if(intersect.y == p2.y)
+                        continue;
+                    ListOfIntersectPoints.push_back(intersect);
+                }
+            }
 
-                vector<Point> result = sortVector(ListOfIntersectPoints);
-                //int intersectPointsSize = result.size();
-                
-                //for(int j = 0; j < intersectPointsSize-1; j+=2) {
-                    splitAvailable(available, result, sb, c);
-                //}      
-                ListOfIntersectPoints.erase(ListOfIntersectPoints.begin(),ListOfIntersectPoints.end());
-                available.clear();
-            
+            vector<Point> result = sortVector(ListOfIntersectPoints);          
+            splitAvailable(available, result, sb, c);            
         } 
     }
 }

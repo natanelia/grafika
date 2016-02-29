@@ -5,6 +5,7 @@
 #include "Line.h"
 #include "Shape.h"
 #include "ShapeGroup.h"
+#include "test.cpp"
 #include <termios.h>
 #include <unistd.h>
 
@@ -49,8 +50,14 @@ char getche(void) {
 	return getch_(1);	
 }
 
+void performTests() {
+  Test test;
+  test.testShape();
+}
+
 
 int main(int argc, char *argv[]) {
+    //performTests();
     FrameBuffer fb;
     ShadowBuffer sb(fb.width, fb.height, 0, 0, fb.finfo.line_length);
     fb.backgroundColor = Color(0, 20, 30);
@@ -63,28 +70,27 @@ int main(int argc, char *argv[]) {
     int position = 0;
     int translation = 2;
     while(true){
-    	if (position > 20){
-    		translation *= -1;
-    	}
-    	if (position < -20){
-    		translation *= -1;
-    	}
-    	Logothesims.translate(0,translation,0);
-    	position += translation;
-    	Logothesims.rotateY(3,offSetX,offSetY,0);
-	    // for(int i = 0; i < Logothesims.shapes.size(); i++){
-	    // 	cout<<i<<endl;
-	    // 	for (int j = 0; j < Logothesims.shapes[i].points.size(); j++){
-	    // 		cout<<"x: "<<Logothesims.shapes[i].points[j].x<<" y: "<<Logothesims.shapes[i].points[j].y<<" z: "<<Logothesims.shapes[i].points[j].z<<endl;
-	    // 	}
-	    // }
-	    //Logothesims.translate(-20,-20,0);
-	    sb.clear();
+      if (position > 20){
+        translation *= -1;
+      }
+      if (position < -20){
+        translation *= -1;
+      }
+      Logothesims.translate(0,translation,0);
+      position += translation;
+      Logothesims.rotateY(3,offSetX,offSetY,0);
+      // for(int i = 0; i < Logothesims.shapes.size(); i++){
+      //  cout<<i<<endl;
+      //  for (int j = 0; j < Logothesims.shapes[i].points.size(); j++){
+      //    cout<<"x: "<<Logothesims.shapes[i].points[j].x<<" y: "<<Logothesims.shapes[i].points[j].y<<" z: "<<Logothesims.shapes[i].points[j].z<<endl;
+      //  }
+      // }
+      //Logothesims.translate(-20,-20,0);
+      sb.clear();
 
-	    Logothesims.draw(sb,offSetX,offSetY);
+      Logothesims.draw(sb,offSetX,offSetY);
 
-	    fb.draw(sb);
-	    usleep(50000);
+      fb.draw(sb);
 	}
 
     return 0;

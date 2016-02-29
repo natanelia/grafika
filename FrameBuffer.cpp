@@ -59,7 +59,7 @@ FrameBuffer::FrameBuffer() {
 }*/
 
 void FrameBuffer::draw(ShadowBuffer& sb) {
-    for (int y = 0; y < sb.height; y++) {
+    for (int y = 0; y < sb.height - UNAVAILABLE_HEIGHT; y++) {
         for (int x = 0; x < sb.width; x++) {
             memcpy(fbp + ((x + sb.offsetX) * 4 + (y + sb.offsetY) * sb.lineLength), sb.sfbp + ((x * 4 + y * sb.lineLength) % sb.bufferSize), 4);
         }
