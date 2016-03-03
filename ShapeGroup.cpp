@@ -2,7 +2,7 @@
 
 ShapeGroup::ShapeGroup(string objName, float offsetX, float offsetY, int scale) {
     Util util;
-    map<string, vector<Point> > point = util.readObject("point3d.txt");
+    map<string, vector<Point> > point = util.readObject("assets/3d.txt");
     vector<vector<Point> > points = util.convertPoint(point, objName, offsetX, offsetY, 0, scale,  scale, scale);
 
     for (int j = 0; j < points.size(); j++) {

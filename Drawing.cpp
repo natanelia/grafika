@@ -114,7 +114,7 @@ Point * Drawing::getTipPoints() {
 void Drawing::clip(Point min, Point max, float scale) {
     ClippingHelper Clipper;
 
-    clippedPoint.clear();
+    clippedPoints.clear();
 
     vector<int> tag;
 
@@ -131,23 +131,23 @@ void Drawing::clip(Point min, Point max, float scale) {
         }
 
         if (Clipper.getBinaryCode(A,min,max) == 0) {
-            clippedPoint.push_back(A);
+            clippedPoints.push_back(A);
             tag.push_back(0);
             if (Clipper.getBinaryCode(B,min,max) != 0) {
                 Point* intersectionPoints = Clipper.getIntersection(A,B,min,max);
-                clippedPoint.push_back(intersectionPoints[0]);
+                clippedPoints.push_back(intersectionPoints[0]);
                 tag.push_back(0);
-                clippedPoint.push_back(intersectionPoints[1]);
+                clippedPoints.push_back(intersectionPoints[1]);
                 tag.push_back(0);
             }
         } else {
-            clippedPoint.push_back(A);
+            clippedPoints.push_back(A);
             tag.push_back(1);
             if (Clipper.andBinary(Clipper.getBinaryCode(A,min,max),Clipper.getBinaryCode(B,min,max)) == 0) {
                 Point* intersectionPoints = Clipper.getIntersection(A,B,min,max);
-                clippedPoint.push_back(intersectionPoints[0]);
+                clippedPoints.push_back(intersectionPoints[0]);
                 tag.push_back(0);
-                clippedPoint.push_back(intersectionPoints[1]);
+                clippedPoints.push_back(intersectionPoints[1]);
                 tag.push_back(0);
             }
             
@@ -156,36 +156,36 @@ void Drawing::clip(Point min, Point max, float scale) {
    
     for(int i = 0; i < tag.size(); i++){
         if (tag[i] == 1) {
-            clippedPoint[i] = Clipper.findNearestPoint(clippedPoint[i], min, max);
+            clippedPoints[i] = Clipper.findNearestPoint(clippedPoints[i], min, max);
             tag[i] = 0;
         } 
     }
 
-    for (int i = 0; i < clippedPoint.size(); i++) {
+    for (int i = 0; i < clippedPoints.size(); i++) {
         int j = i + 1;
         int k = i + 2;
 
-        if (i == clippedPoint.size() - 2) {
+        if (i == clippedPoints.size() - 2) {
             k = 0;
-        } else if (i == clippedPoint.size() - 1) {
+        } else if (i == clippedPoints.size() - 1) {
             j = 0;
             k = 1;
         }
-        if((clippedPoint[i].x == clippedPoint[j].x) && (clippedPoint[i].y == clippedPoint[j].y)){
-            clippedPoint.erase(clippedPoint.begin()+j);
+        if((clippedPoints[i].x == clippedPoints[j].x) && (clippedPoints[i].y == clippedPoints[j].y)){
+            clippedPoints.erase(clippedPoints.begin()+j);
             i--;
         }
 
-        else if (((clippedPoint[i].x == clippedPoint[j].x) && (clippedPoint[i].x == clippedPoint[k].x)) || ((clippedPoint[i].y == clippedPoint[j].y) && (clippedPoint[i].y == clippedPoint[k].y))) {
-            clippedPoint.erase(clippedPoint.begin()+j);
+        else if (((clippedPoints[i].x == clippedPoints[j].x) && (clippedPoints[i].x == clippedPoints[k].x)) || ((clippedPoints[i].y == clippedPoints[j].y) && (clippedPoints[i].y == clippedPoints[k].y))) {
+            clippedPoints.erase(clippedPoints.begin()+j);
             i--;
         }
     }
 
-    for (int i = 0; i < clippedPoint.size(); i++){
-        clippedPoint[i].x -= min.x;
-        clippedPoint[i].y -= min.y;
-        clippedPoint[i].x *= scale;
-        clippedPoint[i].y *= scale;
+    for (int i = 0; i < clippedPoints.size(); i++){
+        clippedPoints[i].x -= min.x;
+        clippedPoints[i].y -= min.y;
+        clippedPoints[i].x *= scale;
+        clippedPoints[i].y *= scale;
     }
 }

@@ -6,14 +6,14 @@ Shape::Shape(Point points[], int n) : Drawing(points, n) {}
 Shape::~Shape(){}
 
 void Shape::draw(ShadowBuffer& sb) {
-    scanLineFill(points,sb);
-    drawBorder(borderColor, sb);
+    scanLineFill(sb, points);
+    drawBorder(sb, borderColor);
 }
 
 void Shape::drawClipped(ShadowBuffer& sb, Point min, Point max, float scale) {
     clip(min, max, scale);
-    scanLineFill(clippedPoint,sb);
-    drawBorder(borderColor, sb);
+    scanLineFill(sb, clippedPoints);
+    drawBorder(sb, borderColor);
 }
 
 vector<Point> Shape::sortVector(vector<Point> v) {
@@ -52,7 +52,7 @@ int Shape::findIntersection(Point& p1, Point& p2, int y, int &x) {
     return isInsideEdgeX && isInsideEdgeY;
 }
 
-void Shape::scanLineFill(vector<Point> v, ShadowBuffer& sb)
+void Shape::scanLineFill(ShadowBuffer& sb, vector<Point> v)
 {       
     Point p1, p2;   
     int edgesSize = v.size();

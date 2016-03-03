@@ -17,7 +17,7 @@ class Drawing {
     public:
         Point anchor;
         vector<Point> points;
-        vector<Point> clippedPoint;
+        vector<Point> clippedPoints;
 
         Drawing() {}
         Drawing(Point points[], int n);
