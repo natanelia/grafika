@@ -120,7 +120,7 @@ int main(int argc, char *argv[]) {
 	// float scale = 19;
 	// sb.clear();
 	// indonesia.clip(target.points[0],target.points[2],19);
-	// indonesia.drawView(sb);
+	// indonesia.drawClipped(sb);
 	//minimap.draw(sb);
 	// indonesia.draw(sb);
 	//target.drawBorder(C,sb);
@@ -171,7 +171,7 @@ int main(int argc, char *argv[]) {
  //    	//initTermios();
  //    	sb.clear();
 	// 	indonesia.clip(target.points[0],target.points[2],scale);
-	// 	indonesia.drawView(sb);
+	// 	indonesia.drawClipped(sb);
  //    	minimap.draw(sb);
  //    	indonesia.draw(sb);
  //    	target.drawBorder(C,sb);

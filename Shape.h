@@ -13,6 +13,7 @@ protected:
 
 public:
     Color color;
+    Color borderColor;
 
     Shape(vector<Point>& points);
     Shape(Point points[], int n);
@@ -20,10 +21,10 @@ public:
 
     vector<Point> sortVector(vector<Point> v);
     int findIntersection(Point& p1, Point& p2, int y, int &x);
-    void scanLineFill(vector<Point> v, ShadowBuffer& sb);
+    void scanLineFill(ShadowBuffer& sb, vector<Point> v);
     void draw(ShadowBuffer& sb);
-    void drawView(ShadowBuffer& sb);
-	void drawBorder(Color c, ShadowBuffer& sb);
+    void drawClipped(ShadowBuffer& sb, Point min, Point max, float scale);
+	void drawBorder(ShadowBuffer& sb, Color c);
     void setColor(Color color);
 };
 

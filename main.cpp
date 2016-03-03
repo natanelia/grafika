@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
     int offSetX = 670;
     int offSetY = 350;
 
-    ShapeGroup Logothesims("Diamond",offSetX,offSetY,70);
+    ShapeGroup Logothesims("Diamond6",offSetX,offSetY,70);
     int position = 0;
     int translation = 2;
     //Logothesims.rotateX(5,offSetX, offSetY,0);

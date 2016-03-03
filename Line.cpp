@@ -8,6 +8,7 @@ Line::Line(Point p1, Point p2){
     points.push_back(p1);
     points.push_back(p2);
 }
+
 void Line::draw(ShadowBuffer& sb) {
     int x1 = (int)points[0].x;
     int y1 = (int)points[0].y;
@@ -42,9 +43,11 @@ void Line::draw(ShadowBuffer& sb) {
         }
     }
 }
+
 Point Line::getPoint1(){
     return points[0];
 }
+
 Point Line::getPoint2(){
     return points[1];
 }

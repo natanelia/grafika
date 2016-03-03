@@ -40,7 +40,7 @@ Point::~Point()
     temp[2] = temp[2] / temp[3];
 
 
-    //Asign nilai point dengan nilai baru
+    //Assign nilai point dengan nilai baru
     x = temp[0];
     y = temp[1];
     z = temp[2];

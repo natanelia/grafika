@@ -11,7 +11,6 @@ class Point
 {
     //Terdiri dari sebuah titik (x,y,z) + void-void transformasi pendukung (rotasi, translasi, scaling)
     public:
-        //vector<float> point; //titik vektor
         float x;
         float y;
         float z;
@@ -28,8 +27,7 @@ class Point
         void rotateX(float degree); //ClockWise
         void rotateY(float degree);//ClockWise
         void rotateZ(float degree);//ClockWise
-        float getZ();
-
+        
         void setX(float xnew);
         void setY(float ynew);
         void setZ(float znew);

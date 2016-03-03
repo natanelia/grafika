@@ -6,38 +6,27 @@ Shape::Shape(Point points[], int n) : Drawing(points, n) {}
 Shape::~Shape(){}
 
 void Shape::draw(ShadowBuffer& sb) {
-    // vector<Triangle> triangles = Triangulate::VectorToTriangleVector(points);
-    // for (int i = 0; i < triangles.size(); i++){
-    //     fillTriangle(triangles[i].P1, triangles[i].P2,triangles[i].P3, this->color, sb);
-    // }
     scanLineFill(points,sb);
-    drawBorder(Color(225,225,0), sb);
+    drawBorder(borderColor, sb);
 }
 
-void Shape::drawView(ShadowBuffer& sb) {
-    // vector<Triangle> triangles = Triangulate::VectorToTriangleVector(clippedPoint);
-    // for (int i = 0; i < triangles.size(); i++){
-    //     fillTriangle(triangles[i].P1, triangles[i].P2,triangles[i].P3, this->color, sb);
-    // }
+void Shape::drawClipped(ShadowBuffer& sb, Point min, Point max, float scale) {
+    clip(min, max, scale);
     scanLineFill(clippedPoint,sb);
-    drawBorder(Color(225,225,0), sb);
+    drawBorder(borderColor, sb);
 }
-
 
 vector<Point> Shape::sortVector(vector<Point> v) {
-
-     int i, j, numLength = v.size();
-     Point key;
-     for(j = 1; j < numLength; j++)    // Start with 1 (not 0)
-    {
-           key = v[j];
-           for(i = j - 1; (i >= 0) && (v[i].x > key.x); i--)   // Smaller values move up
-          {
-                 v[i+1] = v[i];
-          }
-         v[i+1] = key;    //Put key into its proper location
-     }
-     return v;
+    int i, j, numLength = v.size();
+    Point key;
+    for(j = 1; j < numLength; j++) {  // Start with 1 (not 0)
+        key = v[j];
+        for(i = j - 1; (i >= 0) && (v[i].x > key.x); i--) { // Smaller values move up
+            v[i+1] = v[i];
+        }
+        v[i+1] = key;    //Put key into its proper location
+    }
+    return v;
 }
 
 int Shape::findIntersection(Point& p1, Point& p2, int y, int &x) {
@@ -71,7 +60,7 @@ void Shape::scanLineFill(vector<Point> v, ShadowBuffer& sb)
     for(int i = tipPoints[0].y; i <= tipPoints[1].y; i++) {
         vector<Point> ListOfIntersectPoints;
         for(int j = 0; j < edgesSize; j++) {
-            if (j != (edgesSize - 1)){
+            if (j != (edgesSize - 1)) {
                 p1 = v[j];
                 p2 = v[j+1];
             } else {
@@ -79,7 +68,7 @@ void Shape::scanLineFill(vector<Point> v, ShadowBuffer& sb)
                 p2 = v[0];
             }
             int intersectX;
-            if (findIntersection(p1,p2,i,intersectX)){
+            if (findIntersection(p1,p2,i,intersectX)) {
                 if(p1.y > p2.y) {
                     std::swap(p1,p2);
                 }
@@ -107,7 +96,7 @@ void Shape::scanLineFill(vector<Point> v, ShadowBuffer& sb)
     }
 }
 
-void Shape::drawBorder(Color c, ShadowBuffer& sb){
+void Shape::drawBorder(ShadowBuffer& sb, Color c){
     for(int i = 0; i< points.size(); i++){
         vector<Point> p;
         if(i==points.size()-1){
