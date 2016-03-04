@@ -1,6 +1,8 @@
 #include "Shape.h"
 
-Shape::Shape(vector<Point>& points) : Drawing(points) {}
+Shape::Shape(vector<Point>& points) : Drawing(points) {
+    this->type = DEFAULT_FILL;
+}
 
 Shape::Shape(Point points[], int n) : Drawing(points, n) {}
 Shape::~Shape(){}
