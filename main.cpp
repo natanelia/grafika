@@ -54,7 +54,7 @@ char getche(void) {
 
 int main(int argc, char *argv[]) {
     Test test;
-    test.drawMultiChoppedLine();
+    test.drawLine();
 
     Util util;
     FrameBuffer fb;

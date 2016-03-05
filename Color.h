@@ -1,6 +1,6 @@
 #ifndef __COLOR
 #define __COLOR
-#include <stdio.h>
+#include <cstdio>
 
 class Color {
 public:

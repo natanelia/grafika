@@ -87,10 +87,10 @@ public:
 
         float * radius = new float[5];
         radius[0] = 0;
-        radius[1] = 100;
-        radius[2] = 200;
-        radius[3] = 300;
-        radius[4] = 400;
+        radius[1] = 200;
+        radius[2] = 400;
+        radius[3] = 600;
+        radius[4] = 800;
 
         Color * color = new Color[5];
         color[0] = Color(255, 0, 0);
@@ -118,10 +118,10 @@ public:
 
         float * radius = new float[5];
         radius[0] = 0;
-        radius[1] = 100;
-        radius[2] = 200;
-        radius[3] = 300;
-        radius[4] = 400;
+        radius[1] = 200;
+        radius[2] = 400;
+        radius[3] = 600;
+        radius[4] = 800;
 
         Color * color = new Color[5];
         color[0] = Color(255, 0, 0);
@@ -132,7 +132,7 @@ public:
 
         for (int i = 0; i < 500; i+=20) {
             sb.clear();
-            line.drawChopped(sb, Point(i,i,0), radius, color, 5, 20);
+            line.drawChopped(sb, Point(i,i,0), radius, color, 5, 2);
             fb.draw(sb);
         }
         usleep(500000);

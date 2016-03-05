@@ -26,8 +26,9 @@ public:
 
     vector<Point> sortVector(vector<Point> v);
     void draw(ShadowBuffer& sb);
+    
     void drawClipped(ShadowBuffer& sb, Point min, Point max, float scale);
-	void drawBorder(ShadowBuffer& sb, Color c);
+    void drawBorder(ShadowBuffer& sb, Color c);
     
     void scanLineIntersect(ShadowBuffer& sb, Shape available);
     void setColor(Color color);

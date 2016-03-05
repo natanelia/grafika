@@ -11,13 +11,13 @@ Shape::~Shape(){}
 
 void Shape::draw(ShadowBuffer& sb) {
     scanLineFill(sb, points);
-    drawBorder(sb, this->color );
+    //drawBorder(sb, this->color );
 }
 
 void Shape::drawClipped(ShadowBuffer& sb, Point min, Point max, float scale) {
     clip(min, max, scale);
     scanLineFill(sb, clippedPoints);
-    drawBorder(sb, borderColor);
+    //drawBorder(sb, borderColor);
 }
 
 vector<Point> Shape::sortVector(vector<Point> v) {
@@ -77,25 +77,20 @@ void Shape::scanLineFill(ShadowBuffer& sb, vector<Point> v)
                     std::swap(p1,p2);
                 }
 
-                // i = y
                 if (i != p2.y) {
                     Point intersect(intersectX, i, 0);
                     ListOfIntersectPoints.push_back(intersect);
                 }
-                //ListOfIntersectPoints.push_back(intersect);
             }
         }
         vector<Point> result = sortVector(ListOfIntersectPoints);
         int intersectPointsSize = result.size();
         Color d(225, 0, 0);
         for(int j = 0; j < intersectPointsSize-1; j+=2) {
-            vector<Point> p;
-            p.push_back(result[j]);
-            p.push_back(result[j+1]);
-            Line line(p);
+            Line line(result[j], result[j + 1]);
             line.color = this->color;
-            line.draw(sb);
-            //drawLine(result[j].x,result[j].y,result[j+1].x,result[j+1].y,d);
+            //line.draw(sb);
+            line.draw(sb, line.getPoint1(), line.getPoint1().getDistance(line.getPoint2()), line.color, Color(line.color.r - 50, line.color.g - 50, line.color.b - 50));
         }
     }
 }
@@ -150,21 +145,21 @@ void Shape::drawAvailable(vector<Line> available, vector<Point> demand, ShadowBu
 
                 Line line(demand[j], demand[j+1]);
                 line.color = c;
-                line.draw(sb);
+                line.draw(sb, line.getPoint1(), line.getPoint1().getDistance(line.getPoint2()), line.color, Color(line.color.r - 50, line.color.g - 50, line.color.b - 50));
             } else if (available[i].getPoint1().x <= demand[j].x) { //demand lebih banyak kebelakang
                 Line split(available[i].getPoint1(), Point(demand[j].x-1, available[i].getPoint1().y,0));
                 newAvailable.push_back(split);
 
                 Line line(demand[j], Point(available[i].getPoint2().x,demand[j].y,0));
                 line.color = c;
-                line.draw(sb);
+                line.draw(sb, line.getPoint1(), line.getPoint1().getDistance(line.getPoint2()), line.color, Color(line.color.r - 50, line.color.g - 50, line.color.b - 50));
 
             } else if (demand[j+1].x <= available[i].getPoint2().x) { //demand lebih banyak di depan
                 Line split(Point(demand[j+1].x+1,available[i].getPoint2().y,0), available[i].getPoint2());
 
                 Line line(Point(available[i].getPoint1().x,demand[j+1].y,0),demand[j+1]);
                 line.color = c;
-                line.draw(sb);
+                line.draw(sb, line.getPoint1(), line.getPoint1().getDistance(line.getPoint2()), line.color, Color(line.color.r - 50, line.color.g - 50, line.color.b - 50));
 
                 newAvailable.push_back(split);
             } else {

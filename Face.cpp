@@ -94,9 +94,9 @@ Face& Face::operator= (const Face& f){
 }
 
 void Face::draw(ShadowBuffer& sb){
+    lowerHead.draw(sb);
     face.at(0).draw(sb);
     face.at(1).drawBorder(sb,face.at(1).borderColor);
-    lowerHead.draw(sb);
     face.at(2).draw(sb);
     eyes.draw(sb);
 }

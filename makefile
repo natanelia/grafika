@@ -1,6 +1,6 @@
 make:
 	g++ *.cpp -o a -pthread -Ofast -march=native
-	sudo ./a
+	sudo ./a marco
 
 compile:
 	g++ *.cpp -o a -pthread -Ofast -march=native

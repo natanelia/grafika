@@ -285,8 +285,8 @@ void Line::drawChopped(ShadowBuffer& sb, Point const baseStart, float * radius, 
 
     Color c;
     float d;
-    float * segmentPercentage = new float[nSegment];
-    for (int i = 0; i < nSegment; i++) {
+    float * segmentPercentage = new float[nSegment + 1];
+    for (int i = 0; i <= nSegment; i++) {
         segmentPercentage[i] = (float)i / nSegment;
     }
 
@@ -306,7 +306,7 @@ void Line::drawChopped(ShadowBuffer& sb, Point const baseStart, float * radius, 
             percentage = (d - radius[segmentId - 1]) / (radius[segmentId] - radius[segmentId - 1]);
 
             int choppedSegmentId = 0;
-            while (segmentPercentage[choppedSegmentId] < percentage && choppedSegmentId < nSegment) {
+            while (segmentPercentage[choppedSegmentId] < percentage && choppedSegmentId <= nSegment) {
                 ++choppedSegmentId;
             }
             percentage = segmentPercentage[choppedSegmentId];
@@ -340,7 +340,7 @@ void Line::drawChopped(ShadowBuffer& sb, Point const baseStart, float * radius, 
                 percentage = (d - radius[segmentId - 1]) / (radius[segmentId] - radius[segmentId - 1]);
 
                 int choppedSegmentId = 0;
-                while (segmentPercentage[choppedSegmentId] < percentage && choppedSegmentId < nSegment) {
+                while (segmentPercentage[choppedSegmentId] < percentage && choppedSegmentId <= nSegment) {
                     ++choppedSegmentId;
                 }
                 percentage = segmentPercentage[choppedSegmentId];
