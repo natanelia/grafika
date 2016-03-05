@@ -26,7 +26,7 @@ public:
             x = 0;
             for (int i = 0; i < str.length() - 1; ++i) {
                 if (str[i] != ' ' && str[i] != '\n' && str[i] != '\r') {
-                    points->push_back(Point(x,y,z));
+                    points->push_back(Point(x,y,z,0));
                 }
                 ++x;
             }
@@ -37,7 +37,7 @@ public:
         return *points;
     }
 
-    static vector<vector<Point> > convertPoint(map<string, vector<Point> > object, string word, int a, int b, int c, int x, int y, int z) {
+    static vector<vector<Point> > convertPoint(map<string, vector<Point> > object, string word, int a, int b, int c, float x, float y, float z) {
         Point p;
 
         vector<vector<Point> > image;
@@ -60,6 +60,81 @@ public:
     }
 
     static map<string, vector<Point> > readObject(string fileName) {
+        ifstream file(fileName.c_str());
+        string str;
+        map<string, vector<Point> > objects;
+        while(getline(file,str)) {
+            string key = "";
+
+            //ambil key
+            int j=0;
+            while(str[j]!=' ') {
+                key+=str[j];
+                j++;
+            }
+
+            vector<Point> points;
+            int i = j;
+            while(str[i]!=';') {
+                if(str[i]!=' ') {
+                    Point point;
+
+                    //Ambil x
+                    string temp = "";
+                    while(str[i]!=',') {
+                        temp += str[i];
+                        i++;
+                    }
+
+                    int x = atoi(temp.c_str());
+                    //Ambil y
+                    i++;
+                    temp = "";
+                    while(str[i]!=',') {
+                        temp += str[i];
+                        i++;
+                    }
+                    int y = atoi(temp.c_str());
+
+                    //Ambil z
+                    i++;
+                    temp = "";
+                    while(str[i]!=',') {
+                        temp += str[i];
+                        i++;
+                    }
+                    int z = atoi(temp.c_str());
+
+                    
+                    //Ambil tag
+                    i++;
+                    temp = "";
+                    while(str[i]!=' ' && str[i]!=';') {
+                        temp += str[i];
+                        i++;
+                    }
+                    int tag = atoi(temp.c_str());
+
+                    //Isi point
+                    point.x = x;
+                    point.y = y;
+                    point.z = z;
+                    point.tag = tag;
+
+                    points.push_back(point);
+                } else {
+                    i++;
+                }
+
+            }
+            objects[key] = points;
+        }
+
+        file.close();
+        return objects;
+    }
+
+    /*static map<string, vector<Point> > readObject(string fileName) {
         ifstream file(fileName.c_str());
         string str;
         map<string, vector<Point> > objects;
@@ -123,7 +198,7 @@ public:
 
         file.close();
         return objects;
-    }
+    }*/
 };
 
 #endif

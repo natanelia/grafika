@@ -14,10 +14,11 @@ class Point
         float x;
         float y;
         float z;
-        float tag;
+        int tag;
 
         Point();
         Point(float xnew, float ynew, float znew);
+        Point(float xnew, float ynew, float znew, int tagnew);
         virtual ~Point();
 
         //fungsi pendukung

@@ -1,5 +1,7 @@
 #include "Drawing.h"
 
+Drawing::Drawing(){}
+
 Drawing::Drawing(Point points[], int n) {
     for (int i = 0; i < n; i++) {
         this->points.push_back(points[i]);
@@ -90,8 +92,8 @@ void Drawing::scale(Point axis, float scalingFactorX, float scalingFactorY) {
 Point * Drawing::getTipPoints() {
     Point * p = new Point[2];
 
-    p[0] = Point(points.at(0).x, points.at(0).y, points.at(0).z);
-    p[1] = Point(points.at(0).x, points.at(0).y, points.at(0).z);
+    p[0] = Point(points.at(0).x, points.at(0).y, points.at(0).z, points.at(0).tag);
+    p[1] = Point(points.at(0).x, points.at(0).y, points.at(0).z, points.at(0).tag);
 
     for (int i = 1; i < points.size(); i++) {
         if (p[0].x > points[i].x) {

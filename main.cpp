@@ -8,6 +8,7 @@
 #include "test.cpp"
 #include <termios.h>
 #include <unistd.h>
+#include "Face.h"
 
 #include <vector>
 #include <map>
@@ -61,6 +62,34 @@ int main(int argc, char *argv[]) {
     fb.backgroundColor = Color(255, 255, 255);
     sb.backgroundColor = Color(255, 255, 255);
 
+    string filename = argv[1];
+    map<string, vector<Point> > point = util.readObject("assets/"+filename+".txt");
+ 
+    Face face(point,100,100,0,10);
+    int i = 0;
+    //while(true){
+      // fb.clear();
+      // face.eyes.wink(RIGHT);
+      // face.smile();
+      // face.draw(sb);
+      // fb.draw(sb);
+      // i++;
+    while(true){
+      sb.clear();
+      face.eyes.closeEyes();
+      face.smile();
+      face.draw(sb);
+      fb.draw(sb);
+      usleep(1000000);
+      sb.clear();
+      face.eyes.normal();
+      face.openMouth();
+      face.draw(sb);
+      fb.draw(sb);
+      usleep(1000000);
+    }
+    
+    /*
     int offSetX = 670;
     int offSetY = 350;
 
@@ -101,6 +130,6 @@ int main(int argc, char *argv[]) {
       fb.draw(sb);
       usleep(5000);
 	}
-
+*/
     return 0;
 }

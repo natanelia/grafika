@@ -19,7 +19,7 @@ class Drawing {
         vector<Point> points;
         vector<Point> clippedPoints;
 
-        Drawing() {}
+        Drawing();
         Drawing(Point points[], int n);
         Drawing(vector<Point>& points);
 
