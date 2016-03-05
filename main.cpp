@@ -50,13 +50,11 @@ char getche(void) {
 	return getch_(1);	
 }
 
-void performTests() {
-  Test test;
-  test.testShape();
-}
-
 
 int main(int argc, char *argv[]) {
+    Test test;
+    test.drawMultiChoppedLine();
+
     Util util;
     FrameBuffer fb;
     ShadowBuffer sb(fb.width, fb.height, 0, 0, fb.finfo.line_length);

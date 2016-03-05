@@ -3,9 +3,9 @@
 #include "ShadowBuffer.h"
 #include "Drawing.h"
 #include "Line.h"
-#include "FillHelper.h"
-#include "Triangle.h"
-#include "Triangulate.h"
+//#include "FillHelper.h"
+//#include "Triangle.h"
+//#include "Triangulate.h"
 
 class Shape : public Drawing {
 protected:
@@ -13,7 +13,7 @@ protected:
     void scanLineFill(ShadowBuffer& sb, vector<Point> v);
 
 public:
-    int type;
+    //int type;
     Color color;
     Color borderColor;
 

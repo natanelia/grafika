@@ -1,5 +1,6 @@
 #ifndef __COLOR
 #define __COLOR
+#include <stdio.h>
 
 class Color {
 public:
@@ -13,6 +14,10 @@ public:
 
     int isEqual(Color& c) {
         return (r == c.r && g == c.g && b == c.b);
+    }
+
+    void print() {
+        printf("r:%d g:%d b:%d\n", r, g, b);
     }
 };
 

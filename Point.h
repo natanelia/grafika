@@ -32,6 +32,8 @@ class Point
         void setY(float ynew);
         void setZ(float znew);
 
+        float getDistance(Point p2);
+
     protected:
 
     private:

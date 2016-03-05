@@ -149,3 +149,7 @@ void Point::setY(float ynew) {
 void Point::setZ(float znew) {
     z = znew;
 }
+
+float Point::getDistance(Point p2) {
+    return pow(p2.x - x, 2) + pow(p2.y - y, 2) + pow(p2.z - z, 2);
+}
