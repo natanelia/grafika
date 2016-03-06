@@ -18,6 +18,8 @@ class LowerHead {
 		LowerHead& operator= (const LowerHead& lh);
 		void draw(ShadowBuffer& sb);
 		void smile(float top);
+		void sullen(float top, float width);
+		void openMouth(float top, float width);
 
 	protected:
 

@@ -10,7 +10,16 @@ Shape::Shape(Point points[], int n) : Drawing(points, n) {}
 Shape::~Shape(){}
 
 void Shape::draw(ShadowBuffer& sb) {
-    scanLineFill(sb, points);
+    vector<Point> result;
+    addBezier(&result);
+    // for(int i=0; i<result.size()-1; i++) {
+    //     Line line(result[i],result[i+1]);
+    //     line.color = Color(0,0,225);
+    //     line.draw(sb);
+    // }
+    
+    scanLineFill(sb, result);
+    //result.clear();
     //drawBorder(sb, this->color );
 }
 
@@ -55,6 +64,13 @@ int Shape::findIntersection(Point& p1, Point& p2, int y, int &x) {
 
     return isInsideEdgeX && isInsideEdgeY;
 }
+int Shape::floatToInt(float a){
+    float temp= a - floor(a);
+    if(temp > 0.5){
+        return (int) a +1;
+    }else 
+        return (int) a;
+}
 
 void Shape::scanLineFill(ShadowBuffer& sb, vector<Point> v)
 {       
@@ -72,7 +88,11 @@ void Shape::scanLineFill(ShadowBuffer& sb, vector<Point> v)
                 p2 = v[0];
             }
             int intersectX;
-            if (findIntersection(p1,p2,i,intersectX)) {
+            if((floatToInt(p1.y)==floatToInt(p2.y))&&(floatToInt(p1.x)==floatToInt(p2.x))&&(floatToInt(p1.y)==i)){
+                Point intersect((int)p1.x, i, 0);
+                ListOfIntersectPoints.push_back(intersect);
+            }
+            else if (findIntersection(p1,p2,i,intersectX)) {
                 if(p1.y > p2.y) {
                     std::swap(p1,p2);
                 }
@@ -177,6 +197,7 @@ void Shape::scanLineIntersect(ShadowBuffer& sb, Shape available) {
     Point p1, p2;   
 
     int nAvailable = available.points.size();
+
     int nDemand = points.size();
     int a = 0;
     available.draw(sb);
@@ -249,5 +270,80 @@ void Shape::scanLineIntersect(ShadowBuffer& sb, Shape available) {
                 drawAvailable(resultAvailable, resultDemand,sb, this->color);
             }
         //} 
+    }
+}
+
+int Shape::factorial(int n) 
+{
+    if (n == 0)
+       return 1;
+    return n * factorial(n - 1);
+}
+
+float Shape::Bernstein(int i, int n, float t) {
+    int binomial = factorial(n)/(factorial(n-i)*factorial(i));
+    float br = binomial*pow(t,i)*pow((1-t),(n-i));
+    return br;
+}
+
+void Shape::Bezier (vector<Point> control, vector<Point> *result)
+{
+    float t;
+    int n = control.size()-1;
+    for (t = 0.0; t < 1.0; t += 0.001)
+    {
+        float xt =0;
+        float yt =0;
+        for(int i=0; i<=n; i++) {
+            xt += control[i].x*Bernstein(i,n,t);
+            yt += control[i].y*Bernstein(i,n,t);
+
+        }
+        result->push_back(Point(xt,yt,0,0));
+    }
+}
+
+void Shape::addBezier(vector<Point> *result) {
+    vector<Point> temp;
+    temp = points;
+    for(int i=0; i<temp.size(); i++) {
+       
+        if(temp[i].tag==0) {
+
+            vector<Point> control;
+            vector<Point> bezier;
+            control.push_back(temp[i]);
+            i++;
+            while(i<temp.size() && temp[i].tag==1) {
+
+                control.push_back(temp[i]);
+                i++;
+            }
+            if(i>=temp.size()) {
+                control.push_back(temp[0]);
+               
+            }
+            else {
+                control.push_back(temp[i]);
+                if(i>=temp.size())
+                control.push_back(temp[0]);
+            }
+            //jika isi control>2, berarti bezier
+           
+            if(control.size()>2) {
+                Bezier(control, &bezier);
+                for(int j=0; j<bezier.size(); j++){
+                    result->push_back(bezier[j]);
+                }
+                
+               
+            }
+            else {
+                for(int j=0; j<control.size(); j++){
+                    result->push_back(control[j]);
+                }
+            }
+            i--;
+        }
     }
 }

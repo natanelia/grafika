@@ -23,7 +23,14 @@ class Face {
 		Face& operator=(const Face& f);
 		void draw(ShadowBuffer& sb);
 		void openMouth();
+		void sad();
+		void laugh();
+		void happy();
+		void flirting();
+		void angry();
+		void enthusiast();
 		void smile();
+		void sullen();
 
 	protected:
 

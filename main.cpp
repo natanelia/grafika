@@ -53,8 +53,8 @@ char getche(void) {
 
 
 int main(int argc, char *argv[]) {
-    Test test;
-    test.drawLine();
+    //Test test;
+    //test.drawLine();
 
     Util util;
     FrameBuffer fb;
@@ -76,14 +76,21 @@ int main(int argc, char *argv[]) {
       // i++;
     while(true){
       sb.clear();
-      face.eyes.closeEyes();
-      face.smile();
-      face.draw(sb);
-      fb.draw(sb);
-      usleep(1000000);
-      sb.clear();
-      face.eyes.normal();
-      face.openMouth();
+      if (i == 0)
+        face.happy();
+      else if(i == 1)
+        face.flirting();
+      else if(i == 2)
+        face.sad();
+      else if(i == 3)
+        face.angry();
+      else if(i == 4)
+        face.enthusiast();
+      else if(i == 5){
+        face.laugh();
+        i = -1;
+      }
+      i++;
       face.draw(sb);
       fb.draw(sb);
       usleep(1000000);

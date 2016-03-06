@@ -159,15 +159,9 @@ void Eyes::wink(int side){
 // }
 
 void Eyes::closeEyes(){
-	eyebrows.clear();
 	eyes.clear();
-	eyeballs.clear();
-	eyebrows.push_back(normal_state.at(0));
-	eyebrows.push_back(normal_state.at(1));
 	eyes.push_back(normal_state.at(2));
 	eyes.push_back(normal_state.at(3));
-	eyeballs.push_back(normal_state.at(4));
-	eyeballs.push_back(normal_state.at(5));
 	eyes.at(LEFT).color= Color(0,0,0);
 	eyes.at(RIGHT).color= Color(0,0,0);
 	int i = 1;
@@ -182,16 +176,31 @@ void Eyes::closeEyes(){
 	}
 }
 
+void Eyes::happyEyes(){
+	eyes.clear();
+	eyes.push_back(normal_state.at(2));
+	eyes.push_back(normal_state.at(3));
+	eyes.at(LEFT).color= Color(0,0,0);
+	eyes.at(RIGHT).color= Color(0,0,0);
+	int i = eyes.at(0).points.size() - 1;
+	while(eyes.at(0).points.at(i).tag != 0){
+		eyes.at(0).points.at(i).y -= 3 * scale;
+		i--;
+	}
+	i = eyes.at(1).points.size() - 1;
+	while(eyes.at(1).points.at(i).tag != 0){
+		eyes.at(1).points.at(i).y -= 3 * scale;
+		i--;
+	}
+}
+
 void Eyes::stare(){
 	eyebrows.clear();
 	eyes.clear();
-	eyeballs.clear();
 	eyebrows.push_back(normal_state.at(0));
 	eyebrows.push_back(normal_state.at(1));
 	eyes.push_back(normal_state.at(2));
 	eyes.push_back(normal_state.at(3));
-	eyeballs.push_back(normal_state.at(4));
-	eyeballs.push_back(normal_state.at(5));
 	int i = 1;
 	while(eyes.at(0).points.at(i).tag != 0){
 		eyes.at(0).points.at(i).y -= 1 * scale;
@@ -219,6 +228,52 @@ void Eyes::stare(){
 	}
 	for (int j = i; j < eyebrows.at(1).points.size(); j++){
 		eyebrows.at(1).points.at(j).y -= 1 * scale;
+	}
+}
+
+void Eyes::eyebrowUp(int side, float scale){
+	eyebrows.clear();
+	eyebrows.push_back(normal_state.at(0));
+	eyebrows.push_back(normal_state.at(1));
+
+	if (side == 2){
+		eyebrows.at(0).rotate(eyebrows.at(0).points.at(0),-35);
+		for(int i = 0; i < eyebrows.at(0).points.size(); i++){
+			eyebrows.at(0).translate(0,-1*scale);
+		}
+
+		eyebrows.at(1).rotate(eyebrows.at(1).points.at(0),35);
+		for(int i = 0; i < eyebrows.at(1).points.size(); i++){
+			eyebrows.at(1).translate(0,-1*scale);
+		}
+	}else{
+		eyebrows.at(side).rotate(eyebrows.at(side).points.at(0),-35 + 70 * side);
+		for(int i = 0; i < eyebrows.at(side).points.size(); i++){
+			eyebrows.at(side).translate(0,-1*scale);
+		}
+	}
+}
+
+void Eyes::eyebrowDown(int side, float scale){
+	eyebrows.clear();
+	eyebrows.push_back(normal_state.at(0));
+	eyebrows.push_back(normal_state.at(1));
+
+	if (side == 2){
+		eyebrows.at(0).rotate(eyebrows.at(0).points.at(0),15);
+		for(int i = 0; i < eyebrows.at(0).points.size(); i++){
+			eyebrows.at(0).translate(0,+0.5*scale);
+		}
+
+		eyebrows.at(1).rotate(eyebrows.at(1).points.at(0),-15);
+		for(int i = 0; i < eyebrows.at(1).points.size(); i++){
+			eyebrows.at(1).translate(0,+0.5*scale);
+		}
+	}else{
+		eyebrows.at(side).rotate(eyebrows.at(side).points.at(0),15 - 30 * side);
+		for(int i = 0; i < eyebrows.at(side).points.size(); i++){
+			eyebrows.at(side).translate(0,+0.5*scale);
+		}
 	}
 }
 

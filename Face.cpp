@@ -96,9 +96,43 @@ Face& Face::operator= (const Face& f){
 void Face::draw(ShadowBuffer& sb){
     lowerHead.draw(sb);
     face.at(0).draw(sb);
-    face.at(1).drawBorder(sb,face.at(1).borderColor);
+    //face.at(1).drawBorder(sb,face.at(1).borderColor);
+    face.at(1).draw(sb);
     face.at(2).draw(sb);
     eyes.draw(sb);
+}
+
+void Face::sad(){
+    sullen();
+    eyes.closeEyes();
+    eyes.eyebrowUp(2,scale);
+}
+
+void Face::laugh(){
+    eyes.happyEyes();
+    openMouth();
+}
+
+void Face::happy(){
+    smile();
+    eyes.happyEyes();
+    eyes.eyebrowUp(2,scale);
+}
+
+void Face::flirting(){
+    eyes.wink(1);
+    eyes.eyebrowDown(1,scale);
+    openMouth();
+}
+
+void Face::angry(){
+    eyes.stare();
+    sullen();
+}
+
+void Face::enthusiast(){
+    eyes.stare();
+    smile();
 }
 
 void Face::smile(){
@@ -143,6 +177,56 @@ void Face::smile(){
     lowerHead.smile(top);
 }
 
+void Face::sullen(){
+    face.clear();
+    face.push_back(normal_state.at(0));
+    face.push_back(normal_state.at(1));
+    face.push_back(normal_state.at(2));
+    float top = 10000;
+    float min = 10000;
+    float max = 0;
+
+    //find median
+    for (int i = 0; i < face.at(2).points.size(); i++){
+        if (min > face.at(2).points.at(i).x)
+            min = face.at(2).points.at(i).x;
+        if (max < face.at(2).points.at(i).x)
+            max = face.at(2).points.at(i).x;
+        if (top > face.at(2).points.at(i).y)
+            top = face.at(2).points.at(i).y;
+    }
+    float median = (min + max) / 2;
+    
+    //change upper lip shape
+    for(int i = 0; i < face.at(2).points.size(); i++){
+        face.at(2).points.at(i).x -= median;
+        face.at(2).points.at(i).x *= 1.2;
+        face.at(2).points.at(i).x += median;
+        face.at(2).points.at(i).y -= top;
+        face.at(2).points.at(i).y *= 1.2 * abs(median - face.at(2).points.at(i).x) / (max - min);
+        face.at(2).points.at(i).y += top;
+    }
+
+    //find median index in face
+    int median_index;
+    for(int i = 0; i < face.at(0).points.size(); i++){
+        if (face.at(0).points.at(i).x == median)
+            median_index = i;
+    }
+
+    //change face shape
+    for (int i = median_index - 2; i <= median_index + 2; i++){
+        face.at(0).points.at(i).x -= median;
+        face.at(0).points.at(i).x *= 1.2;
+        face.at(0).points.at(i).x += median;
+        face.at(0).points.at(i).y -= top;
+        face.at(0).points.at(i).y *= 1.2 * abs(median - face.at(0).points.at(i).x) / (max - min);
+        face.at(0).points.at(i).y += top;
+    }
+    //change lower head
+    lowerHead.sullen(top,max-min);
+}
+
 void Face::openMouth(){
     face.clear();
     face.push_back(normal_state.at(0));
@@ -163,7 +247,7 @@ void Face::openMouth(){
     int median_index;
     for(int i = 0; i < face.at(2).points.size(); i++){
         face.at(2).points.at(i).x -= median;
-        face.at(2).points.at(i).x *= 1.4;
+        face.at(2).points.at(i).x *= 1.2;
         face.at(2).points.at(i).x += median;
         face.at(2).points.at(i).y -= top;
         face.at(2).points.at(i).y *= 0.5;
@@ -176,11 +260,11 @@ void Face::openMouth(){
 
     for (int i = median_index - 2; i <= median_index + 2; i++){
         face.at(0).points.at(i).x -= median;
-        face.at(0).points.at(i).x *= 1;
+        face.at(0).points.at(i).x *= 1.2;
         face.at(0).points.at(i).x += median;
         face.at(0).points.at(i).y -= top;
-        face.at(0).points.at(i).y *= 1;
+        face.at(0).points.at(i).y *= 0.5;
         face.at(0).points.at(i).y += top;
     }
-    lowerHead.smile(top);
+    lowerHead.openMouth(top,max-min);
 }

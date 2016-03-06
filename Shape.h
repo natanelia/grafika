@@ -3,6 +3,7 @@
 #include "ShadowBuffer.h"
 #include "Drawing.h"
 #include "Line.h"
+#include <iostream>
 //#include "FillHelper.h"
 //#include "Triangle.h"
 //#include "Triangulate.h"
@@ -32,6 +33,12 @@ public:
     
     void scanLineIntersect(ShadowBuffer& sb, Shape available);
     void setColor(Color color);
+
+    int factorial(int n);
+    float Bernstein(int i, int n, float t);
+    void Bezier (vector<Point> control, vector<Point> *result);
+    void addBezier(vector<Point> *result);
+    int floatToInt(float a);
 };
 
 #endif

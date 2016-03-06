@@ -22,7 +22,10 @@ class Eyes {
 		void draw(ShadowBuffer& sb);
 		void wink(int side);
 		//void winkLeft();
+		void eyebrowUp(int side, float scale);
+		void eyebrowDown(int side, float scale);
 		void closeEyes();
+		void happyEyes();
 		void stare();
 		void normal();
 
