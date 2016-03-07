@@ -2,6 +2,7 @@
 #define _LINE
 #include "ShadowBuffer.h"
 #include "Drawing.h"
+#include <map>
 
 class Line : public Drawing {
 protected:
@@ -16,6 +17,7 @@ public:
     
     Point getPoint1();
     Point getPoint2();
+    map<int,int> getLinePoints();
     void draw(ShadowBuffer& sb);
     
     void draw(ShadowBuffer& sb, Point const baseStart, int const radius, Color const startColor, Color const endColor);

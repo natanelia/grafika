@@ -1,4 +1,5 @@
 #include "Shape.h"
+#include <stdexcept> 
 
 Shape::Shape():Drawing(){}
 
@@ -12,6 +13,7 @@ Shape::~Shape(){}
 void Shape::draw(ShadowBuffer& sb) {
     vector<Point> result;
     addBezier(&result);
+
     // for(int i=0; i<result.size()-1; i++) {
     //     Line line(result[i],result[i+1]);
     //     line.color = Color(0,0,225);
@@ -46,8 +48,8 @@ int Shape::findIntersection(Point& p1, Point& p2, int y, int &x) {
     if (p1.y == p2.y) {
         return false;
     }
-
-    x = (p2.x - p1.x) * (y - p1.y) / (p2.y - p1.y) + p1.x;
+    float xFloat = (p2.x - p1.x) * ((float)y - p1.y) / (p2.y - p1.y) + p1.x;
+    x = (int)xFloat;
      //cout<< "x, y =" << x << ", " << y<< endl;
     int isInsideEdgeX;
     int isInsideEdgeY;
@@ -77,30 +79,46 @@ void Shape::scanLineFill(ShadowBuffer& sb, vector<Point> v)
     Point p1, p2;   
     int edgesSize = v.size();
     Point * tipPoints = getTipPoints();
+    vector<map<int,int> > brensenham;
+    for(int i=1; i < v.size(); i++){
+        Line l(v[i-1], v[i]);
+        brensenham.push_back(l.getLinePoints());
+    }
+    Line l(v[v.size()-1], v[0]);
+    brensenham.push_back(l.getLinePoints());
+
     for(int i = tipPoints[0].y; i <= tipPoints[1].y; i++) {
         vector<Point> ListOfIntersectPoints;
-        for(int j = 0; j < edgesSize; j++) {
-            if (j != (edgesSize - 1)) {
-                p1 = v[j];
-                p2 = v[j+1];
-            } else {
-                p1 = v[j];
-                p2 = v[0];
-            }
-            int intersectX;
-            if((floatToInt(p1.y)==floatToInt(p2.y))&&(floatToInt(p1.x)==floatToInt(p2.x))&&(floatToInt(p1.y)==i)){
-                Point intersect((int)p1.x, i, 0);
-                ListOfIntersectPoints.push_back(intersect);
-            }
-            else if (findIntersection(p1,p2,i,intersectX)) {
-                if(p1.y > p2.y) {
-                    std::swap(p1,p2);
-                }
+        // for(int j = 0; j < edgesSize; j++) {
+        //     if (j != (edgesSize - 1)) {
+        //         p1 = v[j];
+        //         p2 = v[j+1];
+        //     } else {
+        //         p1 = v[j];
+        //         p2 = v[0];
+        //     }
+        //     int intersectX;
+        //     if((floatToInt(p1.y)==floatToInt(p2.y))&&(floatToInt(p1.x)==floatToInt(p2.x))&&(floatToInt(p1.y)==i)){
+        //         Point intersect((int)p1.x, i, 0);
+        //         ListOfIntersectPoints.push_back(intersect);
+        //     }
+        //     else if (findIntersection(p1,p2,i,intersectX)) {
+        //         if(p1.y > p2.y) {
+        //             std::swap(p1,p2);
+        //         }
 
-                if (i != p2.y) {
-                    Point intersect(intersectX, i, 0);
-                    ListOfIntersectPoints.push_back(intersect);
-                }
+        //         //if (i != p2.y) {
+        //             Point intersect(intersectX, i, 0);
+        //             ListOfIntersectPoints.push_back(intersect);
+        //         //}
+        //     }
+        // }
+        for(int j=0; j < brensenham.size(); j++){
+            try{
+                ListOfIntersectPoints.push_back(Point(brensenham[j][i], i, 0));
+                
+            }catch(const std::out_of_range& oor) {
+
             }
         }
         vector<Point> result = sortVector(ListOfIntersectPoints);
@@ -299,7 +317,15 @@ void Shape::Bezier (vector<Point> control, vector<Point> *result)
             yt += control[i].y*Bernstein(i,n,t);
 
         }
-        result->push_back(Point(xt,yt,0,0));
+        if (result->size()) {
+            if (result->at(result->size()-1).x == xt || result->at(result->size()-1).y == yt) {
+                /* do nothing */
+            } else {
+                result->push_back(Point(xt,yt,0,0));
+            }
+        } else {
+            result->push_back(Point(xt,yt,0,0));
+        }
     }
 }
 
