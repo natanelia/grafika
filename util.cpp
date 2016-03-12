@@ -2,6 +2,8 @@
 #define __UTIL
 
 #include "Point.h"
+#include "Image.h"
+#include "ColorTable.h"
 
 #include <iostream>
 #include <fstream>
@@ -14,11 +16,12 @@ using namespace std;
 
 class Util {
 public:
-    static vector<Point>& convertImageFile(string fileName) {
+    static Image& convertImageFile(string fileName, ColorTable& ct) {
         ifstream file(fileName.c_str());
         string str;
         int x, y, z;
         vector<Point> * points = new vector<Point>();
+        vector<Color> * colors = new vector<Color>();
 
         y = 0; z = 0;
         while (getline(file, str))
@@ -26,7 +29,8 @@ public:
             x = 0;
             for (int i = 0; i < str.length() - 1; ++i) {
                 if (str[i] != ' ' && str[i] != '\n' && str[i] != '\r') {
-                    points->push_back(Point(x,y,z,0));
+                    points->push_back(Point(x, y, z, 0));
+                    colors->push_back(ct.getColor(str[i]));
                 }
                 ++x;
             }
@@ -34,7 +38,10 @@ public:
         }
 
         file.close();
-        return *points;
+
+
+        Image * img = new Image(*points, *colors);
+        return *img;
     }
 
     static vector<vector<Point> > convertPoint(map<string, vector<Point> > object, string word, int a, int b, int c, float x, float y, float z) {

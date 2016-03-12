@@ -2,6 +2,7 @@
 #define _LINE
 #include "ShadowBuffer.h"
 #include "Drawing.h"
+#include "Image.h"
 #include <map>
 
 class Line : public Drawing {
@@ -25,6 +26,8 @@ public:
 
     void draw(ShadowBuffer& sb, Point const baseStart, float * radius, Color * colors, int n);
     void drawChopped(ShadowBuffer& sb, Point const baseStart, float * radius, Color * colors, int n, int nSegment);
+
+    void drawTextured(ShadowBuffer& sb, Point const baseStart, int textureWidth, int textureHeight, Color ** texture);
 };
 
 #endif

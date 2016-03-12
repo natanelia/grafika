@@ -74,8 +74,16 @@ int Shape::floatToInt(float a){
         return (int) a;
 }
 
-void Shape::scanLineFill(ShadowBuffer& sb, vector<Point> v)
-{       
+void Shape::scanLineFill(ShadowBuffer& sb, vector<Point> v) {
+    Util util;
+    Point basePoint(0,0,0);
+    ColorTable ct("assets/ColorTable.ct");
+    Image texture = util.convertImageFile("assets/texture-grass.txt", ct);
+    Color ** textureCache = texture.getCached();
+    Point textureWH = texture.getWidthAndHeight();
+    int textureWidth = textureWH.x;
+    int textureHeight = textureWH.y;
+
     Point p1, p2;   
     int edgesSize = v.size();
     Point * tipPoints = getTipPoints();
@@ -115,8 +123,9 @@ void Shape::scanLineFill(ShadowBuffer& sb, vector<Point> v)
         // }
         for(int j=0; j < brensenham.size(); j++){
             try{
-                ListOfIntersectPoints.push_back(Point(brensenham[j][i], i, 0));
-                
+                if (brensenham[j][i]) {
+                    ListOfIntersectPoints.push_back(Point(brensenham[j][i], i, 0));
+                }
             }catch(const std::out_of_range& oor) {
 
             }
@@ -128,7 +137,8 @@ void Shape::scanLineFill(ShadowBuffer& sb, vector<Point> v)
             Line line(result[j], result[j + 1]);
             line.color = this->color;
             //line.draw(sb);
-            line.draw(sb, line.getPoint1(), line.getPoint1().getDistance(line.getPoint2()), line.color, Color(line.color.r - 50, line.color.g - 50, line.color.b - 50));
+            //line.draw(sb, line.getPoint1(), line.getPoint1().getDistance(line.getPoint2()), line.color, Color(line.color.r - 50, line.color.g - 50, line.color.b - 50));
+            line.drawTextured(sb, basePoint, textureWidth, textureHeight, textureCache);
         }
     }
 }
@@ -308,7 +318,7 @@ void Shape::Bezier (vector<Point> control, vector<Point> *result)
 {
     float t;
     int n = control.size()-1;
-    for (t = 0.0; t < 1.0; t += 0.001)
+    for (t = 0.0; t < 1.0; t += 0.1)
     {
         float xt =0;
         float yt =0;
