@@ -49,8 +49,10 @@ int Shape::findIntersection(Point& p1, Point& p2, int y, int &x) {
         return false;
     }
     float xFloat = (p2.x - p1.x) * ((float)y - p1.y) / (p2.y - p1.y) + p1.x;
-    x = (int)xFloat;
-     //cout<< "x, y =" << x << ", " << y<< endl;
+    // cout<< "x, untuk y = " << y <<  " adalah  " << xFloat<< endl;
+     //cout<< "x1 :" <<p1.x << " y1 : "<<p1.y << " x2 : "<< p2.x << " y2 : "<< p2.y<<endl;
+    x = round(xFloat);
+     //cout<< "x, untuk y = " << y <<  " adalah  " << x<< endl;
     int isInsideEdgeX;
     int isInsideEdgeY;
 
@@ -63,7 +65,7 @@ int Shape::findIntersection(Point& p1, Point& p2, int y, int &x) {
         isInsideEdgeY = (p1.y <= y) && (y <= p2.y);
     else
         isInsideEdgeY = (p2.y <= y) && (y <= p1.y);
-
+    //if(isInsideEdgeX && isInsideEdgeY) cout<< "KETEMU x, untuk y = " << y <<  " adalah  " << x<< endl;
     return isInsideEdgeX && isInsideEdgeY;
 }
 int Shape::floatToInt(float a){
@@ -79,56 +81,73 @@ void Shape::scanLineFill(ShadowBuffer& sb, vector<Point> v)
     Point p1, p2;   
     int edgesSize = v.size();
     Point * tipPoints = getTipPoints();
-    vector<map<int,int> > brensenham;
-    for(int i=1; i < v.size(); i++){
-        Line l(v[i-1], v[i]);
-        brensenham.push_back(l.getLinePoints());
-    }
-    Line l(v[v.size()-1], v[0]);
-    brensenham.push_back(l.getLinePoints());
+    // vector<map<int,int> > brensenham;
+    // for(int i=1; i < v.size(); i++){
+    //     if(v[i-1].y!=v[i].y){
+    //         Line l(v[i-1], v[i]);
+    //         brensenham.push_back(l.getLinePoints());
+    //     }
+        
+    // }
+    // Line l(v[v.size()-1], v[0]);
+    // brensenham.push_back(l.getLinePoints());
 
     for(int i = tipPoints[0].y; i <= tipPoints[1].y; i++) {
         vector<Point> ListOfIntersectPoints;
-        // for(int j = 0; j < edgesSize; j++) {
-        //     if (j != (edgesSize - 1)) {
-        //         p1 = v[j];
-        //         p2 = v[j+1];
-        //     } else {
-        //         p1 = v[j];
-        //         p2 = v[0];
-        //     }
-        //     int intersectX;
-        //     if((floatToInt(p1.y)==floatToInt(p2.y))&&(floatToInt(p1.x)==floatToInt(p2.x))&&(floatToInt(p1.y)==i)){
-        //         Point intersect((int)p1.x, i, 0);
-        //         ListOfIntersectPoints.push_back(intersect);
-        //     }
-        //     else if (findIntersection(p1,p2,i,intersectX)) {
-        //         if(p1.y > p2.y) {
-        //             std::swap(p1,p2);
-        //         }
+        for(int j = 0; j < edgesSize; j++) {
+            if (j != (edgesSize - 1)) {
+                p1 = v[j];
+                p2 = v[j+1];
+            } else {
+                p1 = v[j];
+                p2 = v[0];
+            }
+            int intersectX;
+            // if((floatToInt(p1.y)==floatToInt(p2.y))&&(floatToInt(p1.x)==floatToInt(p2.x))&&(floatToInt(p1.y)==i)){
+            //     Point intersect(floatToInt(p1.x), i, 0);
+            //     ListOfIntersectPoints.push_back(intersect);
+            // }
+            if (findIntersection(p1,p2,i,intersectX)) {
+                if(p1.y > p2.y) {
+                    std::swap(p1,p2);
+                }
 
-        //         //if (i != p2.y) {
-        //             Point intersect(intersectX, i, 0);
-        //             ListOfIntersectPoints.push_back(intersect);
-        //         //}
-        //     }
-        // }
-        for(int j=0; j < brensenham.size(); j++){
-            try{
-                ListOfIntersectPoints.push_back(Point(brensenham[j][i], i, 0));
-                
-            }catch(const std::out_of_range& oor) {
-
+                if (i != p2.y) {
+                    Point intersect(intersectX, i, 0);
+                    ListOfIntersectPoints.push_back(intersect);
+                }
             }
         }
+        // for(int j=0; j < brensenham.size(); j++){
+        //     try{
+        //         if(brensenham[j][i]!=0)
+        //         ListOfIntersectPoints.push_back(Point(brensenham[j][i], i, 0));
+                
+        //     }catch(const std::out_of_range& oor) {
+
+        //     }
+        // }
         vector<Point> result = sortVector(ListOfIntersectPoints);
         int intersectPointsSize = result.size();
         Color d(225, 0, 0);
+        if(result.size()>0 ){
+            cout<< endl<<"y: "<<i<<endl<< "nilai x:";
+            for(int k=0; k< intersectPointsSize; k++) {
+                cout << result[k].x<< "--"; //<< " , "<< result[k+1].x << "  ";
+            }
+        
+        }
         for(int j = 0; j < intersectPointsSize-1; j+=2) {
-            Line line(result[j], result[j + 1]);
-            line.color = this->color;
-            //line.draw(sb);
-            line.draw(sb, line.getPoint1(), line.getPoint1().getDistance(line.getPoint2()), line.color, Color(line.color.r - 50, line.color.g - 50, line.color.b - 50));
+            // if(j<(intersectPointsSize-1))
+            // while((result[j+1].x-result[j].x)<=1){
+            //     j++;
+            // }
+            //if((result[j+1].x - result[j].x)> 1){
+                Line line(result[j], result[j + 1]);
+                line.color = this->color;
+                //line.draw(sb);
+                line.draw(sb, line.getPoint1(), line.getPoint1().getDistance(line.getPoint2()), line.color, Color(line.color.r - 50, line.color.g - 50, line.color.b - 50));
+            //}else j--;
         }
     }
 }
@@ -308,7 +327,7 @@ void Shape::Bezier (vector<Point> control, vector<Point> *result)
 {
     float t;
     int n = control.size()-1;
-    for (t = 0.0; t < 1.0; t += 0.001)
+    for (t = 0.0; t < 1.0; t += 0.07)
     {
         float xt =0;
         float yt =0;
