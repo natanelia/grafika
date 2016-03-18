@@ -78,7 +78,7 @@ void FrameBuffer::plot(int x, int y, Color& c) {
     
     int location = ((x+vinfo.xoffset) * (vinfo.bits_per_pixel/8) + (y+vinfo.yoffset) * finfo.line_length);
     if(location <= screenSize) {
-         *(fbp + location) = c.b;
+        *(fbp + location) = c.b;
         *(fbp + location + 1) = c.g;
         *(fbp + location + 2) = c.r;
         *(fbp + location + 3) = 0;

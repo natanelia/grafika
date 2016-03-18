@@ -50,22 +50,24 @@ public:
         vector<vector<Point> > image;
         vector<Point> points = object.find(word)->second;
         vector<Point> component;
-        for (int j = 0; j < points.size()-1; j++){
-            if (points[j].x == -1000 && points[j].y == -1000 && points[j].z == -1000) {
-                image.push_back(component);
-                component.clear();
-            } else {
+        for (int j = 0; j < points.size(); j++) {
+            while (!(points[j].x == -1000 && points[j].y == -1000 && points[j].z == -1000) && j < points.size()) {
                 p.x = a + points[j].x * x;
                 p.y = b + points[j].y * y;
                 p.z = c + points[j].z * z;
                 component.push_back(p);
+
+                j++;
             }
+            component.pop_back();
+            p.x = points[j - 1].x;
+            p.y = points[j - 1].y;
+            p.z = points[j - 1].z;
+            component.push_back(p);
+
+            image.push_back(component);
+            component.clear();
         }
-        p.x = points[points.size()-1].x;
-        p.y = points[points.size()-1].y;
-        p.z = points[points.size()-1].z;
-        component.push_back(p);
-        image.push_back(component);
 
         return image;
     }

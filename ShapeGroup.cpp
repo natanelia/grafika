@@ -6,8 +6,8 @@ ShapeGroup::ShapeGroup(string objName, float offsetX, float offsetY, int scale) 
     vector<vector<Point> > points = util.convertPoint(point, objName, offsetX, offsetY, 0, scale,  scale, scale);
     for (int j = 0; j < points.size(); j++) {
         Shape shape(points[j]);
-        vector<Point> p = points[j];
-        Color c(p[points[j].size()-1].x,p[points[j].size()-1].y,p[points[j].size()-1].z);
+        vector<Point> * p = &points[j];
+        Color c(p->at(p->size()-1).x,p->at(p->size()-1).y,p->at(p->size()-1).z);
         shape.setColor(c);
         // cout << "sebelum" << shape.points.size() << endl;
         shape.points.pop_back();
@@ -19,14 +19,10 @@ ShapeGroup::ShapeGroup(string objName, float offsetX, float offsetY, int scale) 
 
 void ShapeGroup::draw(ShadowBuffer& sb, float offsetX, float offsetY) {
     projectTo2D(offsetX,offsetY);
-    for(int i=0; i<shapes.size(); i++) {
-        /*for (int j=0; j < pointToPrint[0].size(); j++) {
-            cout << pointToPrint[0][j].x << "|" << pointToPrint[0][j].y << endl;
-        }*/
+    /*for(int i=0; i<shapes.size(); i++) {
         Shape s(pointToPrint[i]);
-        // cout<<"apaan sih "<<shapes[i].points.size() << endl;
         s.drawBorder(sb, Color(255,255,255));
-    }
+    }*/
     scanLineFill3D(sb);
 
     /*for (int j = 0; j < pointToPrint.size(); j++) {
@@ -154,10 +150,11 @@ Point * ShapeGroup::getTipPoints() {
 }
 
 int ShapeGroup::findZMax(vector<Point> plan){
-    int max= -99;
-    for(int x=0;x< plan.size();x++){
-        if(max< plan[x].z)
-            max= plan[x].z;
+    int max = -99;
+    for(int x = 0; x < plan.size(); x++){
+        if (max < plan[x].z) {
+            max = plan[x].z;
+        }
     }
     return max;
 }
@@ -357,7 +354,8 @@ void ShapeGroup::splitAvailable(vector<Line>  &available, vector<Point> demand, 
 
                 Line line(demand[j], demand[j+1]);
                 //line.color = c;
-                line.drawTextured(sb, basePoint, textureWidth, textureHeight, textureCache);
+                line.draw(sb);
+                // line.drawTextured(sb, basePoint, textureWidth, textureHeight, textureCache);
                 //line.draw(sb, line.getPoint1(), line.getPoint1().getDistance(line.getPoint2()), line.color, Color(line.color.r - 50, line.color.g - 50, line.color.b - 50));
             } else if (available[i].getPoint1().x <= demand[j].x) { //demand lebih banyak kebelakang
                 Line split(available[i].getPoint1(), Point(demand[j].x-1, available[i].getPoint1().y,0));
@@ -366,15 +364,17 @@ void ShapeGroup::splitAvailable(vector<Line>  &available, vector<Point> demand, 
                 Line line(demand[j], Point(available[i].getPoint2().x,demand[j].y,0));
                 // line.color = c;
                 // line.draw(sb, line.getPoint1(), line.getPoint1().getDistance(line.getPoint2()), line.color, Color(line.color.r - 50, line.color.g - 50, line.color.b - 50));
-                line.drawTextured(sb, basePoint, textureWidth, textureHeight, textureCache);
+                line.draw(sb);
+                // line.drawTextured(sb, basePoint, textureWidth, textureHeight, textureCache);
 
             } else if (demand[j+1].x <= available[i].getPoint2().x) { //demand lebih banyak di depan
                 Line split(Point(demand[j+1].x+1,available[i].getPoint2().y,0), available[i].getPoint2());
 
                 Line line(Point(available[i].getPoint1().x,demand[j+1].y,0),demand[j+1]);
                 // line.color = c;
+                line.draw(sb);
                 // line.draw(sb, line.getPoint1(), line.getPoint1().getDistance(line.getPoint2()), line.color, Color(line.color.r - 50, line.color.g - 50, line.color.b - 50));
-                line.drawTextured(sb, basePoint, textureWidth, textureHeight, textureCache);
+                // line.drawTextured(sb, basePoint, textureWidth, textureHeight, textureCache);
 
                 newAvailable.push_back(split);
             } else {
@@ -384,6 +384,47 @@ void ShapeGroup::splitAvailable(vector<Line>  &available, vector<Point> demand, 
         
         //update info available
         //Available.push_back(newAvailable);
+        available = newAvailable;
+    }
+}
+
+void ShapeGroup::splitAvailable(vector<Line> &available, vector<Point> demand, Color c, ShadowBuffer& sb) {
+    for (int j=0; j<demand.size()-1;j+=2) {
+        vector<Line> newAvailable;
+        for (int i= 0; i < available.size(); i++ ) {
+            if (available[i].getPoint2().x<=available[i].getPoint1().x) { //sudah tidak ada slot
+                   
+            } else if ((available[i].getPoint1().x <= demand[j].x) && (demand[j+1].x <= available[i].getPoint2().x)) { //demand berada di tengah
+                Line split1(available[i].getPoint1(), Point(demand[j].x-1, available[i].getPoint1().y,0));
+
+                Line split2(Point(demand[j+1].x+1,available[i].getPoint2().y,0), available[i].getPoint2());
+
+                newAvailable.push_back(split1);
+                newAvailable.push_back(split2);
+
+                Line line(demand[j], demand[j+1]);
+                line.color = c;
+                line.draw(sb);
+            } else if (available[i].getPoint1().x <= demand[j].x) { //demand lebih banyak kebelakang
+                Line split(available[i].getPoint1(), Point(demand[j].x-1, available[i].getPoint1().y,0));
+                newAvailable.push_back(split);
+
+                Line line(demand[j], Point(available[i].getPoint2().x,demand[j].y,0));
+                line.color = c;
+                line.draw(sb);
+
+            } else if (demand[j+1].x <= available[i].getPoint2().x) { //demand lebih banyak di depan
+                Line split(Point(demand[j+1].x+1,available[i].getPoint2().y,0), available[i].getPoint2());
+
+                Line line(Point(available[i].getPoint1().x,demand[j+1].y,0),demand[j+1]);
+                line.color = c;
+                line.draw(sb);
+
+                newAvailable.push_back(split);
+            } else {
+                newAvailable.push_back(available[i]); 
+            }
+        }
         available = newAvailable;
     }
 }
@@ -402,13 +443,13 @@ vector<vector<Line> > ShapeGroup::initAvailable(int x1, int x2) {
 void ShapeGroup::scanLineFill3D(ShadowBuffer& sb) {
     Point p1, p2;   
     Util util;
-    Point basePoint(0,0,0);
+    /*Point basePoint(0,0,0);
     ColorTable ct("assets/ColorTable.ct");
     Image texture = util.convertImageFile("assets/texture-grass.txt", ct);
     Color ** textureCache = texture.getCached();
     Point textureWH = texture.getWidthAndHeight();
     int textureWidth = textureWH.x;
-    int textureHeight = textureWH.y;
+    int textureHeight = textureWH.y;*/
 
 
     int nShape = pointToPrint.size();
@@ -419,11 +460,11 @@ void ShapeGroup::scanLineFill3D(ShadowBuffer& sb) {
     //     shapes[i].drawBorder(sb, Color(225,0,0));
     // }
     Shape as = shapes[0];
-    for(int q=0; q<pointToPrint[0].size(); q++){
+    /*for(int q=0; q<pointToPrint[0].size(); q++){
         cout<< "x= "<<as.points[q].x<<" y= "<<as.points[q].y<<" z= "<<as.points[q].z<<endl;
 
         cout<< "x= "<<pointToPrint[0][q].x<<" y= "<<pointToPrint[0][q].y<<endl;
-    }
+    }*/
     Point * tipPoints = getTipPoints();
     for (int i = 0; i <= 600; i++) {
         //cout<<"sadfsd"<<tipPoints[0].y << "YG KE 2 "<< tipPoints[1].y<<endl;
@@ -434,7 +475,7 @@ void ShapeGroup::scanLineFill3D(ShadowBuffer& sb) {
             vector<Point> ListOfIntersectPoints;
             Shape tempShape = pointToPrint[k];
             //tempShape.drawBorder(sb, Color(255,225,0));
-            tempShape.drawBorder(sb, Color(225,0,0));
+            //tempShape.drawBorder(sb, Color(225,0,0));
             int edgesSize = tempShape.points.size();
             //Color c = shapes[k].color;
 
@@ -463,13 +504,13 @@ void ShapeGroup::scanLineFill3D(ShadowBuffer& sb) {
             vector<Point> result = sortVector(ListOfIntersectPoints);
             if (result.size() > 0) {
                 
-                splitAvailable(available, result, sb, basePoint, textureWidth, textureHeight, textureCache);            
+                splitAvailable(available, result, shapes[k].color, sb);            
             }
         } 
     }
 }
 
-void ShapeGroup::build3D(int height) {
+void ShapeGroup::build3D(int height, Point& lightSource, int const lightRadius) {
     int i,j;
 
     int batas = shapes.size();
@@ -489,9 +530,35 @@ void ShapeGroup::build3D(int height) {
             Point temp2(shapes[k].points[i].x,shapes[k].points[i].y,height,shapes[k].points[i].tag);
             p.push_back(temp2);
             Shape s(p);
-            s.setColor(shapes[k].color);
+
+            Color c;
+            float percentage = ((float)lightSource.getDistance(shapes[k].points[i]) / (float)lightRadius);
+            if (percentage > 1) percentage = 1;
+            percentage *= percentage;
+            c.r = (int) (float)shapes[k].color.r * percentage;
+            c.g = (int) (float)shapes[k].color.g * percentage;
+            c.b = (int) (float)shapes[k].color.b * percentage;
+            c.print();
+            s.setColor(c);
+
             shapes.push_back(s);
-        } 
+        }
+        vector<Point > p;
+        for(int i = 0; i < shapes[k].points.size();i++){
+            Point temp(shapes[k].points[i].x,shapes[k].points[i].y,height,shapes[k].points[i].tag);
+            p.push_back(temp);
+        }
+        Shape s(p);
+        Color c;
+        float percentage = ((float)lightSource.getDistance(s.points[0]) / (float)lightRadius);
+        if (percentage > 1) percentage = 1;
+        percentage *= percentage;
+        c.r = (int) (float)shapes[k].color.r * percentage;
+        c.g = (int) (float)shapes[k].color.g * percentage;
+        c.b = (int) (float)shapes[k].color.b * percentage;
+        c.print();
+        s.setColor(Color());
+        shapes.push_back(s);
     }
 }
 

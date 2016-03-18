@@ -8,6 +8,7 @@ class ShapeGroup {
 protected:
     void projectTo2D(float offsetX, float offsetY);
     void splitAvailable(vector<Line>  &available, vector<Point> demand, ShadowBuffer& sb, Point basePoint, int textureWidth, int textureHeight, Color ** textureCache );
+    void splitAvailable(vector<Line> &available, vector<Point> demand, Color c, ShadowBuffer& sb);
     void sortLayer();
     void scanLineFill3D(ShadowBuffer& sb);
     int findZMax(vector<Point> plane);
@@ -30,7 +31,7 @@ public:
     void rotateX(float degree, float offsetX, float offsetY, float offsetZ);
     void rotateY(float degree, float offsetX, float offsetY, float offsetZ);
     void rotateZ(float degree, float offsetX, float offsetY, float offsetZ);
-    void build3D(int height);
+    void build3D(int height, Point& lightSource, int const lightRadius);
 
     Point * getTipPoints();
     Point * getGroundTipPoints();

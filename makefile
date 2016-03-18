@@ -1,9 +1,9 @@
 make:
 	g++ *.cpp -o a -Ofast -march=native
-	sudo ./a marco
+	sudo ./a
 
 compile:
-	g++ *.cpp -o a -pthread -Ofast -march=native
+	g++ *.cpp -o a -Ofast -march=native
 
 run:
 	sudo ./a

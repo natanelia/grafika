@@ -34,6 +34,7 @@ class Point
         void setZ(float znew);
 
         float getDistance(Point p2);
+        void print();
 
     protected:
 
