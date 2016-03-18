@@ -32,7 +32,7 @@ public:
         for (int i = 0; i < 360; i++) {
             Point * tipPoints = shape.getTipPoints();
             Point midAxis((tipPoints[0].x + tipPoints[1].x) / 2, (tipPoints[0].y + tipPoints[1].y) / 2, 0 , 0);
-            shape.rotate(midAxis, 5);
+            //shape.rotate(midAxis, 5);
             shape.scale(midAxis, 1.005, 1.005);
             shape.color = Color(rand() % 255, rand() % 255, rand() % 255);
 

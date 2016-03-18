@@ -20,11 +20,14 @@ ShapeGroup::ShapeGroup(string objName, float offsetX, float offsetY, int scale) 
 void ShapeGroup::draw(ShadowBuffer& sb, float offsetX, float offsetY) {
     projectTo2D(offsetX,offsetY);
     for(int i=0; i<shapes.size(); i++) {
+        /*for (int j=0; j < pointToPrint[0].size(); j++) {
+            cout << pointToPrint[0][j].x << "|" << pointToPrint[0][j].y << endl;
+        }*/
         Shape s(pointToPrint[i]);
         // cout<<"apaan sih "<<shapes[i].points.size() << endl;
         s.drawBorder(sb, Color(255,255,255));
     }
-    scanLineFill3D(sb);
+    //scanLineFill3D(sb);
 
     /*for (int j = 0; j < pointToPrint.size(); j++) {
         Color c = Color(j*j*4,j*20,250-j*15);
@@ -177,17 +180,14 @@ void ShapeGroup::projectTo2D(float offsetX, float offsetY){
         for(int j = 0; j < shapes[i].points.size(); j++){
             float newX = (offsetX + (shapes[i].points[j].x - offsetX) * pow((1.01),shapes[i].points[j].z * 0.1));
             float newY = (offsetY + (shapes[i].points[j].y - offsetY) * pow((1.01),shapes[i].points[j].z * 0.1));
-            Point p(newX, newY, shapes[i].points[j].z );
+            Point p(newX, newY, shapes[i].points[j].z);
             temp.push_back(p);
         }
-        
         // temp.push_back(Point(60, 170-a, 60));
         // a += 10;
         pointToPrint.push_back(temp);
     }
-
     sortLayer();
-
 }
 
 vector<Point> ShapeGroup::sortVector(vector<Point> v) {
@@ -341,21 +341,56 @@ void ShapeGroup::scanLineFill3D(ShadowBuffer& sb) {
 
 void ShapeGroup::build3D(int height) {
     int i,j;
-    cout << "ukuran " << shapes[0].points.size() << endl;
-    for(int i = 0; i < shapes[0].points.size(); i++){
-        if (i  != shapes[0].points.size() - 1)
-            j = i + 1;
-        else
-            j = 0;
-        vector<Point > p;
-        p.push_back(shapes[0].points[i]);
-        p.push_back(shapes[0].points[j]);
-        Point temp(shapes[0].points[j].x,shapes[0].points[j].y,height,shapes[0].points[j].tag);
-        p.push_back(temp);
-        Point temp2(shapes[0].points[i].x,shapes[0].points[i].y,height,shapes[0].points[i].tag);
-        p.push_back(temp2);
-        Shape s(p);
-        s.setColor(shapes[0].color);
-        shapes.push_back(s);
-    }   
+
+    int batas = shapes.size();
+    for (int k = 0; k < batas; k++) {
+        for(int i = 0; i < shapes[k].points.size(); i++){
+            if (i  != shapes[k].points.size() - 1) {
+                j = i + 1;
+            } else {
+                j = 0;
+            }
+
+            vector<Point > p;
+            p.push_back(shapes[k].points[i]);
+            p.push_back(shapes[k].points[j]);
+            Point temp(shapes[k].points[j].x,shapes[k].points[j].y,height,shapes[k].points[j].tag);
+            p.push_back(temp);
+            Point temp2(shapes[k].points[i].x,shapes[k].points[i].y,height,shapes[k].points[i].tag);
+            p.push_back(temp2);
+            Shape s(p);
+            s.setColor(shapes[k].color);
+            shapes.push_back(s);
+        } 
+    }
+}
+
+
+Point * ShapeGroup::getGroundTipPoints() {
+    Point * tipPoints = shapes[0].getTipPoints();
+
+    for (int i = 1; i < shapes.size(); i++) {
+        Point * tp = shapes[i].getTipPoints();
+        if (tipPoints[0].x > tp[0].x) {
+            tipPoints[0].x = tp[0].x;
+        }
+
+        if (tipPoints[0].y > tp[0].y) {
+            tipPoints[0].y = tp[0].y;
+        }
+
+        if (tipPoints[1].x < tp[1].x) {
+            tipPoints[1].x = tp[1].x;
+        }
+
+        if (tipPoints[1].y < tp[1].y) {
+            tipPoints[1].y = tp[1].y;
+        }
+
+        if (tipPoints[0].z > tp[0].z) {
+            tipPoints[0].z = tipPoints[1].z = tp[0].z;
+        }
+    }
+
+    return tipPoints;
 }
