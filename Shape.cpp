@@ -1,4 +1,5 @@
 #include "Shape.h"
+#include <stdexcept> 
 
 Shape::Shape():Drawing(){}
 
@@ -12,6 +13,7 @@ Shape::~Shape(){}
 void Shape::draw(ShadowBuffer& sb) {
     vector<Point> result;
     addBezier(&result);
+
     // for(int i=0; i<result.size()-1; i++) {
     //     Line line(result[i],result[i+1]);
     //     line.color = Color(0,0,225);
@@ -42,41 +44,122 @@ vector<Point> Shape::sortVector(vector<Point> v) {
     return v;
 }
 
+// int Shape::findIntersection(Point& p1, Point& p2, int y, int &x) {
+//     if (p1.y == p2.y) {
+//         return false;
+//     }
+//     float xFloat = (p2.x - p1.x) * ((float)y - p1.y) / (p2.y - p1.y) + p1.x;
+//     x = round(xFloat);
+//     int isInsideEdgeX;
+//     int isInsideEdgeY;
+
+//     if(p1.x < p2.x) 
+//         isInsideEdgeX = (p1.x <= x) && (x <= p2.x);
+//     else 
+//         isInsideEdgeX = (p2.x <= x) && (x <= p1.x);
+
+//     if(p1.y < p2.y)
+//         isInsideEdgeY = (p1.y <= y) && (y <= p2.y);
+//     else
+//         isInsideEdgeY = (p2.y <= y) && (y <= p1.y);
+//     return isInsideEdgeX && isInsideEdgeY;
+// }
+
 int Shape::findIntersection(Point& p1, Point& p2, int y, int &x) {
-    if (p1.y == p2.y) {
+
+    /*if (p1.y == p2.y && p1.y != y) {
         return false;
+    }*/
+
+    int yBottom;
+    int yTop;
+    int x1 = (int)p1.x;
+    int y1 = (int)p1.y;
+    int x2 = (int)p2.x;
+    int y2 = (int)p2.y;
+    
+    if (y1 > y2) {
+        yBottom = y1;
+        yTop = y2;
+    } else {
+        yBottom = y2;
+        yTop = y1;
     }
 
-    x = (p2.x - p1.x) * (y - p1.y) / (p2.y - p1.y) + p1.x;
-     //cout<< "x, y =" << x << ", " << y<< endl;
-    int isInsideEdgeX;
-    int isInsideEdgeY;
+    if (y < yTop || y > yBottom) return false;
 
-    if(p1.x < p2.x) 
-        isInsideEdgeX = (p1.x <= x) && (x <= p2.x);
-    else 
-        isInsideEdgeX = (p2.x <= x) && (x <= p1.x);
+    float deltaX = (x2 - x1);
+    float deltaY = (y2 - y1);
+    float error = 0;
+    float deltaErr = fabs(deltaY/deltaX);
 
-    if(p1.y < p2.y)
-        isInsideEdgeY = (p1.y <= y) && (y <= p2.y);
-    else
-        isInsideEdgeY = (p2.y <= y) && (y <= p1.y);
+    if (x1 > x2) {
+        int temp = x1;
+        x1 = x2;
+        x2 = temp;
 
-    return isInsideEdgeX && isInsideEdgeY;
+        temp = y1;
+        y1 = y2;
+        y2 = temp;
+    }
+
+    int yl = (int)y1;
+    for (int xl = (int)x1; xl <= (int)x2; xl++) {
+        // sb.plot(x,y, color);
+        if (yl == y && yl != yBottom) {
+            x = xl;
+            return true;
+        }
+        error = error + deltaErr;
+
+
+        while (error >= 0.5 && (yl != y2)) {
+            // sb.plot(x,y, color);
+            if (yl == y && yl != yBottom) {
+                x = xl;
+                return true;
+            }
+            int sign = (y2 > y1) ? 1: -1;
+            yl = yl + sign;
+            error = error - 1;
+        }
+    }
+    return false;
 }
+
 int Shape::floatToInt(float a){
     float temp= a - floor(a);
-    if(temp > 0.5){
+    if (temp > 0.5) {
         return (int) a +1;
-    }else 
+    } else {
         return (int) a;
+    }
 }
 
-void Shape::scanLineFill(ShadowBuffer& sb, vector<Point> v)
-{       
+void Shape::scanLineFill(ShadowBuffer& sb, vector<Point> v) {
+    Util util;
+    Point basePoint(0,0,0);
+    ColorTable ct("assets/ColorTable.ct");
+    Image texture = util.convertImageFile("assets/texture-grass.txt", ct);
+    Color ** textureCache = texture.getCached();
+    Point textureWH = texture.getWidthAndHeight();
+    int textureWidth = textureWH.x;
+    int textureHeight = textureWH.y;
+
     Point p1, p2;   
     int edgesSize = v.size();
     Point * tipPoints = getTipPoints();
+    // vector<map<int,int> > brensenham;
+    // for(int i=1; i < v.size(); i++){
+    //     if(v[i-1].y!=v[i].y){
+    //         Line l(v[i-1], v[i]);
+    //         brensenham.push_back(l.getLinePoints());
+    //     }
+        
+    // }
+    // Line l(v[v.size()-1], v[0]);
+    // brensenham.push_back(l.getLinePoints());
+
     for(int i = tipPoints[0].y; i <= tipPoints[1].y; i++) {
         vector<Point> ListOfIntersectPoints;
         for(int j = 0; j < edgesSize; j++) {
@@ -88,11 +171,11 @@ void Shape::scanLineFill(ShadowBuffer& sb, vector<Point> v)
                 p2 = v[0];
             }
             int intersectX;
-            if((floatToInt(p1.y)==floatToInt(p2.y))&&(floatToInt(p1.x)==floatToInt(p2.x))&&(floatToInt(p1.y)==i)){
-                Point intersect((int)p1.x, i, 0);
-                ListOfIntersectPoints.push_back(intersect);
-            }
-            else if (findIntersection(p1,p2,i,intersectX)) {
+            // if((floatToInt(p1.y)==floatToInt(p2.y))&&(floatToInt(p1.x)==floatToInt(p2.x))&&(floatToInt(p1.y)==i)){
+            //     Point intersect(floatToInt(p1.x), i, 0);
+            //     ListOfIntersectPoints.push_back(intersect);
+            // }
+            if (findIntersection(p1,p2,i,intersectX)) {
                 if(p1.y > p2.y) {
                     std::swap(p1,p2);
                 }
@@ -103,14 +186,37 @@ void Shape::scanLineFill(ShadowBuffer& sb, vector<Point> v)
                 }
             }
         }
+        // for(int j=0; j < brensenham.size(); j++){
+        //     try{
+        //         if(brensenham[j][i]!=0)
+        //         ListOfIntersectPoints.push_back(Point(brensenham[j][i], i, 0));
+                
+        //     }catch(const std::out_of_range& oor) {
+
+        //     }
+        // }
         vector<Point> result = sortVector(ListOfIntersectPoints);
         int intersectPointsSize = result.size();
         Color d(225, 0, 0);
+        /*if(result.size()>0 ){
+            if (i >= 400 && i <= 410) {
+                cout<<"y: "<<i<<endl<< "nilai x:";
+                for(int k=0; k< intersectPointsSize; k++) {
+                    cout << result[k].x<< "--"; //<< " , "<< result[k+1].x << "  ";
+                }
+                cout << endl;
+                // for (int k = 0; k < ListOfIntersectPoints.size(); k++) {
+                //     cout << ListOfIntersectPoints[k].x << "--";
+                // }
+                // cout << endl;
+            }
+        }*/
         for(int j = 0; j < intersectPointsSize-1; j+=2) {
             Line line(result[j], result[j + 1]);
             line.color = this->color;
             //line.draw(sb);
-            line.draw(sb, line.getPoint1(), line.getPoint1().getDistance(line.getPoint2()), line.color, Color(line.color.r - 50, line.color.g - 50, line.color.b - 50));
+            //line.draw(sb, line.getPoint1(), line.getPoint1().getDistance(line.getPoint2()), line.color, Color(line.color.r - 50, line.color.g - 50, line.color.b - 50));
+            line.drawTextured(sb, basePoint, textureWidth, textureHeight, textureCache);
         }
     }
 }
@@ -290,7 +396,7 @@ void Shape::Bezier (vector<Point> control, vector<Point> *result)
 {
     float t;
     int n = control.size()-1;
-    for (t = 0.0; t < 1.0; t += 0.001)
+    for (t = 0.0; t < 1.0; t += 0.07)
     {
         float xt =0;
         float yt =0;
@@ -299,7 +405,15 @@ void Shape::Bezier (vector<Point> control, vector<Point> *result)
             yt += control[i].y*Bernstein(i,n,t);
 
         }
-        result->push_back(Point(xt,yt,0,0));
+        if (result->size()) {
+            if (result->at(result->size()-1).x == xt || result->at(result->size()-1).y == yt) {
+                /* do nothing */
+            } else {
+                result->push_back(Point(xt,yt,0,0));
+            }
+        } else {
+            result->push_back(Point(xt,yt,0,0));
+        }
     }
 }
 

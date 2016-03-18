@@ -44,6 +44,46 @@ void Line::draw(ShadowBuffer& sb) {
     }
 }
 
+map<int,int> Line::getLinePoints() {
+    map<int,int> lineYtoX;
+
+    int x1 = (int)points[0].x;
+    int y1 = (int)points[0].y;
+    int x2 = (int)points[1].x;
+    int y2 = (int)points[1].y;
+
+    float deltaX = (x2 - x1);
+    float deltaY = (y2 - y1);
+    float error = 0;
+    float deltaErr = fabs(deltaY/deltaX);
+
+    if (x1 > x2) {
+        int temp = x1;
+        x1 = x2;
+        x2 = temp;
+
+        temp = y1;
+        y1 = y2;
+        y2 = temp;
+    }
+
+    int z = 0;
+    int y = (int)y1;
+    for (int x = (int)x1; x <= (int)x2; x++) {
+        lineYtoX[y] = x;
+        error = error + deltaErr;
+
+        while (error >= 0.5 && y != y2) {
+            lineYtoX[y] = x;
+            int sign = (y2 > y1) ? 1: -1;
+            y = y + sign;
+            error = error - 1;
+        }
+    }
+
+    return lineYtoX;
+}
+
 void Line::draw(ShadowBuffer& sb, Point const baseStart, int const radius, Color startColor, Color endColor) {
     //Create color which has rgb values of differences between startColor and endColor
     Color diffStartEnd(endColor.r, endColor.g, endColor.b);
@@ -351,6 +391,42 @@ void Line::drawChopped(ShadowBuffer& sb, Point const baseStart, float * radius, 
             c.g = colors[segmentId - 1].g + (colors[segmentId].g - colors[segmentId - 1].g) * percentage;
             c.b = colors[segmentId - 1].b + (colors[segmentId].b - colors[segmentId - 1].b) * percentage;
 
+        }
+    }
+}
+
+void Line::drawTextured(ShadowBuffer& sb, Point const baseStart, int textureWidth, int textureHeight, Color ** texture) {
+    int x1 = (int)points[0].x;
+    int y1 = (int)points[0].y;
+    int x2 = (int)points[1].x;
+    int y2 = (int)points[1].y;
+
+    float deltaX = (x2 - x1);
+    float deltaY = (y2 - y1);
+    float error = 0;
+    float deltaErr = fabs(deltaY/deltaX);
+
+    if (x1 > x2) {
+        int temp = x1;
+        x1 = x2;
+        x2 = temp;
+
+        temp = y1;
+        y1 = y2;
+        y2 = temp;
+    }
+
+    int y = (int)y1;
+
+    for (int x = (int)x1; x <= (int)x2; x++) {
+        sb.plot(x, y, texture[abs((y - (int)baseStart.y) % textureHeight)][abs((x - (int)baseStart.x) % textureWidth)]);
+        error = error + deltaErr;
+
+        while (error >= 0.5 && y != y2) {
+            int sign = (y2 > y1) ? 1: -1;
+            y = y + sign;
+            error = error - 1;
+            sb.plot(x, y, texture[abs((y - (int)baseStart.y) % textureHeight)][abs((x - (int)baseStart.x) % textureWidth)]);
         }
     }
 }

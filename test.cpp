@@ -7,6 +7,7 @@
 #include "Line.h"
 #include "Shape.h"
 #include "ShapeGroup.h"
+#include "ColorTable.h"
 
 #include <cstdlib>
 #include <ctime>
@@ -16,6 +17,29 @@
 
 class Test {
 public:
+    void drawImage() {
+        ColorTable ct("assets/ColorTable.ct");
+        Util util;
+        FrameBuffer fb;
+        ShadowBuffer sb(fb.width, fb.height, 0, 0, fb.finfo.line_length);
+        fb.backgroundColor = Color(0, 20, 30);
+        sb.backgroundColor = Color(0, 20, 30);
+
+        Image kapal = util.convertImageFile("assets/kapal.txt", ct);
+
+        for (int i = 0; i < 360; i++) {
+            Point * tipPoints = kapal.getTipPoints();
+            Point midAxis((tipPoints[0].x + tipPoints[1].x) / 2, (tipPoints[0].y + tipPoints[1].y) / 2, 0 , 0);
+            //kapal.rotate(midAxis, 5);
+            //kapal.scale(midAxis, 1.005, 1.005);
+            kapal.translate(1,0);
+
+            sb.clear();
+            kapal.draw(sb);
+            fb.draw(sb);
+        }
+    }
+
     void drawShape() {
         Util util;
         FrameBuffer fb;
