@@ -58,17 +58,19 @@ int main(int argc, char *argv[]) {
     ShadowBuffer sb(fb.width, fb.height, 0, 0, fb.finfo.line_length);
     fb.backgroundColor = Color(255, 255, 255);
     sb.backgroundColor = Color(255, 255, 255);
+    float offsetX = 100;
+    float offsetY = 100;
 
     string filename = argv[1];
     //map<string, vector<Point> > point = util.readObject("assets/"+filename+".txt");
-    ShapeGroup a("Dua",300,100,10);
-    a.build3D(100);
+    ShapeGroup a("Dua",offsetX,offsetY,5);
+    a.build3D(20);
     
     //a.translate(500,0,0);
     //a.draw(sb,100,100);
     // while(true){
       //sb.clear();
-    a.rotateX(90,0,0,0);
+    //a.rotateX(90,off,0,0);
     // for (int i = 0; i < a.shapes.size(); i++) {
     //   for (int j = 0; j < a.shapes[i].points.size(); j++) {
     //     cout << a.shapes[i].points[j].x << "," << a.shapes[i].points[j].y << "," << a.shapes[i].points[j].z << endl;  
@@ -76,7 +78,7 @@ int main(int argc, char *argv[]) {
     //   }
     //   cout << endl;
     // }
-      a.draw(sb,100,100);
+      a.draw(sb,offsetX,offsetY);
       fb.draw(sb);
       // usleep(1000000);
     // }
