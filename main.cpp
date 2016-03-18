@@ -56,8 +56,8 @@ int main(int argc, char *argv[]) {
     Util util;
     FrameBuffer fb;
     ShadowBuffer sb(fb.width, fb.height, 0, 0, fb.finfo.line_length);
-    fb.backgroundColor = Color(0, 0, 0);
-    sb.backgroundColor = Color(0, 0, 0);
+    fb.backgroundColor = Color(255, 0, 0);
+    sb.backgroundColor = Color(255, 0, 0);
 
     string filename;
     if (argc > 1) {
@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
     
     ShapeGroup a(filename, screenMiddleX, screenMiddleY, 3);
     Point lightSource(screenMiddleX, screenMiddleY, height * 1.2f);
-    a.build3D(height, lightSource, height * 7);
+    a.build3D(height, lightSource, height * 20);
 
     a.draw(sb, screenMiddleX, screenMiddleY);
     fb.draw(sb);

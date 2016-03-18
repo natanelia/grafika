@@ -12,7 +12,7 @@ Shape::~Shape(){}
 
 void Shape::draw(ShadowBuffer& sb) {
     vector<Point> result;
-    addBezier(&result);
+    //addBezier(&result);
 
     // for(int i=0; i<result.size()-1; i++) {
     //     Line line(result[i],result[i+1]);
