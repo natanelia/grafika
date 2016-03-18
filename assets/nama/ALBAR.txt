@@ -1,0 +1,13 @@
+             YYY      YY        YYYYYYY        YYY      YYYYYY            
+             YYY      YY        YYYYYYYY       YYY      YYYYYYYY          
+            YYYY      YY        YY    YYY     YYYY      YY    YY          
+            YY YY     YY        YY     YY     YY YY     YY    YY          
+            YY YY     YY        YY     YY     YY YY     YY    YY          
+           YY  YY     YY        YY   YYY     YY  YY     YY    YY          
+           YY   YY    YY        YYYYYYY      YY   YY    YYYYYYYY          
+           YY   YY    YY        YY    YYY    YY   YY    YYYYYYY           
+          YYYYYYYYY   YY        YY     YY   YYYYYYYYY   YY   YYY          
+          YYYYYYYYY   YY        YY     YY   YYYYYYYYY   YY    YY          
+         YY      YY   YY        YY     YY  YY      YY   YY     YY         
+         YY       YY  YY        YY    YYY  YY       YY  YY     YY         
+         YY       YY  YYYYYYYYY YYYYYYYY   YY       YY  YY      YY 

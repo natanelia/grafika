@@ -58,10 +58,7 @@ int main(int argc, char *argv[]) {
     ShadowBuffer sb(fb.width, fb.height, 0, 0, fb.finfo.line_length);
     fb.backgroundColor = Color(0, 0, 0);
     sb.backgroundColor = Color(0, 0, 0);
-
-    string filename = argv[1];
     //map<string, vector<Point> > point = util.readObject("assets/"+filename+".txt");
-    //a.build3D(100);
     
     //a.translate(500,0,0);
     //a.draw(sb,100,100);
@@ -80,9 +77,16 @@ int main(int argc, char *argv[]) {
     int screenMiddleX = fb.vinfo.xres / 2;
     int screenMiddleY = fb.vinfo.yres / 2;
     
-    ShapeGroup a("TigaPuluhSembilan", screenMiddleX, screenMiddleY, 1);
+    ShapeGroup a("All", screenMiddleX, screenMiddleY, 1);
+    a.build3D(10);
+    ColorTable ct("assets/ColorTable.ct");
+
+    Image logo = util.convertImageFile("assets/nama/perpustakaan.txt", ct);
+    logo.draw(sb);
     a.draw(sb, screenMiddleX, screenMiddleY);
     fb.draw(sb);
+
+
 
     int c=0;
     //initTermios(0);
