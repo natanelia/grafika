@@ -216,9 +216,9 @@ vector<Point> ShapeGroup::sortVector(vector<Point> v) {
 }
 int ShapeGroup::findIntersection(Point& p1, Point& p2, int y, int &x, int &z) {
 
-    /*if (p1.y == p2.y && p1.y != y) {
+    if (p1.y == p2.y) {
         return false;
-    }*/
+    }
 
     int yBottom;
     int yTop;
