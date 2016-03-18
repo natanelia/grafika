@@ -29,6 +29,7 @@ public:
     void rotateX(float degree, float offsetX, float offsetY, float offsetZ);
     void rotateY(float degree, float offsetX, float offsetY, float offsetZ);
     void rotateZ(float degree, float offsetX, float offsetY, float offsetZ);
+    void build3D(int height);
 
     Point * getTipPoints();
 };

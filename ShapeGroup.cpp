@@ -2,18 +2,28 @@
 
 ShapeGroup::ShapeGroup(string objName, float offsetX, float offsetY, int scale) {
     Util util;
-    map<string, vector<Point> > point = util.readObject("assets/3d.txt");
+    map<string, vector<Point> > point = util.readObject("assets/coba3d.txt");
     vector<vector<Point> > points = util.convertPoint(point, objName, offsetX, offsetY, 0, scale,  scale, scale);
-
     for (int j = 0; j < points.size(); j++) {
         Shape shape(points[j]);
-        shape.color= Color(225,0,0);
+        vector<Point> p = points[j];
+        Color c(p[points[j].size()-1].x,p[points[j].size()-1].y,p[points[j].size()-1].z);
+        shape.setColor(c);
+        cout << "sebelum" << shape.points.size() << endl;
+        shape.points.pop_back();
+        cout << "setelah" << shape.points.size() << endl;
         shapes.push_back(shape);
     }
+
 }
 
 void ShapeGroup::draw(ShadowBuffer& sb, float offsetX, float offsetY) {
     projectTo2D(offsetX,offsetY);
+    for(int i=0; i<shapes.size(); i++) {
+        Shape s(pointToPrint[i]);
+        // cout<<"apaan sih "<<shapes[i].points.size() << endl;
+        s.drawBorder(sb, Color(255,255,255));
+    }
     scanLineFill3D(sb);
 
     /*for (int j = 0; j < pointToPrint.size(); j++) {
@@ -171,12 +181,13 @@ void ShapeGroup::projectTo2D(float offsetX, float offsetY){
             temp.push_back(p);
         }
         
-        temp.push_back(Point(60, 170-a, 60));
-        a += 10;
+        // temp.push_back(Point(60, 170-a, 60));
+        // a += 10;
         pointToPrint.push_back(temp);
     }
 
     sortLayer();
+
 }
 
 vector<Point> ShapeGroup::sortVector(vector<Point> v) {
@@ -223,6 +234,7 @@ void ShapeGroup::splitAvailable(vector<vector<Line> > &Available, vector<Point> 
     for (int j=0; j<demand.size();j+=2) {
         vector<Line> newAvailable;
         for (int i= 0; i < available.size(); i++ ) {
+
             if (available[i].getPoint2().x<=available[i].getPoint1().x) { //sudah tidak ada slot
                 newAvailable.push_back(available[i]);   
             } else if (demand[j].x > available[i].getPoint2().x) { //demand berada di kanan available
@@ -282,15 +294,20 @@ void ShapeGroup::scanLineFill3D(ShadowBuffer& sb) {
 
     int nShape = pointToPrint.size();
     int a = 0;
-
+    for(int i=0; i<shapes.size(); i++){
+        //Shape s = points[i];
+        shapes[i].draw(sb);
+        shapes[i].drawBorder(sb, Color(225,0,0));
+    }
     Point * tipPoints = getTipPoints();
     for (int i = tipPoints[0].y; i <= tipPoints[1].y; i++) {
-        vector<vector<Line> > available = initAvailable(0,1020);
+        vector<vector<Line> > available = initAvailable(tipPoints[0].x,tipPoints[1].x);
         for (int k = 0; (k < nShape) && (available.size() > 0); k++) {
             vector<Point> ListOfIntersectPoints;
             Shape tempShape = pointToPrint[k];
+            tempShape.drawBorder(sb, Color(255,225,0));
             int edgesSize = tempShape.points.size();
-            Color c = Color(tempShape.points[edgesSize-1].x,tempShape.points[edgesSize-1].y + 180 - (int)(i / 2),tempShape.points[edgesSize-1].z); 
+            Color c = shapes[k].color;
 
             for (int j = 0; j < (edgesSize - 1); j++) {
                 if (j != (edgesSize - 2)) {
@@ -320,4 +337,25 @@ void ShapeGroup::scanLineFill3D(ShadowBuffer& sb) {
             }
         } 
     }
+}
+
+void ShapeGroup::build3D(int height) {
+    int i,j;
+    cout << "ukuran " << shapes[0].points.size() << endl;
+    for(int i = 0; i < shapes[0].points.size(); i++){
+        if (i  != shapes[0].points.size() - 1)
+            j = i + 1;
+        else
+            j = 0;
+        vector<Point > p;
+        p.push_back(shapes[0].points[i]);
+        p.push_back(shapes[0].points[j]);
+        Point temp(shapes[0].points[j].x,shapes[0].points[j].y,height,shapes[0].points[j].tag);
+        p.push_back(temp);
+        Point temp2(shapes[0].points[i].x,shapes[0].points[i].y,height,shapes[0].points[i].tag);
+        p.push_back(temp2);
+        Shape s(p);
+        s.setColor(shapes[0].color);
+        shapes.push_back(s);
+    }   
 }

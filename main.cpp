@@ -17,7 +17,6 @@
 #include <ctime>
 #include <iostream>
 
-
 using namespace std;
 static struct termios oldT, newT;
 /* Initialize new terminal i/o settings */
@@ -61,37 +60,35 @@ int main(int argc, char *argv[]) {
     sb.backgroundColor = Color(255, 255, 255);
 
     string filename = argv[1];
-    map<string, vector<Point> > point = util.readObject("assets/"+filename+".txt");
- 
-    Face face(point,100,100,0,10);
-    int i = 0;
-    //while(true){
-      // fb.clear();
-      // face.eyes.wink(RIGHT);
-      // face.smile();
-      // face.draw(sb);
-      // fb.draw(sb);
-      // i++;
-    while(true){
-      sb.clear();
-      if (i == 0)
-        face.happy();
-      else if(i == 1)
-        face.flirting();
-      else if(i == 2)
-        face.sad();
-      else if(i == 3)
-        face.angry();
-      else if(i == 4)
-        face.enthusiast();
-      else if(i == 5){
-        face.laugh();
-        i = -1;
-      }
-      i++;
-      face.draw(sb);
+    //map<string, vector<Point> > point = util.readObject("assets/"+filename+".txt");
+    ShapeGroup a("Dua",300,100,10);
+    a.build3D(100);
+    
+    //a.translate(500,0,0);
+    //a.draw(sb,100,100);
+    // while(true){
+      //sb.clear();
+    a.rotateX(90,0,0,0);
+    // for (int i = 0; i < a.shapes.size(); i++) {
+    //   for (int j = 0; j < a.shapes[i].points.size(); j++) {
+    //     cout << a.shapes[i].points[j].x << "," << a.shapes[i].points[j].y << "," << a.shapes[i].points[j].z << endl;  
+    //     // cout << "2d" << a.pointToPrint[i][j].x << "," << a.pointToPrint[i][j].y << endl;
+    //   }
+    //   cout << endl;
+    // }
+      a.draw(sb,100,100);
       fb.draw(sb);
-    }
+      // usleep(1000000);
+    // }
+  
+    /*for (int i = 0; i < a.shapes.size(); i++) {
+      for (int j = 0; j < a.shapes[i].points.size(); j++) {
+        cout << a.shapes[i].points[j].x << "," << a.shapes[i].points[j].y << "," << a.shapes[i].points[j].z << endl;  
+      }
+      cout << endl;
+    }*/
+  
+    //usleep(1000000);
     
     
     /*int offSetX = 670;
@@ -112,9 +109,8 @@ int main(int argc, char *argv[]) {
     // Image logoShadow = util.convertImageFile("assets/logo.txt", ct);
     // logoShadow.translate(550,110);
 
-
     while(true){
-      cout << "T" << endl;
+      cout<<"RYAN"<<endl;
       if (position > 20){
         translation *= -1;
       }

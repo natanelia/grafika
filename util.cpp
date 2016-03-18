@@ -50,7 +50,7 @@ public:
         vector<vector<Point> > image;
         vector<Point> points = object.find(word)->second;
         vector<Point> component;
-        for (int j = 0; j < points.size(); j++){
+        for (int j = 0; j < points.size()-1; j++){
             if (points[j].x == -1000 && points[j].y == -1000 && points[j].z == -1000) {
                 image.push_back(component);
                 component.clear();
@@ -61,6 +61,10 @@ public:
                 component.push_back(p);
             }
         }
+        p.x = points[points.size()-1].x;
+        p.y = points[points.size()-1].y;
+        p.z = points[points.size()-1].z;
+        component.push_back(p);
         image.push_back(component);
 
         return image;
@@ -84,51 +88,58 @@ public:
             int i = j;
             while(str[i]!=';') {
                 if(str[i]!=' ') {
-                    Point point;
+                    if (str[i]!='-') {
+                        Point point;
 
-                    //Ambil x
-                    string temp = "";
-                    while(str[i]!=',') {
-                        temp += str[i];
+                        //Ambil x
+                        string temp = "";
+                        while(str[i]!=',') {
+                            temp += str[i];
+                            i++;
+                        }
+
+                        int x = atoi(temp.c_str());
+                        //Ambil y
+                        i++;
+                        temp = "";
+                        while(str[i]!=',') {
+                            temp += str[i];
+                            i++;
+                        }
+                        int y = atoi(temp.c_str());
+
+                        //Ambil z
+                        i++;
+                        temp = "";
+                        while(str[i]!=',') {
+                            temp += str[i];
+                            i++;
+                        }
+                        int z = atoi(temp.c_str());
+
+                        
+                        //Ambil tag
+                        i++;
+                        temp = "";
+                        while(str[i]!=' ' && str[i]!=';') {
+                            temp += str[i];
+                            i++;
+                        }
+                        int tag = atoi(temp.c_str());
+
+                        //Isi point
+                        point.x = x;
+                        point.y = y;
+                        point.z = z;
+                        point.tag = tag;
+
+                        points.push_back(point);    
+                    } else {
+                        while(str[i]!=' ') {
+                            i++;
+                        }
                         i++;
                     }
-
-                    int x = atoi(temp.c_str());
-                    //Ambil y
-                    i++;
-                    temp = "";
-                    while(str[i]!=',') {
-                        temp += str[i];
-                        i++;
-                    }
-                    int y = atoi(temp.c_str());
-
-                    //Ambil z
-                    i++;
-                    temp = "";
-                    while(str[i]!=',') {
-                        temp += str[i];
-                        i++;
-                    }
-                    int z = atoi(temp.c_str());
-
-                    
-                    //Ambil tag
-                    i++;
-                    temp = "";
-                    while(str[i]!=' ' && str[i]!=';') {
-                        temp += str[i];
-                        i++;
-                    }
-                    int tag = atoi(temp.c_str());
-
-                    //Isi point
-                    point.x = x;
-                    point.y = y;
-                    point.z = z;
-                    point.tag = tag;
-
-                    points.push_back(point);
                 } else {
                     i++;
                 }

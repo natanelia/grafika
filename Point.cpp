@@ -7,7 +7,7 @@ Point::Point()
     x = 0;
     y = 0;
     z = 0;
-    tag = 0; //elemen terakhir sebagai pelengkap, untuk keperluan transformasi
+    tag = 1; //elemen terakhir sebagai pelengkap, untuk keperluan transformasi
 }
 
 
@@ -16,7 +16,7 @@ Point::Point(float xnew, float ynew, float znew){
     x = xnew;
     y = ynew;
     z = znew;
-    tag = 0; //elemen terakhir sebagai pelengkap, untuk keperluan transformasi
+    tag = 1; //elemen terakhir sebagai pelengkap, untuk keperluan transformasi
 }
 
 Point::Point(float xnew, float ynew, float znew, int tagnew){
@@ -24,7 +24,7 @@ Point::Point(float xnew, float ynew, float znew, int tagnew){
     x = xnew;
     y = ynew;
     z = znew;
-    tag = tagnew; //elemen terakhir sebagai pelengkap, untuk keperluan transformasi
+    tag = 1; //elemen terakhir sebagai pelengkap, untuk keperluan transformasi
 }
 
 Point::~Point()
