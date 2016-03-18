@@ -75,16 +75,19 @@ void FrameBuffer::clear() {
 }
 
 void FrameBuffer::plot(int x, int y, Color& c) {
-    int location = ((x+vinfo.xoffset) * (vinfo.bits_per_pixel/8) + (y+vinfo.yoffset) * finfo.line_length) % this->screenSize;
-
-    *(fbp + location) = c.b;
-    *(fbp + location + 1) = c.g;
-    *(fbp + location + 2) = c.r;
-    *(fbp + location + 3) = 0;
+    
+    int location = ((x+vinfo.xoffset) * (vinfo.bits_per_pixel/8) + (y+vinfo.yoffset) * finfo.line_length);
+    if(location <= screenSize) {
+         *(fbp + location) = c.b;
+        *(fbp + location + 1) = c.g;
+        *(fbp + location + 2) = c.r;
+        *(fbp + location + 3) = 0;
+    }
+   
 }
 
 Color * FrameBuffer::getColor(int x, int y) {
-    int location = ((x+vinfo.xoffset) * (vinfo.bits_per_pixel/8) + (y+vinfo.yoffset) * finfo.line_length) % this->screenSize;
+    int location = ((x+vinfo.xoffset) * (vinfo.bits_per_pixel/8) + (y+vinfo.yoffset) * finfo.line_length);
     Color * c = new Color();
     c->b = *(fbp + location);
     c->g = *(fbp + location + 1);

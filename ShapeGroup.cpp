@@ -9,9 +9,9 @@ ShapeGroup::ShapeGroup(string objName, float offsetX, float offsetY, int scale) 
         vector<Point> p = points[j];
         Color c(p[points[j].size()-1].x,p[points[j].size()-1].y,p[points[j].size()-1].z);
         shape.setColor(c);
-        cout << "sebelum" << shape.points.size() << endl;
+        // cout << "sebelum" << shape.points.size() << endl;
         shape.points.pop_back();
-        cout << "setelah" << shape.points.size() << endl;
+        // cout << "setelah" << shape.points.size() << endl;
         shapes.push_back(shape);
     }
 
@@ -19,15 +19,25 @@ ShapeGroup::ShapeGroup(string objName, float offsetX, float offsetY, int scale) 
 
 void ShapeGroup::draw(ShadowBuffer& sb, float offsetX, float offsetY) {
     projectTo2D(offsetX,offsetY);
-    for(int i=0; i<shapes.size(); i++) {
-        /*for (int j=0; j < pointToPrint[0].size(); j++) {
-            cout << pointToPrint[0][j].x << "|" << pointToPrint[0][j].y << endl;
-        }*/
-        Shape s(pointToPrint[i]);
-        // cout<<"apaan sih "<<shapes[i].points.size() << endl;
-        s.drawBorder(sb, Color(255,255,255));
-    }
-    //scanLineFill3D(sb);
+    // for(int i=0; i<shapes.size(); i++) {
+    //     for (int j=0; j < pointToPrint[0].size(); j++) {
+    //         cout << pointToPrint[0][j].x << "|" << pointToPrint[0][j].y << endl;
+    //     }
+    //     Shape s(pointToPrint[i]);
+    //     // cout<<"apaan sih "<<shapes[i].points.size() << endl;
+    //     s.drawBorder(sb, Color(255,255,255));
+    // }
+    Point p1(0,0,0);
+    Point p2(sb.width, 0, 0);
+    Point p3(sb.width, sb.height, 0);
+    Point p4(0, sb.height, 0);
+    vector<Point> temp;
+    temp.push_back(p1);
+    temp.push_back(p2);
+    temp.push_back(p3);
+    temp.push_back(p4);
+    Shape view(temp);
+    scanLineFill3D(sb,view);
 
     /*for (int j = 0; j < pointToPrint.size(); j++) {
         Color c = Color(j*j*4,j*20,250-j*15);
@@ -127,10 +137,12 @@ void ShapeGroup::rotateZ(float degree, float offsetX, float offsetY, float offse
 }
 
 Point * ShapeGroup::getTipPoints() {
-    Point * tipPoints = shapes[0].getTipPoints();
 
-    for (int i = 1; i < shapes.size(); i++) {
-        Point * tp = shapes[i].getTipPoints();
+    Shape temp(pointToPrint[0]);
+    Point * tipPoints = temp.getTipPoints();
+
+    for (int i = 1; i < pointToPrint.size(); i++) {
+        Point * tp = Shape(pointToPrint[i]).getTipPoints();
         if (tipPoints[0].x > tp[0].x) {
             tipPoints[0].x = tp[0].x;
         }
@@ -202,46 +214,154 @@ vector<Point> ShapeGroup::sortVector(vector<Point> v) {
     }
     return v;
 }
+int ShapeGroup::findIntersection(Point& p1, Point& p2, int y, int &x, int &z) {
 
-bool ShapeGroup::findIntersection(Point p1, Point p2, int y, int &x, int &z) {
-    if (p1.y == p2.y) return false;
+    if (p1.y == p2.y) {
+        return false;
+    }
 
-    bool isInsideEdgeX;
-    bool isInsideEdgeY;
-
-    x = ((p2.x-p1.x) * (y-p1.y)) / (p2.y-p1.y) + p1.x;
-    z = 0;
+    int yBottom;
+    int yTop;
+    int x1 = (int)p1.x;
+    int y1 = (int)p1.y;
+    int x2 = (int)p2.x;
+    int y2 = (int)p2.y;
     
-    if(p1.x < p2.x) { 
-        isInsideEdgeX = (p1.x <= x) && (x <= p2.x);
-    } else { 
-        isInsideEdgeX = (p2.x <= x) && (x <= p1.x);
-    }
-
-    if(p1.y < p2.y) {
-        isInsideEdgeY = (p1.y <= y) && (y <= p2.y);
+    if (y1 > y2) {
+        yBottom = y1;
+        yTop = y2;
     } else {
-        isInsideEdgeY = (p2.y <= y) && (y <= p1.y);
+        yBottom = y2;
+        yTop = y1;
     }
 
-    return isInsideEdgeX && isInsideEdgeY;
+    if (y < yTop || y > yBottom) return false;
+
+    float deltaX = (x2 - x1);
+    float deltaY = (y2 - y1);
+    float error = 0;
+    float deltaErr = fabs(deltaY/deltaX);
+
+    if (x1 > x2) {
+        int temp = x1;
+        x1 = x2;
+        x2 = temp;
+
+        temp = y1;
+        y1 = y2;
+        y2 = temp;
+    }
+
+    int yl = (int)y1;
+    for (int xl = (int)x1; xl <= (int)x2; xl++) {
+        // sb.plot(x,y, color);
+        if (yl == y && yl != yBottom) {
+            x = xl;
+            return true;
+        }
+        error = error + deltaErr;
+
+
+        while (error >= 0.5 && (yl != y2)) {
+            // sb.plot(x,y, color);
+            if (yl == y && yl != yBottom) {
+                x = xl;
+                return true;
+            }
+            int sign = (y2 > y1) ? 1: -1;
+            yl = yl + sign;
+            error = error - 1;
+        }
+    }
+    return false;
+}
+// bool ShapeGroup::findIntersection(Point p1, Point p2, int y, int &x, int &z) {
+//     if (p1.y == p2.y) return false;
+
+//     bool isInsideEdgeX;
+//     bool isInsideEdgeY;
+
+//     x = ((p2.x-p1.x) * (y-p1.y)) / (p2.y-p1.y) + p1.x;
+//     z = 0;
+    
+//     if(p1.x < p2.x) { 
+//         isInsideEdgeX = (p1.x <= x) && (x <= p2.x);
+//     } else { 
+//         isInsideEdgeX = (p2.x <= x) && (x <= p1.x);
+//     }
+
+//     if(p1.y < p2.y) {
+//         isInsideEdgeY = (p1.y <= y) && (y <= p2.y);
+//     } else {
+//         isInsideEdgeY = (p2.y <= y) && (y <= p1.y);
+//     }
+
+//     return isInsideEdgeX && isInsideEdgeY;
+// }
+
+vector<Line>   ShapeGroup::initAvailable(vector<Point> v) {
+    vector<Line>  available;
+    
+    for(int i=0; i < v.size()-1; i+=2) {
+        vector<Line> init;    
+        Line line(v[i],v[i+1]);
+        available.push_back(line);
+    }
+    return available;
 }
 
 
-void ShapeGroup::splitAvailable(vector<vector<Line> > &Available, vector<Point> demand, ShadowBuffer& sb, Color c){
-    vector<Line> available= Available[Available.size() - 1];
-
-    for (int j=0; j<demand.size();j+=2) {
+void ShapeGroup::splitAvailable(vector<Line>  &available, vector<Point> demand, ShadowBuffer& sb, Point basePoint, int textureWidth, int textureHeight, Color ** textureCache ){
+    //vector<Line> available= Available[Available.size() - 1];
+// cout<< "ADA RESULT "<<demand.size()<<endl;
+    for (int j=0; j<demand.size()-1;j+=2) {
         vector<Line> newAvailable;
         for (int i= 0; i < available.size(); i++ ) {
+            // if (available[i].getPoint2().x<=available[i].getPoint1().x) { //sudah tidak ada slot
+            //     //newAvailable.push_back(available[i]);   
+            // } else if (demand[j].x > available[i].getPoint2().x) { //demand berada di kanan available
+            //     newAvailable.push_back(available[i]); 
+            // } else if (demand[j+1].x < available[i].getPoint1().x) { //demand di kiri available
+            //     newAvailable.push_back(available[i]); 
+            // } else if ((available[i].getPoint1().x <= demand[j].x)&&(demand[j+1].x <= available[i].getPoint2().x)){ //demand berada di tengah
+            //     Line split1(available[i].getPoint1(), Point(demand[j].x-1, available[i].getPoint1().y,0));
 
+            //     Line split2(Point(demand[j+1].x+1,available[i].getPoint2().y,0), available[i].getPoint2());
+
+            //     newAvailable.push_back(split1);
+            //     newAvailable.push_back(split2);
+            //     cout<< "ADA"<<endl;
+            //     if (j+1 < demand.size()) {
+            //         Line line(demand[j], demand[j+1]);
+            //         //line.color = c;
+            //         //line.draw(sb);
+            //         line.drawTextured(sb, basePoint, textureWidth, textureHeight, textureCache);
+            //     }
+            // } else if (available[i].getPoint1().x <= demand[j].x) { //demand lebih banyak kebelakang
+            //     Line split(available[i].getPoint1(), Point(demand[j].x-1, available[i].getPoint1().y,0));
+            //     newAvailable.push_back(split);
+            //     cout<< "ADA"<<endl;;
+            //     Line line(demand[j], Point(available[i].getPoint2().x,demand[j].y,0));
+            //     //line.color = c;
+            //     //line.draw(sb);
+            //     line.drawTextured(sb, basePoint, textureWidth, textureHeight, textureCache);
+
+            // } else if (demand[j+1].x <= available[i].getPoint2().x) { //demand lebih banyak di depan
+            //     Line split(Point(demand[j+1].x+1,available[i].getPoint2().y,0), available[i].getPoint2());
+            //     cout<< "ADA"<<endl;
+            //     Line line(Point(available[i].getPoint1().x,demand[j+1].y,0),demand[j+1]);
+            //     // line.color = c;
+            //     // line.draw(sb);
+            //     line.drawTextured(sb, basePoint, textureWidth, textureHeight, textureCache);
+            //     newAvailable.push_back(split);
+            // }
             if (available[i].getPoint2().x<=available[i].getPoint1().x) { //sudah tidak ada slot
-                newAvailable.push_back(available[i]);   
+                    
             } else if (demand[j].x > available[i].getPoint2().x) { //demand berada di kanan available
                 newAvailable.push_back(available[i]); 
             } else if (demand[j+1].x < available[i].getPoint1().x) { //demand di kiri available
                 newAvailable.push_back(available[i]); 
-            } else if ((available[i].getPoint1().x <= demand[j].x)&&(demand[j+1].x <= available[i].getPoint2().x)){ //demand berada di tengah
+            } else if ((available[i].getPoint1().x <= demand[j].x) && (demand[j+1].x <= available[i].getPoint2().x)) { //demand berada di tengah
                 Line split1(available[i].getPoint1(), Point(demand[j].x-1, available[i].getPoint1().y,0));
 
                 Line split2(Point(demand[j+1].x+1,available[i].getPoint2().y,0), available[i].getPoint2());
@@ -249,32 +369,36 @@ void ShapeGroup::splitAvailable(vector<vector<Line> > &Available, vector<Point> 
                 newAvailable.push_back(split1);
                 newAvailable.push_back(split2);
 
-                if (j+1 < demand.size()) {
-                    Line line(demand[j], demand[j+1]);
-                    line.color = c;
-                    line.draw(sb);
-                }
+                Line line(demand[j], demand[j+1]);
+                //line.color = c;
+                line.drawTextured(sb, basePoint, textureWidth, textureHeight, textureCache);
+                //line.draw(sb, line.getPoint1(), line.getPoint1().getDistance(line.getPoint2()), line.color, Color(line.color.r - 50, line.color.g - 50, line.color.b - 50));
             } else if (available[i].getPoint1().x <= demand[j].x) { //demand lebih banyak kebelakang
                 Line split(available[i].getPoint1(), Point(demand[j].x-1, available[i].getPoint1().y,0));
                 newAvailable.push_back(split);
 
                 Line line(demand[j], Point(available[i].getPoint2().x,demand[j].y,0));
-                line.color = c;
-                line.draw(sb);
+                // line.color = c;
+                // line.draw(sb, line.getPoint1(), line.getPoint1().getDistance(line.getPoint2()), line.color, Color(line.color.r - 50, line.color.g - 50, line.color.b - 50));
+                line.drawTextured(sb, basePoint, textureWidth, textureHeight, textureCache);
 
             } else if (demand[j+1].x <= available[i].getPoint2().x) { //demand lebih banyak di depan
                 Line split(Point(demand[j+1].x+1,available[i].getPoint2().y,0), available[i].getPoint2());
 
                 Line line(Point(available[i].getPoint1().x,demand[j+1].y,0),demand[j+1]);
-                line.color = c;
-                line.draw(sb);
+                // line.color = c;
+                // line.draw(sb, line.getPoint1(), line.getPoint1().getDistance(line.getPoint2()), line.color, Color(line.color.r - 50, line.color.g - 50, line.color.b - 50));
+                line.drawTextured(sb, basePoint, textureWidth, textureHeight, textureCache);
 
                 newAvailable.push_back(split);
+            } else {
+                newAvailable.push_back(available[i]); 
             }
         }
         
         //update info available
-        Available.push_back(newAvailable);
+        //Available.push_back(newAvailable);
+        available = newAvailable;
     }
 }
 
@@ -291,26 +415,45 @@ vector<vector<Line> > ShapeGroup::initAvailable(int x1, int x2) {
 
 void ShapeGroup::scanLineFill3D(ShadowBuffer& sb) {
     Point p1, p2;   
+    Util util;
+    Point basePoint(0,0,0);
+    ColorTable ct("assets/ColorTable.ct");
+    Image texture = util.convertImageFile("assets/texture-grass.txt", ct);
+    Color ** textureCache = texture.getCached();
+    Point textureWH = texture.getWidthAndHeight();
+    int textureWidth = textureWH.x;
+    int textureHeight = textureWH.y;
+
 
     int nShape = pointToPrint.size();
     int a = 0;
-    for(int i=0; i<shapes.size(); i++){
-        //Shape s = points[i];
-        shapes[i].draw(sb);
-        shapes[i].drawBorder(sb, Color(225,0,0));
+    // for(int i=0; i<1; i++){
+    //     //Shape s = points[i];
+    //     shapes[i].draw(sb);
+    //     shapes[i].drawBorder(sb, Color(225,0,0));
+    // }
+    Shape as = shapes[0];
+    for(int q=0; q<pointToPrint[0].size(); q++){
+        cout<< "x= "<<as.points[q].x<<" y= "<<as.points[q].y<<" z= "<<as.points[q].z<<endl;
+
+        cout<< "x= "<<pointToPrint[0][q].x<<" y= "<<pointToPrint[0][q].y<<endl;
     }
     Point * tipPoints = getTipPoints();
-    for (int i = tipPoints[0].y; i <= tipPoints[1].y; i++) {
-        vector<vector<Line> > available = initAvailable(tipPoints[0].x,tipPoints[1].x);
-        for (int k = 0; (k < nShape) && (available.size() > 0); k++) {
+    for (int i = 0; i <= 800; i++) {
+        //cout<<"sadfsd"<<tipPoints[0].y << "YG KE 2 "<< tipPoints[1].y<<endl;
+        Line l(Point(0,0,0), Point(1000,0,0));
+        vector<Line> available; //initAvailable(tipPoints[0].x,tipPoints[1].x);
+        available.push_back(l);
+        for (int k = 0; (k < nShape); k++) {
             vector<Point> ListOfIntersectPoints;
             Shape tempShape = pointToPrint[k];
-            tempShape.drawBorder(sb, Color(255,225,0));
+            //tempShape.drawBorder(sb, Color(255,225,0));
+            tempShape.drawBorder(sb, Color(225,0,0));
             int edgesSize = tempShape.points.size();
-            Color c = shapes[k].color;
+            //Color c = shapes[k].color;
 
-            for (int j = 0; j < (edgesSize - 1); j++) {
-                if (j != (edgesSize - 2)) {
+            for (int j = 0; j < edgesSize; j++) {
+                if (j != (edgesSize - 1)) {
                     p1 = tempShape.points[j];
                     p2 = tempShape.points[j+1];
                 } else {
@@ -326,16 +469,119 @@ void ShapeGroup::scanLineFill3D(ShadowBuffer& sb) {
                     }
 
                     Point intersect(intersectX, i,intersectZ);
-                    if (intersect.y == p2.y) continue;
+                    if (intersect.y != p2.y)
                     ListOfIntersectPoints.push_back(intersect);
                 }
             }
 
             vector<Point> result = sortVector(ListOfIntersectPoints);
             if (result.size() > 0) {
-                splitAvailable(available, result, sb, c);            
+                
+                splitAvailable(available, result, sb, basePoint, textureWidth, textureHeight, textureCache);            
             }
         } 
+    }
+}
+
+void ShapeGroup::scanLineFill3D(ShadowBuffer& sb, Shape form) {
+    Point p1, p2;   
+    Util util;
+    Point basePoint(0,0,0);
+    ColorTable ct("assets/ColorTable.ct");
+    Image texture = util.convertImageFile("assets/texture-grass.txt", ct);
+    Color ** textureCache = texture.getCached();
+    Point textureWH = texture.getWidthAndHeight();
+    int textureWidth = textureWH.x;
+    int textureHeight = textureWH.y;
+
+
+    int nShape = pointToPrint.size();
+    int a = 0;
+    // for(int i=0; i<1; i++){
+    //     //Shape s = points[i];
+    //     shapes[i].draw(sb);
+    //     shapes[i].drawBorder(sb, Color(225,0,0));
+    // }
+    Shape as = shapes[0];
+
+    Point * tipPoints = form.getTipPoints();
+    for (int i = tipPoints[0].y; i <= tipPoints[1].y; i++) {
+        vector<Point> ListOfIntersectPointsAvailable;
+        //BUAT AVAILABLE AREA
+            //Shape tempShape = pointToPrint[k];
+            int edgesSize = form.points.size();
+            //Color c = Color(tempShape.points[edgesSize-1].x,tempShape.points[edgesSize-1].y + 180 - (int)(i / 2),tempShape.points[edgesSize-1].z); 
+
+            for (int j = 0; j < edgesSize ; j++) {
+                //cout<< "GARIS ke-"<<j<<endl;
+                if (j != (edgesSize - 1)) {
+                    p1 = form.points[j];
+                    p2 = form.points[j+1];
+                } else {
+                    p1 = form.points[j];
+                    p2 = form.points[0];
+                }
+
+                int intersectX, intersectY;
+
+                if (findIntersection(p1,p2,i,intersectX, intersectY)){
+                    //cout<< intersectX<<endl;
+                    if (p1.y > p2.y) {
+                        std::swap(p1,p2);
+                    }
+                    Point intersect(intersectX, i,0);
+
+                    if (intersect.y != p2.y) 
+                    ListOfIntersectPointsAvailable.push_back(intersect);
+                }
+            }
+        if(ListOfIntersectPointsAvailable.size()>0) {
+            vector<Point> sort = sortVector(ListOfIntersectPointsAvailable);
+        //AVAILABLE
+            vector<Line> available = initAvailable(sort);
+
+
+        //cout<<"sadfsd"<<tipPoints[0].y << "YG KE 2 "<< tipPoints[1].y<<endl;
+        //Line l(Point(0,0,0), Point(1000,0,0));
+        //vector<Line> available; //initAvailable(tipPoints[0].x,tipPoints[1].x);
+        //available.push_back(l);
+        
+            for (int k = 0; (k < nShape); k++) {
+                vector<Point> ListOfIntersectPoints;
+                Shape tempShape = pointToPrint[k];
+                //tempShape.drawBorder(sb, Color(255,225,0));
+                //tempShape.drawBorder(sb, Color(225,0,0));
+                int edgesSize = tempShape.points.size();
+                //Color c = shapes[k].color;
+
+                for (int j = 0; j < edgesSize; j++) {
+                    if (j != (edgesSize - 1)) {
+                        p1 = tempShape.points[j];
+                        p2 = tempShape.points[j+1];
+                    } else {
+                        p1 = tempShape.points[j];
+                        p2 = tempShape.points[0];
+                    }
+
+                    int intersectX, intersectZ;
+
+                    if (findIntersection(p1,p2,i,intersectX, intersectZ)){
+                        if (p1.y > p2.y) {
+                            std::swap(p1,p2);
+                        }
+
+                        Point intersect(intersectX, i,intersectZ);
+                        if (intersect.y != p2.y)
+                        ListOfIntersectPoints.push_back(intersect);
+                    }
+                }
+                if(ListOfIntersectPoints.size() > 0) {
+                    vector<Point> result = sortVector(ListOfIntersectPoints);
+                //if (result.size() > 0) {
+                    splitAvailable(available, result, sb, basePoint, textureWidth, textureHeight, textureCache);            
+                }
+            } 
+        }
     }
 }
 

@@ -7,12 +7,14 @@
 class ShapeGroup {
 protected:
     void projectTo2D(float offsetX, float offsetY);
-    void splitAvailable(vector<vector<Line> > &Available, vector<Point> demand, ShadowBuffer& sb, Color c);
+    void splitAvailable(vector<Line>  &available, vector<Point> demand, ShadowBuffer& sb, Point basePoint, int textureWidth, int textureHeight, Color ** textureCache );
     void sortLayer();
     void scanLineFill3D(ShadowBuffer& sb);
     int findZMax(vector<Point> plane);
-    bool findIntersection(Point p1, Point p2, int y, int &x, int &z);
+    int findIntersection(Point& p1, Point& p2, int y, int &x, int &z);
+    void scanLineFill3D(ShadowBuffer& sb, Shape form); 
     vector<vector<Line> > initAvailable(int x1, int x2);
+    vector<Line> initAvailable(vector<Point> v);
     vector<Point> sortVector(vector<Point> v);
     
 public:

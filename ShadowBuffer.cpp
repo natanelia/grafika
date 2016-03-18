@@ -34,12 +34,13 @@ void ShadowBuffer::clear() {
 }
 
 void ShadowBuffer::plot(int x, int y, Color& c) {
-    int location = abs(x * 4 + y * this->lineLength) % this->bufferSize;
-
-    *(sfbp + location) = c.b;
-    *(sfbp + location + 1) = c.g;
-    *(sfbp + location + 2) = c.r;
-    *(sfbp + location + 3) = 0;
+    int location = abs(x * 4 + y * this->lineLength);
+    if(location <= bufferSize) {
+        *(sfbp + location) = c.b;
+        *(sfbp + location + 1) = c.g;
+        *(sfbp + location + 2) = c.r;
+        *(sfbp + location + 3) = 0;
+    }
 }
 
 Color * ShadowBuffer::getColor(int x, int y) {
