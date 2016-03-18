@@ -56,21 +56,19 @@ int main(int argc, char *argv[]) {
     Util util;
     FrameBuffer fb;
     ShadowBuffer sb(fb.width, fb.height, 0, 0, fb.finfo.line_length);
-    fb.backgroundColor = Color(255, 255, 255);
-    sb.backgroundColor = Color(255, 255, 255);
-    float offsetX = 100;
-    float offsetY = 100;
+    fb.backgroundColor = Color(0, 0, 0);
+    sb.backgroundColor = Color(0, 0, 0);
 
     string filename = argv[1];
     //map<string, vector<Point> > point = util.readObject("assets/"+filename+".txt");
-    ShapeGroup a("Dua",offsetX,offsetY,5);
-    a.build3D(20);
+    //a.build3D(100);
     
     //a.translate(500,0,0);
     //a.draw(sb,100,100);
     // while(true){
       //sb.clear();
-    //a.rotateX(90,off,0,0);
+    //a.rotateX(90,0,0,0);
+    //a.rotateX(90,0,0,0);
     // for (int i = 0; i < a.shapes.size(); i++) {
     //   for (int j = 0; j < a.shapes[i].points.size(); j++) {
     //     cout << a.shapes[i].points[j].x << "," << a.shapes[i].points[j].y << "," << a.shapes[i].points[j].z << endl;  
@@ -78,8 +76,68 @@ int main(int argc, char *argv[]) {
     //   }
     //   cout << endl;
     // }
-      a.draw(sb,offsetX,offsetY);
+
+    int screenMiddleX = fb.vinfo.xres / 2;
+    int screenMiddleY = fb.vinfo.yres / 2;
+    
+    ShapeGroup a("TigaPuluhSembilan", screenMiddleX, screenMiddleY, 1);
+    a.build3D(20);
+    a.draw(sb, screenMiddleX, screenMiddleY);
+    fb.draw(sb);
+
+    int c=0;
+    //initTermios(0);
+
+    int quit = 0;
+
+    Point * groundTipPoints = a.getGroundTipPoints();
+
+    while(!quit){
+
+      c=getch();
+      //resetTermios();
+      switch(c){
+        case 'a':
+            a.rotateY(-2, (groundTipPoints[0].x + groundTipPoints[1].x) / 2, (groundTipPoints[0].y + groundTipPoints[1].y) / 2, groundTipPoints[0].z);
+          break;
+        case 's':
+            a.rotateX(-10, (groundTipPoints[0].x + groundTipPoints[1].x) / 2, (groundTipPoints[0].y + groundTipPoints[1].y) / 2, groundTipPoints[0].z);
+          break;
+        case 'd':
+            a.rotateY(2, (groundTipPoints[0].x + groundTipPoints[1].x) / 2, (groundTipPoints[0].y + groundTipPoints[1].y) / 2, groundTipPoints[0].z);
+          break;
+        case 'w':
+            a.rotateX(10, (groundTipPoints[0].x + groundTipPoints[1].x) / 2, (groundTipPoints[0].y + groundTipPoints[1].y) / 2, groundTipPoints[0].z);
+          break;
+        case '=':
+          quit = 1;
+        case 'u':
+            a.translate(0,-10,0);
+          break;
+        case 'j':
+            a.translate(0,10,0);
+          break;
+        case 'h':
+            a.translate(-10,0,0);
+          break;
+        case 'k':
+            a.translate(10,0,0);
+          break;
+        case 'i':
+            a.translate(0,0,-10);
+            groundTipPoints[0].translation(0,0,-10);
+          break;
+        case 'n':
+            a.translate(0,0,10);
+            groundTipPoints[0].translation(0,0,10);
+          break;
+      }
+      sb.clear();
+      a.draw(sb,fb.vinfo.xres / 2,fb.vinfo.yres / 2);
       fb.draw(sb);
+    }
+    delete [] groundTipPoints;
+    resetTermios();
       // usleep(1000000);
     // }
   

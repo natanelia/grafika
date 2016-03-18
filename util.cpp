@@ -88,58 +88,51 @@ public:
             int i = j;
             while(str[i]!=';') {
                 if(str[i]!=' ') {
-                    if (str[i]!='-') {
-                        Point point;
+                    Point point;
 
-                        //Ambil x
-                        string temp = "";
-                        while(str[i]!=',') {
-                            temp += str[i];
-                            i++;
-                        }
-
-                        int x = atoi(temp.c_str());
-                        //Ambil y
-                        i++;
-                        temp = "";
-                        while(str[i]!=',') {
-                            temp += str[i];
-                            i++;
-                        }
-                        int y = atoi(temp.c_str());
-
-                        //Ambil z
-                        i++;
-                        temp = "";
-                        while(str[i]!=',') {
-                            temp += str[i];
-                            i++;
-                        }
-                        int z = atoi(temp.c_str());
-
-                        
-                        //Ambil tag
-                        i++;
-                        temp = "";
-                        while(str[i]!=' ' && str[i]!=';') {
-                            temp += str[i];
-                            i++;
-                        }
-                        int tag = atoi(temp.c_str());
-
-                        //Isi point
-                        point.x = x;
-                        point.y = y;
-                        point.z = z;
-                        point.tag = tag;
-
-                        points.push_back(point);    
-                    } else {
-                        while(str[i]!=' ') {
-                            i++;
-                        }
+                    //Ambil x
+                    string temp = "";
+                    while(str[i]!=',') {
+                        temp += str[i];
                         i++;
                     }
+
+                    int x = atoi(temp.c_str());
+                    //Ambil y
+                    i++;
+                    temp = "";
+                    while(str[i]!=',') {
+                        temp += str[i];
+                        i++;
+                    }
+                    int y = atoi(temp.c_str());
+
+                    //Ambil z
+                    i++;
+                    temp = "";
+                    while(str[i]!=',') {
+                        temp += str[i];
+                        i++;
+                    }
+                    int z = atoi(temp.c_str());
+
+                    
+                    //Ambil tag
+                    i++;
+                    temp = "";
+                    while(str[i]!=' ' && str[i]!=';') {
+                        temp += str[i];
+                        i++;
+                    }
+                    int tag = atoi(temp.c_str());
+
+                    //Isi point
+                    point.x = x;
+                    point.y = y;
+                    point.z = z;
+                    point.tag = tag;
+
+                    points.push_back(point);
                 } else {
                     i++;
                 }

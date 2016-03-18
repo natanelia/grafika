@@ -108,6 +108,9 @@ Point * Drawing::getTipPoints() {
         if (p[1].y < points[i].y) {
             p[1].y = points[i].y;
         }
+        if (p[0].z > points[0].z) {
+            p[0].z = p[1].z = points[0].z;
+        }
     }
 
     return p; //first p means top left, second means bottom right

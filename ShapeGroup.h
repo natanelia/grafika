@@ -33,6 +33,7 @@ public:
     void build3D(int height);
 
     Point * getTipPoints();
+    Point * getGroundTipPoints();
 };
 
 #endif
