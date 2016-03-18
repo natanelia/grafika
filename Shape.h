@@ -3,6 +3,8 @@
 #include "ShadowBuffer.h"
 #include "Drawing.h"
 #include "Line.h"
+#include "util.cpp"
+#include "Image.h"
 #include <iostream>
 //#include "FillHelper.h"
 //#include "Triangle.h"

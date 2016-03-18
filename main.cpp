@@ -9,6 +9,7 @@
 #include <termios.h>
 #include <unistd.h>
 #include "Face.h"
+#include "ColorTable.h"
 
 #include <vector>
 #include <map>
@@ -52,10 +53,7 @@ char getche(void) {
 }
 
 
-int main(int argc, char *argv[]) {
-    //Test test;
-    //test.drawLine();
-
+int main(int argc, char *argv[]) {    
     Util util;
     FrameBuffer fb;
     ShadowBuffer sb(fb.width, fb.height, 0, 0, fb.finfo.line_length);

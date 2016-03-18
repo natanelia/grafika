@@ -2,17 +2,23 @@
 #define _IMAGE
 #include "ShadowBuffer.h"
 #include "Drawing.h"
+#include "Point.h"
 #include <cstring>
 
 using namespace std;
 
 class Image : public Drawing {
 public:
-    Color color;
-    Image(vector<Point>& points);
-    Image(Point points[], int n);
+    vector<Color> colors;
+
+    Image();
+    Image(vector<Point>& points, vector<Color>& colors);
+    Image(Point points[], Color colors[], int n);
 
     void draw(ShadowBuffer &sb);
+
+    Color ** getCached();
+    Point& getWidthAndHeight();
 };
 
 #endif

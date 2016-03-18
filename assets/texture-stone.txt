@@ -1,0 +1,82 @@
+##@@C@CCXB#@#C!C~C!CC@##C@#@###C!!!!!~~!!~!!!X###@@C@@@@#@@@@#@@C@@@@##B######X@!XBC
+X@@CC!@@@#X@!CCC!!!!C!C#@@@#C#CX@C~~!~!~~!C #!C#####@@CC@@@@@@@@#@@CC#XX@X#@@C##CXX@
+B!@CC#@#@XCCC!C!!!!!!!!!@C@@#@#X##!!!!!@C@@#@C@CB#B###C@@@@@@@@!@@C@@XXX#####X#@@#!X
+X@@!#XX#C!CCCC!!!!!!~!!~!!!@@C@X##CC@#CX!#!@X#CxBBX####@#@@@@@@@@@@@@@XX#########@@#
+X@@CXx@C!C!!!C!!!!!! ~~~~~~~!!!C#@#@#@#@#C@@!!XXX#X#@###@###@@#@@@@@X##XX####C#@###@
+##@!#XCCC!CCC!C!!!C!!C~!~~~!~!@CC#X@CC@XXCC#@@#@XB#!##@#@@@#@#####@BXX###X###@@X##@#
+@C!C@XCC!!!!~!!!!C!!!!!!!!!!!!CC!@#@#!@X#@#@XC@C##C@XX##########CC@#######@#@#X#####
+@@!!@@X@!~!C!!!!~!CC!!!!!!!!!!!!!CC##@CX@@#@C@CX#X#C#X#@##@##@##@@C@######@###@##@##
+@@@@CXXC!~~~C!!!!!!C!C!!!CC@C!CC!!@##!XCCC@@CC@!C##@@#@@@@###C#@#@#X######X######@##
+#@C!!XX@~!~!!@CC@!CC!!!!!C@!!!C!CCC!#B#~!@C~!C~@@@#@@C@@@X#######@X#X###@######XX#C#
+XCC!@BB@@!~!@@##@@CCC!!!C@C!!C~!!CC@#X#!!!~CCC!!X###@@X@@X@X#@@#########XX########@@
+#CCC@#XC@C!#X@####C@#####C@~!!!!!!C##@@@C!CC!!CC@#####X#CCX######@X@X###X#@#X#X#X#X#
+@@!@X##C@X#!X@@@####@@##@@#!!C~CCC@#XXC@C@C!@!!!@@@C#####X#########XX#X@CC!@X#C#B@##
+##@!C@X#XX@@!C@@#X##@@##@@@@@@#@#@C#X@@!@~C!!@@!@#@C@@B#####@##@###XB#@@#!@#xBX#X@#C
+#@!CX#@@@@XC@CX@#@XX@X@C##@@@#C@@#!@#@#C~XXC~@X##C#@XXXC@@@####@###X#!@@@CC@@B#xB#@#
+C@C@####X!C##@#C!###@###@C#@@#!X###C@#@#@#@##C###@@@XXB!###X########@#@@#@@XXX@XXX##
+@C!#@#CCC#!!##X@C@C@C##X@#@#CX#@!#@@@XC@#@#@@@@#@X##XXBX@#####@#########XX@xX##XXXX#
+@BC@CCCC@XCC#@B#@@#@@XX!C#####!C!C@#@XCC@B@###X@@#X#XXC##X@###@@########@XXBBXXXX!@X
+X#@!X!##XX#!@XX@@@####@X#C#@C!@!C#@@@@@@##@XX@BX#X~X#@@@@##@#@#XX#####@XCX##X##XX@CC
+X!C@C@XX#C!!~xBXC@@@##X###CC@@XC@B@##@X##@#XXXX###X###@@@CX###XCXXB##@##X#XX#B@#XC!C
+X!CCX#@X#X!##BBB#@@#!##@@@#@C@X#XB#@#@XXCC#X##########CC####@C@B#B#X#XX#X#x#C##@X!C@
+B@@@##B@@@@#C@B#@CCCCC@B@XXCC@@##B#@@#@###B##@####X#XX#@C#@#@@@XBXX#B###XBBXXXXX#!C@
+@!CXC##CXXBXCBBX##CBC#@@@X#@#@X#XX@X#@C#@!#@@####XXXX#X###X@CC!X@##B#X##XxXXX##X@C@!
+X~@X!@@@CBXx@CX#@@@@@@X#@#XC##@@#BX####X!@X@@####X###@#X#C@XC@XCC#X#####B#BXB##@#X#!
+~ XCC@C!C#@##!B#@@@@##C#@@#@@C@C@X@###X####@XX###XX@#X@@#@##XXXBXXXXX###CC@X##@@X#@C
+~ CB##CC#xBX!@@BBB@CCC@@!!~CC!CX#X#@@C@C##@@XXX@##C##X#XXCX@XCXXXxBX###XC#C@CxX@##!!
+!@CCCCX##@BBC@@#x#C~!!C!CC!C@@CBX#@!C!CCC@#@XBX#XC@###BXX#@##CB@@XB#####X!##CC##XX@C
+@C@##@CBBBBx@CXX#@CC@#C!C#C@!##B##@@@CC!C@@@XX@X#@x#B#B#@C@@@#@#@XX#B####XXXX#C@B#@#
+X@X@C@@BCXB!B@#BXCCCCC@C@@C#@BxXC@!@CC!!!CCC@B##C@BXXX#@@C@CC@###X@!#XXXX@#X#@C!XX#@
+B@#@@@#@@B##X##B##XC@@@@@@C#CBB@@@C!!!!!CCCC!XX##X#BX@@C@C@@@@C@#XXB!XB##@#@#X@@XBXX
+#@CC!#X@X#@BX@@XXC#B@CC@~~@!#x#@@CCCCCC!CC@C!!B#@#XB#C@@@@CC@CCC#X#BX#X#B#B@X#X#@BBB
+#C~@C@@#X@#BX##X@#@Bx##C@CX#XBX@@@@C@CC!CCCCC!#B#@Xx#@@@@C@@CC@X##X#X#XXX@B@#xXXXB#x
+####CBBX@@@X@@C#@#C##@@X#CXB#XXX#@@CC!C!C!@C C!B@#@@X####@@@X#X@X@###X#XX#B#XX@XXBBB
+##@@xx#@C!C!!C!#@@X#@C@C@#@BBBXB#@CC!!!!!!C@C@!XXXC##CXB###C@@Xx@#XB##XX#@#XXB##XXXX
+#@@CXB#C@!CC!~!C##!##XB#C@@XBB@#BXCC!!!C!CCC~@@@#X@!#C##X@@XC#@X#@#X##X#XXXXX#XXCC#@
+@@@!@##C##!~@!@C@#C#X@@##@XXxBX##@X##CC!!!C@@@@@####@X##BBX@XB#X###X##@#@C#@@@@C@##@
+##@@xC@!C@C!!~!CC@@@@@#CC@##B#BX#C@XBC!!!!CC@@CCC!##@XC@XB#XBXX##@#X##@C#@@@C@~##@@@
+X#@@X#C@C@C~CC!C@@CC@C@@@#@@xBXX##@CXX@C!@CCC!@C#@C#X#B@BBXBXXX##@@@@@@XC#X@C#@BBXXC
+X@@XB#@!C!CCC!CC@CC!C!####@#xX#X#!C@#XCX#BXC!XX@@~@###X@X#BXX#B##X##@X##!#@@@XX#XBBX
+CCCXX#@!!!C!!CC!!@@CC@##C@X#X###@C@@XX####BX##XXXX#XC@#!#B#@#X####XXXX#X#CX!C#X@#XXX
+@@@XB@@!~C@C!~C!~!!@XCX@BBBB###@XC#@CXBX#XXXX@X#X####XB#B#C##@X###BX#XBX#@#C@XX##XBX
+#@@#X##!C C@!C!C!CX@##X#X##@@XC@XX##@BXX###XX#XXXX###@##X#X@@@@#XX#@##@X@####XX#BXBX
+#CC#X#CCC!!#CCC@!@CB@XX@@XX@X#C!##@##BBB@@CC@##Cx@X#BX##XXBX#X@###@@XXX#XXX#XXXX#XBX
+#@@X@!C!!CC#C!C!!#XBX#!C@XX@@#!X#B#@XB#@!CC!@CX##XXXXB###XXBB##@XC#@#XBX##@#BXXX#XXX
+BX@X##C!!CCC~CC@C@XBB#@!@CCCCC@BC@@#XX@C~!CCCCC@##XXX@X@X@X#BBB##!@@XXXX###X##XXXBBX
+####X@#BC!C~C!@C!@CXx#CC#@@@C~@#!#@XXXCC!C!CCCC@C#@##@@X@##XXB##B###@#X##@###BBBX#X#
+#@#XC#XBXC!CCC@@@#XB#CC#CC!!!~@#@@X@@CCC!CC!!!!C!!CCC#@##X######XBB#@#@@X##BB#BXX#BX
+##BX@xCBX@@#@!@@XXBB@CCCCCCCC~@#@CC@C!CCCCCC!!!!CCCC!C###@##C!#~CXXX!!!#@##X#XXX@@@#
+~C@CC@@@#C~C#@B@BX##CCCCCCCCCC@#@C@CCCCCC@CCCC@CCC!C!!##XX@@C!@#@CC@CCC@X@@x@X###@@X
+CCC!!@@C##@CCC@BCBX@C@@C~CCCC@#B@@@C@@CCC@!!C!C!!@!!!!@#X##@!#C~CCCCC!@C~@@@#@C@#@##
+!C@~ !C@####@C@XBB#CC@C@@!CC!@#X@@@@@@CC@CC@!!!!!!!!!CXX#@@CC!!CCCCC~!!!CCC#@CC@@C@@
+~!~!!C@XBXC@#@@##X#CCC@CCCC@C##X##@CCC@CC!!!!!!!C!~!CXX#@C~C~~C@@!!!C~C!~C@@#@@@@@@#
+!!C@C@X#@C!CCC!XX#X#@ @@CCC!!#X#C@#@@C#!C!!!!!!@C!C!#XB#@#X@!!@@CC!!!C@C@C@@CC@@#@##
+!~C#XCX@!@@@!CC#B#@C!!~!~# !~X@@#C@~CC!!C!!!!!XCC!C@#XXC!CCC@@CC!C@C@!CCC@C@@@CC##@#
+#!@@@#XB@C!@C@C@B@C@!CC!~!!C!!#@@!##!!!!C!!!@CC!!!C##BB#CCC!C!CC#C!CC@@@@#@@#@@@@@@@
+@BC@@#XB#!@C@@X#BXC@C!!!!C~!!!C#X#@CC!#C@C!!!!!!!!@##XX###@@CCCC!CC@@@C!@CC@CC@@##@@
+BBC#XXX###!@C@@#X@@C!@!!C!!!CCC@@#C@@!CCC!!C!CC@CC#@#X#CC@CC@CCC@CC@@CCC@@@@!@@C@@C!
+X#C@@@@X##@C@@C#B@@@@CCC~!!!C~@##XXC@CCCC!CCC!!!!#####@@@@@@@#!#C@C!CCC#@!@C@@CC!CC!
+#@@!CXBXX##@#@@#x#@C@C!@#C@~@@@###X#CCC!CCCCC!!!@XX#@~@~@!#@##!C@C!@CC!CC!C!!@C!CC@C
+X!@@@@@xX#CC@~!XxB@CCCC@@@CC@@C#XBX###@C@CC!!@C~XXC@@#!!@CC@CCCC@CC@CC@@CC~CC@@CC@@#
+#@XX~#XXX@@@@CC#XBX@C~@@C!@C!@!@XB###C@@@@@CC@@@#CC##@~@C@CCC~!@!!CCCC@@@@CCC#@@@#@#
+XX#C##X##XX#@@@XXBX@C!@!!#!@!!!##XXXX@C#@@@##@@#@#C@@#@@@@@@@!!!@C!!@@C@@@@@@@C@##@@
+BBX@@C#C@XBX@@@@X#X@C!C@C@@@!@@@#XX@#XX#@@@@@CB#@#@@@~@@@@@@@@@@C@@C@@@@##@@#@@@##@#
+x#@#@@!~@CxXC@###Bx!@!!@!C@C@#@#XX@####CC###@##X#@@@@@@#@##@@@@@@@@@################
+B#C@C~!C!#BXC@C!@X#xXXX@!C@##B@#BX#####C@#X#B#BB#@##@@###@@C@#@@C#####XXXX##@##XX###
+@C@@@!!!!@XB@CCCCXxx#XXC@@@@@#@@@XB#@#@BX###XXXBX#@@#####@@@@@@@#####X#XXXX#XXX#@##X
+!C!@!C!!!!#XB@CCC@#CXXX#X@@@@###XXX@@@#B#X#X#XBXB@C#XX#@@@@@@@@CXX##XXX#XXXXXXXXXX##
+C!C#!!!C!!C#XxX!!##B#BBXC##@#@!@#BX##X#BXB#X##X##@#BxXB#####@@C##BCX##XXXXXXX##XXXXX
+C!##!!! C!XC#BB!@XCBXBB#XX###@@#B#X###@#BBX#@@@@!X@BBBX##@@@@#X@#@B!BBX#XXXX#XXXXXXX
+#@C!CC~CC@!!#XB!BX@CxXBXBXBBB@XX#XX#BXBBXX#@C@@@@@XXXXB@@X@@#BB##B#@CXX@#BBBBB#XXXXX
+#C@~!~!!!~CCX@x@#!XxBXXX#BB#B####X###xxBX@C@C@C@XBXXXXXBXC#BX#BBX#CXXXXXXBXX#BBBxXXX
+!C~CC@CCC!X@@XC@#!@@BXXXX#XXxXBXXXXC#@xX@@!!@C!!#XX#C!#@X@XXX!XBBC!@C#X#C#BBXXxBXX#X
+!!!!~!!!!CX@CCx!B!@x#@BXX#BBBXBBX#X@@#BX@@@@@@@#BBXX@C#Xx@@##@X@@CC!@##XCB##@XXBX@XX
+#C!!~!!CCC@X!@XXXBX##XB##XX##@##@@#@#@BBX###B#XBBXX#X#X#X##C#C@C!CC@@#@@@@#X@X!X@#X#
+##!C~!!!!C@@C@!BB@#!CBXXXX@!CC!C!C@@##XB#X#BX@XB#@#BBX@BX##C!!@@@@@@#@@@@@#@@#X@#X!X
+#CC!~~@CCC!CC#XXX#@@CXCC@C@CC@CCC!@@BX#X@@XXB#BB#@@XB##XxX#@CCC@@@@@C@@#@@CC@XB!B@X#
+#CCCC!!C!@CXBB#@@#@@!#@C@C@!!@CC@C@C@@B###XXXBXC@@@@#B#BXX##@CCCCCC@@X#@C@@C##X!@BC@
+##CC!!CC@XXXBXC!##@#@@@CCCCC!@CCCC!@@CXC#xBX@@@@C@@@#BXXXXXC@CC#CCC@C@CCCC@@#@###B#X
+B@CC~!CCX@@@X@!##X@XX#~C@CCC!CC @!C@#@B#@@##CCCC@CC@#XB@#@CC@@@C!@@@CCC!C@##@X#!B!X@
+x#CC!!CX!C@#BB##BB#X@CC@C!@!C@CC!#@#B##CCC#@C!@@C!~C#XB#XC###CC!!!!!C!!!!C#CC@#@!#@#
+#@C!!CC@@X@Bxx@@#@BX#X@@C@CCCCCCCC@@Bx@CC@#CC!!C!CC@@BXX#@!@C!!~!~~!!C!!!@C~@XCC@@C@
+#@CC!C!X#@C#XB#XX#B#@X@C@@@C@C@CC!@XBXCC!CCC!CCCC!CC@xBX#C!!!~!!!!!~CC!C@C@#C~#CCC!@
