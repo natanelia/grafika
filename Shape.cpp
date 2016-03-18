@@ -44,36 +44,96 @@ vector<Point> Shape::sortVector(vector<Point> v) {
     return v;
 }
 
+// int Shape::findIntersection(Point& p1, Point& p2, int y, int &x) {
+//     if (p1.y == p2.y) {
+//         return false;
+//     }
+//     float xFloat = (p2.x - p1.x) * ((float)y - p1.y) / (p2.y - p1.y) + p1.x;
+//     x = round(xFloat);
+//     int isInsideEdgeX;
+//     int isInsideEdgeY;
+
+//     if(p1.x < p2.x) 
+//         isInsideEdgeX = (p1.x <= x) && (x <= p2.x);
+//     else 
+//         isInsideEdgeX = (p2.x <= x) && (x <= p1.x);
+
+//     if(p1.y < p2.y)
+//         isInsideEdgeY = (p1.y <= y) && (y <= p2.y);
+//     else
+//         isInsideEdgeY = (p2.y <= y) && (y <= p1.y);
+//     return isInsideEdgeX && isInsideEdgeY;
+// }
+
 int Shape::findIntersection(Point& p1, Point& p2, int y, int &x) {
-    if (p1.y == p2.y) {
+
+    /*if (p1.y == p2.y && p1.y != y) {
         return false;
+    }*/
+
+    int yBottom;
+    int yTop;
+    int x1 = (int)p1.x;
+    int y1 = (int)p1.y;
+    int x2 = (int)p2.x;
+    int y2 = (int)p2.y;
+    
+    if (y1 > y2) {
+        yBottom = y1;
+        yTop = y2;
+    } else {
+        yBottom = y2;
+        yTop = y1;
     }
-    float xFloat = (p2.x - p1.x) * ((float)y - p1.y) / (p2.y - p1.y) + p1.x;
-    // cout<< "x, untuk y = " << y <<  " adalah  " << xFloat<< endl;
-     //cout<< "x1 :" <<p1.x << " y1 : "<<p1.y << " x2 : "<< p2.x << " y2 : "<< p2.y<<endl;
-    x = round(xFloat);
-     //cout<< "x, untuk y = " << y <<  " adalah  " << x<< endl;
-    int isInsideEdgeX;
-    int isInsideEdgeY;
 
-    if(p1.x < p2.x) 
-        isInsideEdgeX = (p1.x <= x) && (x <= p2.x);
-    else 
-        isInsideEdgeX = (p2.x <= x) && (x <= p1.x);
+    if (y < yTop || y > yBottom) return false;
 
-    if(p1.y < p2.y)
-        isInsideEdgeY = (p1.y <= y) && (y <= p2.y);
-    else
-        isInsideEdgeY = (p2.y <= y) && (y <= p1.y);
-    //if(isInsideEdgeX && isInsideEdgeY) cout<< "KETEMU x, untuk y = " << y <<  " adalah  " << x<< endl;
-    return isInsideEdgeX && isInsideEdgeY;
+    float deltaX = (x2 - x1);
+    float deltaY = (y2 - y1);
+    float error = 0;
+    float deltaErr = fabs(deltaY/deltaX);
+
+    if (x1 > x2) {
+        int temp = x1;
+        x1 = x2;
+        x2 = temp;
+
+        temp = y1;
+        y1 = y2;
+        y2 = temp;
+    }
+
+    int yl = (int)y1;
+    for (int xl = (int)x1; xl <= (int)x2; xl++) {
+        // sb.plot(x,y, color);
+        if (yl == y && yl != yBottom) {
+            x = xl;
+            return true;
+        }
+        error = error + deltaErr;
+
+
+        while (error >= 0.5 && (yl != y2)) {
+            // sb.plot(x,y, color);
+            if (yl == y && yl != yBottom) {
+                x = xl;
+                return true;
+            }
+            int sign = (y2 > y1) ? 1: -1;
+            yl = yl + sign;
+            error = error - 1;
+        }
+    }
+    return false;
 }
+
 int Shape::floatToInt(float a){
     float temp= a - floor(a);
-    if(temp > 0.5){
+    if (temp > 0.5) {
         return (int) a +1;
-    }else 
+    } else {
         return (int) a;
+    }
 }
 
 void Shape::scanLineFill(ShadowBuffer& sb, vector<Point> v) {
@@ -138,13 +198,19 @@ void Shape::scanLineFill(ShadowBuffer& sb, vector<Point> v) {
         vector<Point> result = sortVector(ListOfIntersectPoints);
         int intersectPointsSize = result.size();
         Color d(225, 0, 0);
-        if(result.size()>0 ){
-            cout<< endl<<"y: "<<i<<endl<< "nilai x:";
-            for(int k=0; k< intersectPointsSize; k++) {
-                cout << result[k].x<< "--"; //<< " , "<< result[k+1].x << "  ";
+        /*if(result.size()>0 ){
+            if (i >= 400 && i <= 410) {
+                cout<<"y: "<<i<<endl<< "nilai x:";
+                for(int k=0; k< intersectPointsSize; k++) {
+                    cout << result[k].x<< "--"; //<< " , "<< result[k+1].x << "  ";
+                }
+                cout << endl;
+                // for (int k = 0; k < ListOfIntersectPoints.size(); k++) {
+                //     cout << ListOfIntersectPoints[k].x << "--";
+                // }
+                // cout << endl;
             }
-        
-        }
+        }*/
         for(int j = 0; j < intersectPointsSize-1; j+=2) {
             Line line(result[j], result[j + 1]);
             line.color = this->color;

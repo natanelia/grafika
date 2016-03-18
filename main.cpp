@@ -91,29 +91,30 @@ int main(int argc, char *argv[]) {
       i++;
       face.draw(sb);
       fb.draw(sb);
-      usleep(1000000);
     }
     
-    /*
-    int offSetX = 670;
+    
+    /*int offSetX = 670;
     int offSetY = 350;
 
+    cout << "WOI" << endl;
     ShapeGroup Logothesims("Diamond6",offSetX,offSetY,70);
     int position = 0;
     int translation = 2;
     //Logothesims.rotateX(5,offSetX, offSetY,0);
 
-    vector<Point> points = util.convertImageFile("assets/logo.txt");
-    Image logo(points);
-    logo.color = Color(0, 0, 255);
-    logo.translate(550,100);
+    cout << "TEST" << endl;
+    ColorTable ct("assets/ColorTable.ct");
 
-    Image logoShadow(points);
-    logoShadow.color = Color(220, 220, 220);
-    logoShadow.translate(550,110);
+    // Image logo = util.convertImageFile("assets/logo.txt", ct);
+    // logo.translate(550,100);
+
+    // Image logoShadow = util.convertImageFile("assets/logo.txt", ct);
+    // logoShadow.translate(550,110);
 
 
     while(true){
+      cout << "T" << endl;
       if (position > 20){
         translation *= -1;
       }
@@ -124,17 +125,16 @@ int main(int argc, char *argv[]) {
       position += translation;
       Logothesims.rotateY(3,offSetX,offSetY,0);
 
-      logo.translate(0, -translation / 2);
-      logoShadow.translate(0, -translation / 2);
+      // logo.translate(0, -translation / 2);
+      // logoShadow.translate(0, -translation / 2);
 
       sb.clear();
-      logoShadow.draw(sb);
-      logo.draw(sb);
+      // logoShadow.draw(sb);
+      // logo.draw(sb);
       Logothesims.draw(sb,offSetX,offSetY);
 
       fb.draw(sb);
-      usleep(5000);
-	}
-*/
+	  }*/
+
     return 0;
 }
