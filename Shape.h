@@ -29,6 +29,7 @@ public:
 
     vector<Point> sortVector(vector<Point> v);
     void draw(ShadowBuffer& sb);
+    void drawTextured(ShadowBuffer& sb, Point const textureAnchor, int textureWidth, int textureHeight, Color ** textureCache);
     
     void drawClipped(ShadowBuffer& sb, Point min, Point max, float scale);
     void drawBorder(ShadowBuffer& sb, Color c);

@@ -6,24 +6,13 @@ Color::Color() {
     this->b = 255;
 }
 
-Color::Color(std::string hex) {
-    std::stringstream ss;
-    std::string r = hex.substr(0, 2);
-    std::string g = hex.substr(2, 2);
-    std::string b = hex.substr(4, 2);
-    ss << std::hex << r;
-    ss >> this->r;
-    ss.str("");
-    ss.clear();
-    ss << std::hex << g;
-    ss >> this->g;
-    ss.str("");
-    ss.clear();
-    ss << std::hex << b;
-    ss >> this->b;
+Color::Color(std::string strHex) {
+    this->r = strtol(strHex.substr(0, 2).c_str(), NULL, 16);
+    this->g = strtol(strHex.substr(2, 2).c_str(), NULL, 16);
+    this->b = strtol(strHex.substr(4, 2).c_str(), NULL, 16);
 }
 
-Color::Color(int r, int g, int b) {
+Color::Color(unsigned char r, unsigned char g, unsigned char b) {
     this->r = r;
     this->g = g;
     this->b = b;

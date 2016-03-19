@@ -20,9 +20,48 @@ void Shape::draw(ShadowBuffer& sb) {
     //     line.draw(sb);
     // }
     
-    scanLineFill(sb, result);
+    scanLineFill(sb, points);
     //result.clear();
     //drawBorder(sb, this->color );
+}
+
+void Shape::drawTextured(ShadowBuffer& sb, Point const textureAnchor, int textureWidth, int textureHeight, Color ** textureCache) {
+    Util util;
+
+    Point p1, p2;
+    Point * tipPoints = getTipPoints();
+
+    for(int i = tipPoints[0].y; i <= tipPoints[1].y; i++) {
+        vector<Point> ListOfIntersectPoints;
+        for(int j = 0; j < points.size(); j++) {
+            if (j != (points.size() - 1)) {
+                p1 = points[j];
+                p2 = points[j+1];
+            } else {
+                p1 = points[j];
+                p2 = points[0];
+            }
+            int intersectX;
+            if (findIntersection(p1,p2,i,intersectX)) {
+                if(p1.y > p2.y) {
+                    std::swap(p1,p2);
+                }
+
+                if (i != p2.y) {
+                    Point intersect(intersectX, i, 0);
+                    ListOfIntersectPoints.push_back(intersect);
+                }
+            }
+        }
+        vector<Point> sortedResult = sortVector(ListOfIntersectPoints);
+        int intersectPointsSize = sortedResult.size();
+        Color d(225, 0, 0);
+        for(int j = 0; j < intersectPointsSize-1; j+=2) {
+            Line line(sortedResult[j], sortedResult[j + 1]);
+            line.drawTextured(sb, textureAnchor, textureWidth, textureHeight, textureCache);
+        }
+    }
+    delete [] tipPoints;
 }
 
 void Shape::drawClipped(ShadowBuffer& sb, Point min, Point max, float scale) {
@@ -138,13 +177,6 @@ int Shape::floatToInt(float a){
 
 void Shape::scanLineFill(ShadowBuffer& sb, vector<Point> v) {
     Util util;
-    Point basePoint(0,0,0);
-    ColorTable ct("assets/ColorTable.ct");
-    Image texture = util.convertImageFile("assets/texture-grass.txt", ct);
-    Color ** textureCache = texture.getCached();
-    Point textureWH = texture.getWidthAndHeight();
-    int textureWidth = textureWH.x;
-    int textureHeight = textureWH.y;
 
     Point p1, p2;   
     int edgesSize = v.size();
@@ -214,11 +246,13 @@ void Shape::scanLineFill(ShadowBuffer& sb, vector<Point> v) {
         for(int j = 0; j < intersectPointsSize-1; j+=2) {
             Line line(result[j], result[j + 1]);
             line.color = this->color;
-            //line.draw(sb);
+            line.draw(sb);
             //line.draw(sb, line.getPoint1(), line.getPoint1().getDistance(line.getPoint2()), line.color, Color(line.color.r - 50, line.color.g - 50, line.color.b - 50));
-            line.drawTextured(sb, basePoint, textureWidth, textureHeight, textureCache);
+            //line.drawTextured(sb, basePoint, textureWidth, textureHeight, textureCache);
         }
     }
+
+    delete [] tipPoints;
 }
 
 void Shape::drawBorder(ShadowBuffer& sb, Color c){
@@ -377,6 +411,8 @@ void Shape::scanLineIntersect(ShadowBuffer& sb, Shape available) {
             }
         //} 
     }
+
+    delete [] tipPoints;
 }
 
 int Shape::factorial(int n) 
