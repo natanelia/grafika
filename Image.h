@@ -11,10 +11,15 @@ using namespace std;
 class Image : public Drawing {
 public:
     vector<Color> colors;
+    Point position;
 
     Image();
     Image(vector<Point>& points, vector<Color>& colors);
     Image(Point points[], Color colors[], int n);
+	Image(vector<Point>& points, vector<Color>& colors, Point position);
+
+    void setPosition(Point p);
+    
 
     void draw(ShadowBuffer &sb);
     void draw(ShadowBuffer &sb, int scaleX, int scaleY);

@@ -3,6 +3,7 @@
 #include "Image.h"
 #include "ShadowBuffer.h"
 #include "ShapeGroup.h"
+#include "ImageGroup.h"
 #include "util.cpp"
 
 #include <termios.h>
@@ -80,7 +81,7 @@ int main(int argc, char *argv[]) {
     Shape backgroundImage(backgroundEdgePoints, edgeCount);
     Point * tipPoints = backgroundImage.getTipPoints();
     
-    ShapeGroup a(filename, screenMiddleX, screenMiddleY, 3);
+    ShapeGroup a(filename, screenMiddleX, screenMiddleY, 5);
 
     Point * groundTipPoints = a.getGroundTipPoints();
     a.translate((groundTipPoints[0].x - groundTipPoints[1].x) / 2, (groundTipPoints[0].y - groundTipPoints[1].y) / 2, 0);
@@ -91,6 +92,10 @@ int main(int argc, char *argv[]) {
 
     // sb.clear();
     backgroundImage.drawTextured(sb, cloudTextureAnchor, cloudTextureWidth, cloudTextureHeight, cloudTextureCache);
+
+    ImageGroup IG("assets/nama/nama","assets/nama/positionTable.txt",screenMiddleX,screenMiddleY, 5);
+    IG.draw(sb);
+
     a.draw(sb, screenMiddleX, screenMiddleY);
     fb.draw(sb);
 
@@ -104,15 +109,19 @@ int main(int argc, char *argv[]) {
       switch(c) {
         case 'a':
             a.rotateY(-2, (groundTipPoints[0].x + groundTipPoints[1].x) / 2, (groundTipPoints[0].y + groundTipPoints[1].y) / 2, groundTipPoints[0].z);
+            IG.rotatePositionY(-2, (groundTipPoints[0].x + groundTipPoints[1].x) / 2, (groundTipPoints[0].y + groundTipPoints[1].y) / 2, groundTipPoints[0].z);
           break;
         case 's':
             a.rotateX(-10, (groundTipPoints[0].x + groundTipPoints[1].x) / 2, (groundTipPoints[0].y + groundTipPoints[1].y) / 2, groundTipPoints[0].z);
+            IG.rotatePositionX(-10, (groundTipPoints[0].x + groundTipPoints[1].x) / 2, (groundTipPoints[0].y + groundTipPoints[1].y) / 2, groundTipPoints[0].z);
           break;
         case 'd':
             a.rotateY(2, (groundTipPoints[0].x + groundTipPoints[1].x) / 2, (groundTipPoints[0].y + groundTipPoints[1].y) / 2, groundTipPoints[0].z);
+            IG.rotatePositionY(2, (groundTipPoints[0].x + groundTipPoints[1].x) / 2, (groundTipPoints[0].y + groundTipPoints[1].y) / 2, groundTipPoints[0].z);
           break;
         case 'w':
             a.rotateX(10, (groundTipPoints[0].x + groundTipPoints[1].x) / 2, (groundTipPoints[0].y + groundTipPoints[1].y) / 2, groundTipPoints[0].z);
+             IG.rotatePositionX(10, (groundTipPoints[0].x + groundTipPoints[1].x) / 2, (groundTipPoints[0].y + groundTipPoints[1].y) / 2, groundTipPoints[0].z);
           break;
         case 'u':
             a.translate(0,-10,0);
@@ -139,9 +148,11 @@ int main(int argc, char *argv[]) {
             groundTipPoints[0].translation(0,0,10);
           break;
       }
-      // sb.clear();
+       sb.clear();
       backgroundImage.drawTextured(sb, cloudTextureAnchor, cloudTextureWidth, cloudTextureHeight, cloudTextureCache);
-      a.draw(sb, screenMiddleX, screenMiddleY);
+      a.draw(sb, screenMiddleX, screenMiddleY);   
+      cout << IG.images[2].points[0].x << "," << IG.images[2].points[0].y << endl;
+      IG.draw(sb);
       fb.draw(sb);
     }
     resetTermios();

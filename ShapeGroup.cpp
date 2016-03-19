@@ -500,47 +500,55 @@ void ShapeGroup::splitAvailable(vector<Line>  &available, vector<Point> demand, 
 
 void ShapeGroup::splitAvailable(vector<Line> &available, vector<Point> demand, Color c, ShadowBuffer& sb) {
     for (int j=0; j<demand.size()-1;j+=2) {
-        vector<Line> newAvailable;
-
-        for (int i= 0; i < available.size(); i++ ) {
+        //vector<Line> newAvailable;
+        int i=0;
+        while(i< available.size()){
+        //for (int i= 0; i < available.size(); i++ ) {
             if (available[i].getPoint2().x<=available[i].getPoint1().x) { //sudah tidak ada slot
-                   
+                i++;         
             } else if (demand[j].x > available[i].getPoint2().x) { //demand berada di kanan available
-                newAvailable.push_back(available[i]); 
+                //newAvailable.push_back(available[i]);
+                i++; 
             } else if (demand[j+1].x < available[i].getPoint1().x) { //demand di kiri available
-                newAvailable.push_back(available[i]); 
+                //newAvailable.push_back(available[i]);
+                i++; 
             } else if ((available[i].getPoint1().x <= demand[j].x) && (demand[j+1].x <= available[i].getPoint2().x)) { //demand berada di tengah
                 Line split1(available[i].getPoint1(), Point(demand[j].x-1, available[i].getPoint1().y,0));
 
                 Line split2(Point(demand[j+1].x+1,available[i].getPoint2().y,0), available[i].getPoint2());
-
-                newAvailable.push_back(split1);
-                newAvailable.push_back(split2);
+                available.push_back(split1);
+                available.push_back(split2);
+                //newAvailable.push_back(split1);
+                //newAvailable.push_back(split2);
 
                 Line line(demand[j], demand[j+1]);
                 line.color = c;
                 line.draw(sb);
+                available.erase(available.begin()+i);
             } else if (available[i].getPoint1().x <= demand[j].x) { //demand lebih banyak kebelakang
                 Line split(available[i].getPoint1(), Point(demand[j].x-1, available[i].getPoint1().y,0));
-                newAvailable.push_back(split);
+                //newAvailable.push_back(split);
+                available.push_back(split);
 
                 Line line(demand[j], Point(available[i].getPoint2().x,demand[j].y,0));
                 line.color = c;
                 line.draw(sb);
+                available.erase(available.begin()+i);
 
             } else if (demand[j+1].x <= available[i].getPoint2().x) { //demand lebih banyak di depan
                 Line split(Point(demand[j+1].x+1,available[i].getPoint2().y,0), available[i].getPoint2());
-
+                available.push_back(split);
                 Line line(Point(available[i].getPoint1().x,demand[j+1].y,0),demand[j+1]);
                 line.color = c;
                 line.draw(sb);
-
-                newAvailable.push_back(split);
+                available.erase(available.begin()+i);
+                //newAvailable.push_back(split);
             } else {
-                newAvailable.push_back(available[i]); 
+                //newAvailable.push_back(available[i]);
+                i++;
             }
         }
-        available = newAvailable;
+        //available = newAvailable;
     }
     
         
