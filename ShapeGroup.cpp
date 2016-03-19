@@ -213,6 +213,7 @@ int ShapeGroup::getFront(vector<Point> plane1, vector<Point> plane2) //harusnya 
     Point p2(plane1[index].x,plane1[index].y,plane1[index].z + 10);
     vector<Point> line;
     line.push_back(p1);
+
     line.push_back(p2);
     Point intersect1 = findIntersection(line,plane1);
     Point intersect2 = findIntersection(line,plane2);
@@ -242,17 +243,22 @@ int ShapeGroup::findZMax(vector<Point> plan){
 void ShapeGroup::sortLayer(){
     int i, j, numLength = pointToPrint.size();
     vector<Point> key;
+    Color temp;
     for(j = 1; j < numLength; j++) { // Start with 1 (not 0)
         key = pointToPrint[j];
+        temp = colorToPrint[j];
         for(i = j - 1; (i >= 0) && (getFront(pointToPrint[i],key)==2); i--) { // Smaller values move up
             pointToPrint[i+1] = pointToPrint[i];
+            colorToPrint[i+1] = colorToPrint[i];
         }
         pointToPrint[i+1] = key;    //Put key into its proper location
+        colorToPrint[i+1] = temp;
     }
 }
 
 void ShapeGroup::projectTo2D(float offsetX, float offsetY){
     pointToPrint.clear();
+    colorToPrint.clear();
     int a = 0;
     for(int i = shapes.size() - 1; i >= 0; --i){
         vector<Point> temp;
@@ -262,6 +268,7 @@ void ShapeGroup::projectTo2D(float offsetX, float offsetY){
             Point p(newX, newY, shapes[i].points[j].z);
             temp.push_back(p);
         }
+        colorToPrint.push_back(shapes[i].color);
         pointToPrint.push_back(temp);
     }
     sortLayer();
@@ -741,7 +748,7 @@ void ShapeGroup::scanLineFill3D(ShadowBuffer& sb, Shape form) {
                     if(ListOfIntersectPoints.size() > 0) {
                         vector<Point> result = sortVector(ListOfIntersectPoints);
                     //if (result.size() > 0) {
-                        splitAvailable(available, result, shapes[k].color, sb);            
+                        splitAvailable(available, result, colorToPrint[k] , sb);            
                     }
                 }
             } 
