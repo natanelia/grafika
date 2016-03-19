@@ -7,14 +7,13 @@ ShapeGroup::ShapeGroup(string objName, float offsetX, float offsetY, int scale) 
     for (int j = 0; j < points.size(); j++) {
         Shape shape(points[j]);
         vector<Point> * p = &points[j];
-        Color c(p->at(p->size()-1).x,p->at(p->size()-1).y,p->at(p->size()-1).z);
+        Color c(p->at(p->size()-2).x,p->at(p->size()-2).y,p->at(p->size()-2).z);
+        shape.height = (p->at(p->size()-1).z) * 2;
         shape.setColor(c);
-        // cout << "sebelum" << shape.points.size() << endl;
         shape.points.pop_back();
-        // cout << "setelah" << shape.points.size() << endl;
+        shape.points.pop_back();
         shapes.push_back(shape);
     }
-
 }
 
 void ShapeGroup::draw(ShadowBuffer& sb, float offsetX, float offsetY) {
@@ -765,7 +764,7 @@ void ShapeGroup::scanLineFill3D(ShadowBuffer& sb, Shape form) {
     delete [] tipPoints;
 }
 
-void ShapeGroup::build3D(int height, Point& lightSource, int const lightRadius) {
+void ShapeGroup::build3D(Point& lightSource, int const lightRadius) {
     int batas = shapes.size();
     for (int k = 0; k < batas; k++) {
         for(int i = 0; i < shapes[k].points.size(); i++){
@@ -779,9 +778,9 @@ void ShapeGroup::build3D(int height, Point& lightSource, int const lightRadius) 
             vector<Point > p;
             p.push_back(shapes[k].points[i]);
             p.push_back(shapes[k].points[j]);
-            Point temp(shapes[k].points[j].x,shapes[k].points[j].y,height,shapes[k].points[j].tag);
+            Point temp(shapes[k].points[j].x,shapes[k].points[j].y,shapes[k].height,shapes[k].points[j].tag);
             p.push_back(temp);
-            Point temp2(shapes[k].points[i].x,shapes[k].points[i].y,height,shapes[k].points[i].tag);
+            Point temp2(shapes[k].points[i].x,shapes[k].points[i].y,shapes[k].height,shapes[k].points[i].tag);
             p.push_back(temp2);
 
             Shape s(p);
@@ -804,7 +803,7 @@ void ShapeGroup::build3D(int height, Point& lightSource, int const lightRadius) 
         }
         vector<Point > p;
         for(int i = 0; i < shapes[k].points.size();i++){
-            Point temp(shapes[k].points[i].x,shapes[k].points[i].y,height,shapes[k].points[i].tag);
+            Point temp(shapes[k].points[i].x,shapes[k].points[i].y,shapes[k].height,shapes[k].points[i].tag);
             p.push_back(temp);
         }
         Shape s(p);

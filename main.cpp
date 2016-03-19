@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
     if (argc > 1) {
       filename = argv[1];
     } else {
-      filename = "default";
+      filename = "default2";
     }
 
     int height;
@@ -88,7 +88,7 @@ int main(int argc, char *argv[]) {
     delete [] groundTipPoints;
 
     Point lightSource(screenMiddleX, screenMiddleY, height * 1.2f);
-    a.build3D(height, lightSource, height * 20);
+    a.build3D(lightSource, height * 20);
 
     // sb.clear();
     backgroundImage.drawTextured(sb, cloudTextureAnchor, cloudTextureWidth, cloudTextureHeight, cloudTextureCache);
