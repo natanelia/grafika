@@ -17,6 +17,10 @@ protected:
     vector<vector<Line> > initAvailable(int x1, int x2);
     vector<Line> initAvailable(vector<Point> v);
     vector<Point> sortVector(vector<Point> v);
+    bool isOnShape(Shape des, Shape src);
+    Point * getProjected3DTipPoints(); 
+    Point findIntersection(vector<Point> line, vector<Point> plane);
+    int getFront(vector<Point> plane1, vector<Point> plane2);
     
 public:
     Color color;

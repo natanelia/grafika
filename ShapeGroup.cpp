@@ -178,7 +178,7 @@ void ShapeGroup::sortLayer(){
     vector<Point> key;
     for(j = 1; j < numLength; j++) { // Start with 1 (not 0)
         key = pointToPrint[j];
-        for(i = j - 1; (i >= 0) && (findZMax(pointToPrint[i]) < findZMax(key)); i--) { // Smaller values move up
+        for(i = j - 1; (i >= 0) && (getFront(pointToPrint[i],key)==1); i--) { // Smaller values move up
             pointToPrint[i+1] = pointToPrint[i];
         }
         pointToPrint[i+1] = key;    //Put key into its proper location
@@ -227,9 +227,7 @@ int ShapeGroup::findIntersection(Point& p1, Point& p2, int y, int &x, int &z) {
     int y1 = (int)p1.y;
     int x2 = (int)p2.x;
     int y2 = (int)p2.y;
-    if((y2<0)||(y1<0)){
-        cout<<"y1 = " <<y1<< " y2 = " << y2 << endl;
-    }
+    
     
     if (y1 > y2) {
         yBottom = y1;
@@ -491,6 +489,78 @@ vector<vector<Line> > ShapeGroup::initAvailable(int x1, int x2) {
     return available;
 }
 
+bool ShapeGroup::isOnShape(Shape des, Shape src){
+    Point * desTipPoints = des.getTipPoints();
+    Point * srcTipPoints = src.getTipPoints();
+    bool ret = false;
+    if(desTipPoints[1].x<srcTipPoints[0].x)
+        ret=false;
+    else if(srcTipPoints[1].x<desTipPoints[0].x)
+        ret=false;
+    else if(desTipPoints[1].y<srcTipPoints[0].y)
+        ret=false;
+    else if(srcTipPoints[1].y<desTipPoints[0].y)
+        ret=false;
+    else ret = true;
+
+    delete [] desTipPoints;
+    delete [] srcTipPoints;
+    return ret;
+}
+Point ShapeGroup::findIntersection(vector<Point> line, vector<Point> plane){//harusnya line sama shape anggap persamaan line sama persamaan bidangnya pasti ber-intersect
+    Point AB;
+    Point AC;
+    
+    AB.x = plane[1].x - plane[0].x;
+    AB.y = plane[1].y - plane[0].y;
+    AB.z = plane[1].z - plane[0].z;
+    
+    AC.x = plane[2].x - plane[0].x;
+    AC.y = plane[2].y - plane[0].y;
+    AC.z = plane[2].z - plane[0].z;
+    
+    Point equation;
+    equation.x = AB.y * AC.z - AC.y * AB.z;
+    equation.y = AB.z * AC.x - AC.z * AB.x;
+    equation.z = AB.x * AC.y - AC.z * AB.y;
+    
+    float c = -(equation.x * plane[0].x + equation.y * plane[0].y + equation.z * plane[0].z);
+    
+    Point lineDirection;
+    lineDirection.x = line[1].x - line[0].x;
+    lineDirection.y = line[1].y - line[0].y;
+    lineDirection.z = line[1].z - line[0].z;
+    
+    float t = -(c + line[0].x + line[0].y + line[0].z)/(lineDirection.x + lineDirection.y + lineDirection.z);
+    
+    Point intersectionPoint;
+    intersectionPoint.x = line[0].x + lineDirection.x * t;
+    intersectionPoint.y = line[0].y + lineDirection.y * t;
+    intersectionPoint.z = line[0].z + lineDirection.z * t;
+    
+    return intersectionPoint;
+}
+
+int ShapeGroup::getFront(vector<Point> plane1, vector<Point> plane2) //harusnya dua2nya shape, ngeluarin 1 kalo plane1 lebih depan, else 2
+{
+    int index = 0;
+    for(int i = 1; i < plane1.size(); i++){
+        if (plane1[i].z < plane1[index].z)
+            index = i;
+    }
+    Point p1(plane1[index].x,plane1[index].y,plane1[index].z);
+    Point p2(plane1[index].x,plane1[index].y,plane1[index].z + 10);
+    vector<Point> line;
+    line.push_back(p1);
+    line.push_back(p2);
+    Point intersect1 = findIntersection(line,plane1);
+    Point intersect2 = findIntersection(line,plane2);
+    if (intersect1.z > intersect2.z)
+        return 1;
+    else
+        return 2;
+}
+
 void ShapeGroup::scanLineFill3D(ShadowBuffer& sb) {
     Point p1, p2;   
     Util util;
@@ -583,7 +653,16 @@ void ShapeGroup::scanLineFill3D(ShadowBuffer& sb, Shape form) {
     Shape as = shapes[0];
 
     Point * tipPoints = form.getTipPoints();
-    for (int i = tipPoints[0].y; i <= tipPoints[1].y; i++) {
+    int start = tipPoints[0].y;
+    int end = tipPoints[1].y;
+    delete [] tipPoints;
+    for (int i = start; i <= end ; i++) {
+        Point * tp = getProjected3DTipPoints();
+        if(i< tp[0].y){
+            delete [] tp;
+            continue;
+        }
+
         vector<Point> ListOfIntersectPointsAvailable;
         //BUAT AVAILABLE AREA
             //Shape tempShape = pointToPrint[k];
@@ -627,36 +706,39 @@ void ShapeGroup::scanLineFill3D(ShadowBuffer& sb, Shape form) {
             for (int k = 0; (k < nShape); k++) {
                 vector<Point> ListOfIntersectPoints;
                 Shape tempShape = pointToPrint[k];
-                //tempShape.drawBorder(sb, Color(255,225,0));
-                //tempShape.drawBorder(sb, Color(225,0,0));
-                int edgesSize = tempShape.points.size();
-                //Color c = shapes[k].color;
 
-                for (int j = 0; j < edgesSize; j++) {
-                    if (j != (edgesSize - 1)) {
-                        p1 = tempShape.points[j];
-                        p2 = tempShape.points[j+1];
-                    } else {
-                        p1 = tempShape.points[j];
-                        p2 = tempShape.points[0];
-                    }
+                if(isOnShape(form, tempShape)){
+                    //tempShape.drawBorder(sb, Color(255,225,0));
+                    //tempShape.drawBorder(sb, Color(225,0,0));
+                    int edgesSize = tempShape.points.size();
+                    //Color c = shapes[k].color;
 
-                    int intersectX, intersectZ;
-
-                    if (findIntersection(p1,p2,i,intersectX, intersectZ)){
-                        if (p1.y > p2.y) {
-                            std::swap(p1,p2);
+                    for (int j = 0; j < edgesSize; j++) {
+                        if (j != (edgesSize - 1)) {
+                            p1 = tempShape.points[j];
+                            p2 = tempShape.points[j+1];
+                        } else {
+                            p1 = tempShape.points[j];
+                            p2 = tempShape.points[0];
                         }
 
-                        Point intersect(intersectX, i,intersectZ);
-                        if (intersect.y != p2.y)
-                        ListOfIntersectPoints.push_back(intersect);
+                        int intersectX, intersectZ;
+
+                        if (findIntersection(p1,p2,i,intersectX, intersectZ)){
+                            if (p1.y > p2.y) {
+                                std::swap(p1,p2);
+                            }
+
+                            Point intersect(intersectX, i,intersectZ);
+                            if (intersect.y != p2.y)
+                            ListOfIntersectPoints.push_back(intersect);
+                        }
                     }
-                }
-                if(ListOfIntersectPoints.size() > 0) {
-                    vector<Point> result = sortVector(ListOfIntersectPoints);
-                //if (result.size() > 0) {
-                    splitAvailable(available, result, shapes[k].color, sb);            
+                    if(ListOfIntersectPoints.size() > 0) {
+                        vector<Point> result = sortVector(ListOfIntersectPoints);
+                    //if (result.size() > 0) {
+                        splitAvailable(available, result, shapes[k].color, sb);            
+                    }
                 }
             } 
         }
@@ -756,6 +838,40 @@ Point * ShapeGroup::get3DTipPoints() {
 
     for (int i = 1; i < shapes.size(); i++) {
         Point * tp = shapes[i].getTipPoints();
+        if (tipPoints[0].x > tp[0].x) {
+            tipPoints[0].x = tp[0].x;
+        }
+
+        if (tipPoints[0].y > tp[0].y) {
+            tipPoints[0].y = tp[0].y;
+        }
+
+        if (tipPoints[0].z < tp[0].z) {
+            tipPoints[0].z = tp[0].z;
+        }
+
+        if (tipPoints[1].x < tp[1].x) {
+            tipPoints[1].x = tp[1].x;
+        }
+
+        if (tipPoints[1].y < tp[1].y) {
+            tipPoints[1].y = tp[1].y;
+        }
+
+        if (tipPoints[1].z > tp[1].z) {
+            tipPoints[1].z = tp[1].z;
+        }
+    }
+
+    return tipPoints;
+}
+Point * ShapeGroup::getProjected3DTipPoints() {
+    Shape s = pointToPrint[0];
+    Point * tipPoints = s.getTipPoints();
+
+    for (int i = 1; i < pointToPrint.size(); i++) {
+        Shape st = pointToPrint[i];
+        Point * tp = st.getTipPoints();
         if (tipPoints[0].x > tp[0].x) {
             tipPoints[0].x = tp[0].x;
         }
