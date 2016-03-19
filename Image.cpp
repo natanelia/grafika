@@ -20,6 +20,16 @@ void Image::draw(ShadowBuffer& sb) {
     }
 }
 
+void Image::draw(ShadowBuffer& sb, int scaleX, int scaleY) {
+    for (int i = 0; i < points.size(); ++i) {
+        for (int j = 0; j < scaleY; ++j) {
+            for (int k = 0; k < scaleX; ++k) {
+                sb.plot((int)(points[i].x * scaleX) + k, (int)(points[i].y * scaleY) + j, colors[i]);
+            }
+        }
+    }
+}
+
 Color ** Image::getCached() {
     Point * tipPoints = getTipPoints();
     int width = tipPoints[1].x - tipPoints[0].x + 1;
@@ -39,11 +49,8 @@ Color ** Image::getCached() {
         pixels[(int)(points[i].y) - (int)(tipPoints[0].y)][(int)(points[i].x) - (int)(tipPoints[0].x)] = colors[i];
     }
 
-    /*for (int i = 0; i < height; ++i) {
-        for (int j = 0; j < width; ++j) {
-            pixels[i][j].print();
-        }
-    }*/
+    delete [] tipPoints;
+    
     return pixels;
 }
 

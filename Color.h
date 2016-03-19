@@ -1,18 +1,18 @@
 #ifndef __COLOR
 #define __COLOR
 #include <cstdio>
-#include <cstring>
-#include <sstream>
+#include <cstdlib>
+#include <string>
 
 class Color {
 public:
-    int r;
-    int g;
-    int b;
+    unsigned char r;
+    unsigned char g;
+    unsigned char b;
 
     Color();
-    Color(int r, int g, int b);
-    Color(std::string hex);
+    Color(unsigned char r, unsigned char g, unsigned char b);
+    Color(std::string strHex);
     Color(const Color& c);
 
     int isEqual(Color& c) {
@@ -20,7 +20,7 @@ public:
     }
 
     void print() {
-        printf("r:%d g:%d b:%d\n", r, g, b);
+        printf("r:%d g:%d b:%d || 0x%.2X%.2X%.2X\n", r, g, b, r, g, b);
     }
 };
 

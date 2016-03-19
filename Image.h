@@ -1,3 +1,4 @@
+
 #ifndef _IMAGE
 #define _IMAGE
 #include "ShadowBuffer.h"
@@ -16,6 +17,7 @@ public:
     Image(Point points[], Color colors[], int n);
 
     void draw(ShadowBuffer &sb);
+    void draw(ShadowBuffer &sb, int scaleX, int scaleY);
 
     Color ** getCached();
     Point& getWidthAndHeight();

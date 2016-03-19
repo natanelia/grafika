@@ -215,6 +215,7 @@ vector<Point> ShapeGroup::sortVector(vector<Point> v) {
     }
     return v;
 }
+
 int ShapeGroup::findIntersection(Point& p1, Point& p2, int y, int &x, int &z) {
 
     if (p1.y == p2.y) {
@@ -300,12 +301,12 @@ int ShapeGroup::findIntersection(Point& p1, Point& p2, int y, int &x, int &z) {
 //     return isInsideEdgeX && isInsideEdgeY;
 // }
 
-vector<Line>   ShapeGroup::initAvailable(vector<Point> v) {
-    vector<Line>  available;
+vector<Line> ShapeGroup::initAvailable(vector<Point> v) {
+    vector<Line> available;
     
     for(int i=0; i < v.size()-1; i+=2) {
         vector<Line> init;    
-        Line line(v[i],v[i+1]);
+        Line line(v[i], v[i+1]);
         available.push_back(line);
     }
     return available;
@@ -535,14 +536,6 @@ void ShapeGroup::scanLineFill3D(ShadowBuffer& sb) {
 void ShapeGroup::scanLineFill3D(ShadowBuffer& sb, Shape form) {
     Point p1, p2;   
     Util util;
-    Point basePoint(0,0,0);
-    ColorTable ct("assets/ColorTable.ct");
-    Image texture = util.convertImageFile("assets/texture-grass.txt", ct);
-    Color ** textureCache = texture.getCached();
-    Point textureWH = texture.getWidthAndHeight();
-    int textureWidth = textureWH.x;
-    int textureHeight = textureWH.y;
-
 
     int nShape = pointToPrint.size();
     int a = 0;
@@ -632,6 +625,7 @@ void ShapeGroup::scanLineFill3D(ShadowBuffer& sb, Shape form) {
             } 
         }
     }
+    delete [] tipPoints;
 }
 
 void ShapeGroup::build3D(int height, Point& lightSource, int const lightRadius) {
@@ -656,14 +650,14 @@ void ShapeGroup::build3D(int height, Point& lightSource, int const lightRadius) 
             Shape s(p);
 
             Color c;
-            float percentage = ((float)lightSource.getDistance(s.points[0]) / (float)lightRadius);
+            float percentage = ((float)lightSource.getDistance(shapes[k].points[i]) / (float)lightRadius);
             if (percentage > 1) percentage = 1;
             percentage = 1 - percentage;
             percentage = pow(percentage, 3);
             c.r = (int) (float)shapes[k].color.r * percentage;
             c.g = (int) (float)shapes[k].color.g * percentage;
             c.b = (int) (float)shapes[k].color.b * percentage;
-            c.print();
+            // c.print();
             s.setColor(c);
 
             shapes.push_back(s);
@@ -675,14 +669,14 @@ void ShapeGroup::build3D(int height, Point& lightSource, int const lightRadius) 
         }
         Shape s(p);
         Color c;
-        float percentage = ((float)lightSource.getDistance(s.points[0]) / (float)lightRadius);
+        float percentage = ((float)lightSource.getDistance(shapes[k].points[0]) / (float)lightRadius);
         if (percentage > 1) percentage = 1;
         percentage = 1 - percentage;
         percentage = pow(percentage, 3);
         c.r = (int) (float)shapes[k].color.r * percentage;
         c.g = (int) (float)shapes[k].color.g * percentage;
         c.b = (int) (float)shapes[k].color.b * percentage;
-        c.print();
+        // c.print();
         s.setColor(c);
         shapes.push_back(s);
     }
