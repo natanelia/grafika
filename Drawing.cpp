@@ -102,14 +102,18 @@ Point * Drawing::getTipPoints() {
         if (p[0].y > points[i].y) {
             p[0].y = points[i].y;
         }
+        if (p[0].z < points[i].z) {
+            p[0].z = points[i].z;
+        }
         if (p[1].x < points[i].x) {
             p[1].x = points[i].x;
         }
         if (p[1].y < points[i].y) {
             p[1].y = points[i].y;
         }
-        if (p[0].z > points[0].z) {
-            p[0].z = p[1].z = points[0].z;
+
+        if (p[1].z > points[i].z) {
+            p[1].z = points[i].z;
         }
     }
 

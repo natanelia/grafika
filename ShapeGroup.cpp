@@ -664,11 +664,10 @@ void ShapeGroup::scanLineFill3D(ShadowBuffer& sb, Shape form) {
 }
 
 void ShapeGroup::build3D(int height, Point& lightSource, int const lightRadius) {
-    int i,j;
-
     int batas = shapes.size();
     for (int k = 0; k < batas; k++) {
         for(int i = 0; i < shapes[k].points.size(); i++){
+            int j;
             if (i  != shapes[k].points.size() - 1) {
                 j = i + 1;
             } else {
@@ -682,10 +681,11 @@ void ShapeGroup::build3D(int height, Point& lightSource, int const lightRadius) 
             p.push_back(temp);
             Point temp2(shapes[k].points[i].x,shapes[k].points[i].y,height,shapes[k].points[i].tag);
             p.push_back(temp2);
+
             Shape s(p);
 
             Color c;
-            float percentage = ((float)lightSource.getDistance(shapes[k].points[i]) / (float)lightRadius);
+            float percentage = ((float)lightSource.getDistance(s.points[0]) / (float)lightRadius);
             if (percentage > 1) percentage = 1;
             percentage = 1 - percentage;
             percentage = pow(percentage, 3);
@@ -704,7 +704,7 @@ void ShapeGroup::build3D(int height, Point& lightSource, int const lightRadius) 
         }
         Shape s(p);
         Color c;
-        float percentage = ((float)lightSource.getDistance(shapes[k].points[i]) / (float)lightRadius);
+        float percentage = ((float)lightSource.getDistance(s.points[0]) / (float)lightRadius);
         if (percentage > 1) percentage = 1;
         percentage = 1 - percentage;
         percentage = pow(percentage, 3);
@@ -741,6 +741,43 @@ Point * ShapeGroup::getGroundTipPoints() {
 
         if (tipPoints[0].z > tp[0].z) {
             tipPoints[0].z = tipPoints[1].z = tp[0].z;
+        }
+    }
+
+    return tipPoints;
+}
+
+/**
+    Index   : [0] = Most top left point
+              [1] = Most bottom right point
+*/
+Point * ShapeGroup::get3DTipPoints() {
+    Point * tipPoints = shapes[0].getTipPoints();
+
+    for (int i = 1; i < shapes.size(); i++) {
+        Point * tp = shapes[i].getTipPoints();
+        if (tipPoints[0].x > tp[0].x) {
+            tipPoints[0].x = tp[0].x;
+        }
+
+        if (tipPoints[0].y > tp[0].y) {
+            tipPoints[0].y = tp[0].y;
+        }
+
+        if (tipPoints[0].z < tp[0].z) {
+            tipPoints[0].z = tp[0].z;
+        }
+
+        if (tipPoints[1].x < tp[1].x) {
+            tipPoints[1].x = tp[1].x;
+        }
+
+        if (tipPoints[1].y < tp[1].y) {
+            tipPoints[1].y = tp[1].y;
+        }
+
+        if (tipPoints[1].z > tp[1].z) {
+            tipPoints[1].z = tp[1].z;
         }
     }
 
