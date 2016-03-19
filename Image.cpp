@@ -25,7 +25,7 @@ Image::Image(vector<Point>& points, vector<Color>& colors, Point position){
 void Image::draw(ShadowBuffer& sb) {
     //struct fb_var_screeninfo vinfo;
     for (int i = 0; i < points.size(); ++i) {
-        if (points[i].x>=0 && points[i].x<=1366 && points[i].y<=768 &&t points[i].y>=0)
+        if (points[i].x>=0 && points[i].x<=1366 && points[i].y<=768 && points[i].y>=0)
         sb.plot((int)(points[i].x), (int)(points[i].y), colors[i]);
     }
 }
