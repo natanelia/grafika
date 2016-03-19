@@ -140,9 +140,12 @@ int main(int argc, char *argv[]) {
           break;
       }
       // sb.clear();
-      backgroundImage.drawTextured(sb, cloudTextureAnchor, cloudTextureWidth, cloudTextureHeight, cloudTextureCache);
-      a.draw(sb, screenMiddleX, screenMiddleY);
-      fb.draw(sb);
+
+      if (c != '=') {
+        backgroundImage.drawTextured(sb, cloudTextureAnchor, cloudTextureWidth, cloudTextureHeight, cloudTextureCache);
+        a.draw(sb, screenMiddleX, screenMiddleY);
+        fb.draw(sb);
+      }
     }
     resetTermios();
 

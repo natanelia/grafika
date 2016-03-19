@@ -3,6 +3,7 @@
 #include "ShadowBuffer.h"
 #include "Shape.h"
 #include "util.cpp"
+#include <algorithm>
 
 class ShapeGroup {
 protected:
@@ -21,7 +22,8 @@ protected:
     Point * getProjected3DTipPoints(); 
     Point findIntersection(vector<Point> line, vector<Point> plane);
     int getFront(vector<Point> plane1, vector<Point> plane2);
-    int getHighestZIndexShape(vector<Point>& plane1, vector<Point>& plane2);
+    int getHighestZIndexShape(Shape& plane1, Shape& plane2) ;
+    vector<Shape> * getSortedShapes();
     
 public:
     Color color;
