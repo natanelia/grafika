@@ -163,6 +163,72 @@ Point * ShapeGroup::getTipPoints() {
     return tipPoints;
 }
 
+
+Point ShapeGroup::findIntersection(vector<Point> line, vector<Point> plane){//harusnya line sama shape anggap persamaan line sama persamaan bidangnya pasti ber-intersect
+    Point AB;
+    Point AC;
+    
+    AB.x = plane[1].x - plane[0].x;
+    AB.y = plane[1].y - plane[0].y;
+    AB.z = plane[1].z - plane[0].z;
+    
+    AC.x = plane[2].x - plane[0].x;
+    AC.y = plane[2].y - plane[0].y;
+    AC.z = plane[2].z - plane[0].z;
+    
+    Point equation;
+    equation.x = AB.y * AC.z - AC.y * AB.z;
+    equation.y = AB.z * AC.x - AC.z * AB.x;
+    equation.z = AB.x * AC.y - AC.z * AB.y;
+    
+    float c = -(equation.x * plane[0].x + equation.y * plane[0].y + equation.z * plane[0].z);
+    // here we get ax + by + cz + c = 0 for the plane formula
+
+
+    Point lineDirection;
+    lineDirection.x = line[1].x - line[0].x;
+    lineDirection.y = line[1].y - line[0].y;
+    lineDirection.z = line[1].z - line[0].z;
+
+    float t = -(c + equation.x * line[0].x + equation.y * line[0].y + equation.z * line[0].z) / (equation.x * lineDirection.x + equation.y * lineDirection.y + equation.z * lineDirection.z);
+    
+    // float t = -(c + line[0].x + line[0].y + line[0].z)/(lineDirection.x + lineDirection.y + lineDirection.z);
+    
+    Point intersectionPoint;
+    intersectionPoint.x = line[0].x + lineDirection.x * t;
+    intersectionPoint.y = line[0].y + lineDirection.y * t;
+    intersectionPoint.z = line[0].z + lineDirection.z * t;
+    
+    return intersectionPoint;
+}
+
+int ShapeGroup::getFront(vector<Point> plane1, vector<Point> plane2) //harusnya dua2nya shape, ngeluarin 1 kalo plane1 lebih depan, else 2
+{
+    int index = 0;
+    for(int i = 1; i < plane1.size(); i++){
+        if (plane1[i].z < plane1[index].z)
+            index = i;
+    }
+    Point p1(plane1[index].x,plane1[index].y,plane1[index].z);
+    Point p2(plane1[index].x,plane1[index].y,plane1[index].z + 10);
+    vector<Point> line;
+    line.push_back(p1);
+    line.push_back(p2);
+    Point intersect1 = findIntersection(line,plane1);
+    Point intersect2 = findIntersection(line,plane2);
+    if (intersect1.z > intersect2.z)
+        return 1;
+    else
+        return 2;
+}
+
+int ShapeGroup::getHighestZIndexShape(vector<Point>& plane1, vector<Point>& plane2) {
+    Point middleOfPlane1;
+    Point middleOfPlane2;
+
+
+}
+
 int ShapeGroup::findZMax(vector<Point> plan){
     int max = -99;
     for(int x = 0; x < plan.size(); x++){
@@ -178,7 +244,7 @@ void ShapeGroup::sortLayer(){
     vector<Point> key;
     for(j = 1; j < numLength; j++) { // Start with 1 (not 0)
         key = pointToPrint[j];
-        for(i = j - 1; (i >= 0) && (getFront(pointToPrint[i],key)==1); i--) { // Smaller values move up
+        for(i = j - 1; (i >= 0) && (getFront(pointToPrint[i],key)==2); i--) { // Smaller values move up
             pointToPrint[i+1] = pointToPrint[i];
         }
         pointToPrint[i+1] = key;    //Put key into its proper location
@@ -196,8 +262,6 @@ void ShapeGroup::projectTo2D(float offsetX, float offsetY){
             Point p(newX, newY, shapes[i].points[j].z);
             temp.push_back(p);
         }
-        // temp.push_back(Point(60, 170-a, 60));
-        // a += 10;
         pointToPrint.push_back(temp);
     }
     sortLayer();
@@ -508,59 +572,6 @@ bool ShapeGroup::isOnShape(Shape des, Shape src){
     delete [] srcTipPoints;
     return ret;
 }
-Point ShapeGroup::findIntersection(vector<Point> line, vector<Point> plane){//harusnya line sama shape anggap persamaan line sama persamaan bidangnya pasti ber-intersect
-    Point AB;
-    Point AC;
-    
-    AB.x = plane[1].x - plane[0].x;
-    AB.y = plane[1].y - plane[0].y;
-    AB.z = plane[1].z - plane[0].z;
-    
-    AC.x = plane[2].x - plane[0].x;
-    AC.y = plane[2].y - plane[0].y;
-    AC.z = plane[2].z - plane[0].z;
-    
-    Point equation;
-    equation.x = AB.y * AC.z - AC.y * AB.z;
-    equation.y = AB.z * AC.x - AC.z * AB.x;
-    equation.z = AB.x * AC.y - AC.z * AB.y;
-    
-    float c = -(equation.x * plane[0].x + equation.y * plane[0].y + equation.z * plane[0].z);
-    
-    Point lineDirection;
-    lineDirection.x = line[1].x - line[0].x;
-    lineDirection.y = line[1].y - line[0].y;
-    lineDirection.z = line[1].z - line[0].z;
-    
-    float t = -(c + line[0].x + line[0].y + line[0].z)/(lineDirection.x + lineDirection.y + lineDirection.z);
-    
-    Point intersectionPoint;
-    intersectionPoint.x = line[0].x + lineDirection.x * t;
-    intersectionPoint.y = line[0].y + lineDirection.y * t;
-    intersectionPoint.z = line[0].z + lineDirection.z * t;
-    
-    return intersectionPoint;
-}
-
-int ShapeGroup::getFront(vector<Point> plane1, vector<Point> plane2) //harusnya dua2nya shape, ngeluarin 1 kalo plane1 lebih depan, else 2
-{
-    int index = 0;
-    for(int i = 1; i < plane1.size(); i++){
-        if (plane1[i].z < plane1[index].z)
-            index = i;
-    }
-    Point p1(plane1[index].x,plane1[index].y,plane1[index].z);
-    Point p2(plane1[index].x,plane1[index].y,plane1[index].z + 10);
-    vector<Point> line;
-    line.push_back(p1);
-    line.push_back(p2);
-    Point intersect1 = findIntersection(line,plane1);
-    Point intersect2 = findIntersection(line,plane2);
-    if (intersect1.z > intersect2.z)
-        return 1;
-    else
-        return 2;
-}
 
 void ShapeGroup::scanLineFill3D(ShadowBuffer& sb) {
     Point p1, p2;   
@@ -651,7 +662,7 @@ void ShapeGroup::scanLineFill3D(ShadowBuffer& sb, Shape form) {
     delete [] tipPoints;
     for (int i = start; i <= end ; i++) {
         Point * tp = getProjected3DTipPoints();
-        if(i< tp[0].y){
+        if (i < tp[0].y){
             delete [] tp;
             continue;
         }
@@ -765,11 +776,14 @@ void ShapeGroup::build3D(int height, Point& lightSource, int const lightRadius) 
             if (percentage > 1) percentage = 1;
             percentage = 1 - percentage;
             percentage = pow(percentage, 3);
-            c.r = (int) (float)shapes[k].color.r * percentage;
-            c.g = (int) (float)shapes[k].color.g * percentage;
-            c.b = (int) (float)shapes[k].color.b * percentage;
-            // c.print();
+            // c.r = (int) (float)shapes[k].color.r * percentage;
+            // c.g = (int) (float)shapes[k].color.g * percentage;
+            // c.b = (int) (float)shapes[k].color.b * percentage;
+            c.r = rand() % 255;
+            c.b = rand() % 255;
+            c.r = rand() % 255;
             s.setColor(c);
+            // c.print();
 
             shapes.push_back(s);
         }
@@ -784,9 +798,12 @@ void ShapeGroup::build3D(int height, Point& lightSource, int const lightRadius) 
         if (percentage > 1) percentage = 1;
         percentage = 1 - percentage;
         percentage = pow(percentage, 3);
-        c.r = (int) (float)shapes[k].color.r * percentage;
-        c.g = (int) (float)shapes[k].color.g * percentage;
-        c.b = (int) (float)shapes[k].color.b * percentage;
+        c.r = rand() % 255;
+        c.b = rand() % 255;
+        c.r = rand() % 255;
+        // c.r = (int) (float)shapes[k].color.r * percentage;
+        // c.g = (int) (float)shapes[k].color.g * percentage;
+        // c.b = (int) (float)shapes[k].color.b * percentage;
         // c.print();
         s.setColor(c);
         shapes.push_back(s);
