@@ -36,6 +36,7 @@ public:
 
     Point * getTipPoints();
     Point * getGroundTipPoints();
+    Point * get3DTipPoints();
 };
 
 #endif
