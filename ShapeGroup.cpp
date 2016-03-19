@@ -227,6 +227,9 @@ int ShapeGroup::findIntersection(Point& p1, Point& p2, int y, int &x, int &z) {
     int y1 = (int)p1.y;
     int x2 = (int)p2.x;
     int y2 = (int)p2.y;
+    if((y2<0)||(y1<0)){
+        cout<<"y1 = " <<y1<< " y2 = " << y2 << endl;
+    }
     
     if (y1 > y2) {
         yBottom = y1;
@@ -312,64 +315,85 @@ vector<Line>   ShapeGroup::initAvailable(vector<Point> v) {
 }
 
 
+// void ShapeGroup::splitAvailable(vector<Line>  &available, vector<Point> demand, ShadowBuffer& sb, Point basePoint, int textureWidth, int textureHeight, Color ** textureCache ){
+//     //vector<Line> available= Available[Available.size() - 1];
+// // cout<< "ADA RESULT "<<demand.size()<<endl;
+//     for (int j=0; j<demand.size()-1;j+=2) {
+//         vector<Line> newAvailable;
+//         for (int i= 0; i < available.size(); i++ ) {
+ 
+//             if (available[i].getPoint2().x<=available[i].getPoint1().x) { //sudah tidak ada slot
+                    
+//             } else if (demand[j].x > available[i].getPoint2().x) { //demand berada di kanan available
+//                 newAvailable.push_back(available[i]); 
+//             } else if (demand[j+1].x < available[i].getPoint1().x) { //demand di kiri available
+//                 newAvailable.push_back(available[i]); 
+//             } else if ((available[i].getPoint1().x <= demand[j].x) && (demand[j+1].x <= available[i].getPoint2().x)) { //demand berada di tengah
+//                 Line split1(available[i].getPoint1(), Point(demand[j].x-1, available[i].getPoint1().y,0));
+
+//                 Line split2(Point(demand[j+1].x+1,available[i].getPoint2().y,0), available[i].getPoint2());
+
+//                 newAvailable.push_back(split1);
+//                 newAvailable.push_back(split2);
+
+//                 Line line(demand[j], demand[j+1]);
+//                 //line.color = c;
+//                 line.draw(sb);
+//                 // line.drawTextured(sb, basePoint, textureWidth, textureHeight, textureCache);
+//                 //line.draw(sb, line.getPoint1(), line.getPoint1().getDistance(line.getPoint2()), line.color, Color(line.color.r - 50, line.color.g - 50, line.color.b - 50));
+//             } else if (available[i].getPoint1().x <= demand[j].x) { //demand lebih banyak kebelakang
+//                 Line split(available[i].getPoint1(), Point(demand[j].x-1, available[i].getPoint1().y,0));
+//                 newAvailable.push_back(split);
+
+//                 Line line(demand[j], Point(available[i].getPoint2().x,demand[j].y,0));
+//                 // line.color = c;
+//                 // line.draw(sb, line.getPoint1(), line.getPoint1().getDistance(line.getPoint2()), line.color, Color(line.color.r - 50, line.color.g - 50, line.color.b - 50));
+//                 line.draw(sb);
+//                 // line.drawTextured(sb, basePoint, textureWidth, textureHeight, textureCache);
+
+//             } else if (demand[j+1].x <= available[i].getPoint2().x) { //demand lebih banyak di depan
+//                 Line split(Point(demand[j+1].x+1,available[i].getPoint2().y,0), available[i].getPoint2());
+
+//                 Line line(Point(available[i].getPoint1().x,demand[j+1].y,0),demand[j+1]);
+//                 // line.color = c;
+//                 line.draw(sb);
+//                 // line.draw(sb, line.getPoint1(), line.getPoint1().getDistance(line.getPoint2()), line.color, Color(line.color.r - 50, line.color.g - 50, line.color.b - 50));
+//                 // line.drawTextured(sb, basePoint, textureWidth, textureHeight, textureCache);
+
+//                 newAvailable.push_back(split);
+//             } 
+//         }
+        
+//         //update info available
+//         //Available.push_back(newAvailable);
+//         available = newAvailable;
+//     }
+// }
+
 void ShapeGroup::splitAvailable(vector<Line>  &available, vector<Point> demand, ShadowBuffer& sb, Point basePoint, int textureWidth, int textureHeight, Color ** textureCache ){
     //vector<Line> available= Available[Available.size() - 1];
 // cout<< "ADA RESULT "<<demand.size()<<endl;
     for (int j=0; j<demand.size()-1;j+=2) {
-        vector<Line> newAvailable;
-        for (int i= 0; i < available.size(); i++ ) {
-            // if (available[i].getPoint2().x<=available[i].getPoint1().x) { //sudah tidak ada slot
-            //     //newAvailable.push_back(available[i]);   
-            // } else if (demand[j].x > available[i].getPoint2().x) { //demand berada di kanan available
-            //     newAvailable.push_back(available[i]); 
-            // } else if (demand[j+1].x < available[i].getPoint1().x) { //demand di kiri available
-            //     newAvailable.push_back(available[i]); 
-            // } else if ((available[i].getPoint1().x <= demand[j].x)&&(demand[j+1].x <= available[i].getPoint2().x)){ //demand berada di tengah
-            //     Line split1(available[i].getPoint1(), Point(demand[j].x-1, available[i].getPoint1().y,0));
-
-            //     Line split2(Point(demand[j+1].x+1,available[i].getPoint2().y,0), available[i].getPoint2());
-
-            //     newAvailable.push_back(split1);
-            //     newAvailable.push_back(split2);
-            //     cout<< "ADA"<<endl;
-            //     if (j+1 < demand.size()) {
-            //         Line line(demand[j], demand[j+1]);
-            //         //line.color = c;
-            //         //line.draw(sb);
-            //         line.drawTextured(sb, basePoint, textureWidth, textureHeight, textureCache);
-            //     }
-            // } else if (available[i].getPoint1().x <= demand[j].x) { //demand lebih banyak kebelakang
-            //     Line split(available[i].getPoint1(), Point(demand[j].x-1, available[i].getPoint1().y,0));
-            //     newAvailable.push_back(split);
-            //     cout<< "ADA"<<endl;;
-            //     Line line(demand[j], Point(available[i].getPoint2().x,demand[j].y,0));
-            //     //line.color = c;
-            //     //line.draw(sb);
-            //     line.drawTextured(sb, basePoint, textureWidth, textureHeight, textureCache);
-
-            // } else if (demand[j+1].x <= available[i].getPoint2().x) { //demand lebih banyak di depan
-            //     Line split(Point(demand[j+1].x+1,available[i].getPoint2().y,0), available[i].getPoint2());
-            //     cout<< "ADA"<<endl;
-            //     Line line(Point(available[i].getPoint1().x,demand[j+1].y,0),demand[j+1]);
-            //     // line.color = c;
-            //     // line.draw(sb);
-            //     line.drawTextured(sb, basePoint, textureWidth, textureHeight, textureCache);
-            //     newAvailable.push_back(split);
-            // }
+        //vector<Line> newAvailable;
+        int i=0;
+        while(i<available.size()){
+ 
             if (available[i].getPoint2().x<=available[i].getPoint1().x) { //sudah tidak ada slot
-                    
+                i++;
             } else if (demand[j].x > available[i].getPoint2().x) { //demand berada di kanan available
-                newAvailable.push_back(available[i]); 
+                //newAvailable.push_back(available[i]);
+                i++;
             } else if (demand[j+1].x < available[i].getPoint1().x) { //demand di kiri available
-                newAvailable.push_back(available[i]); 
+                //newAvailable.push_back(available[i]);
+                i++; 
             } else if ((available[i].getPoint1().x <= demand[j].x) && (demand[j+1].x <= available[i].getPoint2().x)) { //demand berada di tengah
                 Line split1(available[i].getPoint1(), Point(demand[j].x-1, available[i].getPoint1().y,0));
-
                 Line split2(Point(demand[j+1].x+1,available[i].getPoint2().y,0), available[i].getPoint2());
-
-                newAvailable.push_back(split1);
-                newAvailable.push_back(split2);
-
+                available.push_back(split1);
+                available.push_back(split2);
+                //newAvailable.push_back(split1);
+                //newAvailable.push_back(split2);
+                available.erase(available.begin()+i);
                 Line line(demand[j], demand[j+1]);
                 //line.color = c;
                 line.draw(sb);
@@ -377,38 +401,37 @@ void ShapeGroup::splitAvailable(vector<Line>  &available, vector<Point> demand, 
                 //line.draw(sb, line.getPoint1(), line.getPoint1().getDistance(line.getPoint2()), line.color, Color(line.color.r - 50, line.color.g - 50, line.color.b - 50));
             } else if (available[i].getPoint1().x <= demand[j].x) { //demand lebih banyak kebelakang
                 Line split(available[i].getPoint1(), Point(demand[j].x-1, available[i].getPoint1().y,0));
-                newAvailable.push_back(split);
-
+                //newAvailable.push_back(split);
+                available.push_back(split);
                 Line line(demand[j], Point(available[i].getPoint2().x,demand[j].y,0));
-                // line.color = c;
-                // line.draw(sb, line.getPoint1(), line.getPoint1().getDistance(line.getPoint2()), line.color, Color(line.color.r - 50, line.color.g - 50, line.color.b - 50));
+                available.erase(available.begin()+i);
                 line.draw(sb);
                 // line.drawTextured(sb, basePoint, textureWidth, textureHeight, textureCache);
 
             } else if (demand[j+1].x <= available[i].getPoint2().x) { //demand lebih banyak di depan
                 Line split(Point(demand[j+1].x+1,available[i].getPoint2().y,0), available[i].getPoint2());
-
+                available.push_back(split);
                 Line line(Point(available[i].getPoint1().x,demand[j+1].y,0),demand[j+1]);
+                available.erase(available.begin()+i);
                 // line.color = c;
                 line.draw(sb);
                 // line.draw(sb, line.getPoint1(), line.getPoint1().getDistance(line.getPoint2()), line.color, Color(line.color.r - 50, line.color.g - 50, line.color.b - 50));
                 // line.drawTextured(sb, basePoint, textureWidth, textureHeight, textureCache);
 
-                newAvailable.push_back(split);
-            } else {
-                newAvailable.push_back(available[i]); 
-            }
+                //newAvailable.push_back(split);
+            } 
         }
         
         //update info available
         //Available.push_back(newAvailable);
-        available = newAvailable;
+        //available = newAvailable;
     }
 }
 
 void ShapeGroup::splitAvailable(vector<Line> &available, vector<Point> demand, Color c, ShadowBuffer& sb) {
     for (int j=0; j<demand.size()-1;j+=2) {
         vector<Line> newAvailable;
+
         for (int i= 0; i < available.size(); i++ ) {
             if (available[i].getPoint2().x<=available[i].getPoint1().x) { //sudah tidak ada slot
                    
@@ -449,6 +472,12 @@ void ShapeGroup::splitAvailable(vector<Line> &available, vector<Point> demand, C
         }
         available = newAvailable;
     }
+    
+        
+        //update info available
+        //Available.push_back(newAvailable);
+        //available = newAvailable;
+    
 }
 
 
@@ -663,7 +692,7 @@ void ShapeGroup::build3D(int height, Point& lightSource, int const lightRadius) 
             c.r = (int) (float)shapes[k].color.r * percentage;
             c.g = (int) (float)shapes[k].color.g * percentage;
             c.b = (int) (float)shapes[k].color.b * percentage;
-            c.print();
+            //c.print();
             s.setColor(c);
 
             shapes.push_back(s);
@@ -682,7 +711,7 @@ void ShapeGroup::build3D(int height, Point& lightSource, int const lightRadius) 
         c.r = (int) (float)shapes[k].color.r * percentage;
         c.g = (int) (float)shapes[k].color.g * percentage;
         c.b = (int) (float)shapes[k].color.b * percentage;
-        c.print();
+        //c.print();
         s.setColor(c);
         shapes.push_back(s);
     }
