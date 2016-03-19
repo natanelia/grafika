@@ -19,11 +19,13 @@ Image::Image(vector<Point>& points, vector<Color>& colors, Point position){
         this->colors.push_back(colors[i]);
     }
     this->position = position;
-    translate(position.x, position.y);
+    translate(position.x, position.y,0);
 }
 
 void Image::draw(ShadowBuffer& sb) {
+    //struct fb_var_screeninfo vinfo;
     for (int i = 0; i < points.size(); ++i) {
+        if (points[i].x>=0 && points[i].x<=1366 && points[i].y<=768 &&t points[i].y>=0)
         sb.plot((int)(points[i].x), (int)(points[i].y), colors[i]);
     }
 }
@@ -72,6 +74,21 @@ Point& Image::getWidthAndHeight() {
 }
 
 void Image::setPosition(Point p) {
-    translate(p.x - position.x, p.y - position.y);
+    translate(p.x - position.x, p.y - position.y,0);
     this->position = p;    
+}
+
+
+void Image::project2dPos(){
+    Point * tipPoints = getTipPoints();
+    float factor;
+    if(position.x > (tipPoints[1].x-tipPoints[0].x)/2)
+        factor = 1.003;
+    else
+        factor = 1.001;
+
+    float newX = (position.x * pow((factor),position.z * 0.1));
+    float newY = (position.y * pow((factor),position.z * 0.1));
+    Point p(newX,newY,0);
+    setPosition(p);
 }

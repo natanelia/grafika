@@ -93,10 +93,11 @@ int main(int argc, char *argv[]) {
     // sb.clear();
     backgroundImage.drawTextured(sb, cloudTextureAnchor, cloudTextureWidth, cloudTextureHeight, cloudTextureCache);
 
-    ImageGroup IG("assets/nama/nama","assets/nama/positionTable.txt",screenMiddleX,screenMiddleY, 5);
-    IG.draw(sb);
+    ImageGroup IG("assets/nama/nama","assets/nama/positionTable.txt",screenMiddleX-325,screenMiddleY-300, 5);
+    
 
     a.draw(sb, screenMiddleX, screenMiddleY);
+    IG.draw(sb);
     fb.draw(sb);
 
     int c = 0;
@@ -126,26 +127,32 @@ int main(int argc, char *argv[]) {
         case 'u':
             a.translate(0,-10,0);
             groundTipPoints[0].translation(0,-10,0);
+            IG.translatePos(0,-10,0);
           break;
         case 'j':
             a.translate(0,10,0);
             groundTipPoints[0].translation(0,10,0);
+            IG.translatePos(0,10,0);
           break;
         case 'h':
             a.translate(-10,0,0);
             groundTipPoints[0].translation(-10,0,0);
+            IG.translatePos(-10,0,0);
           break;
         case 'k':
             a.translate(10,0,0);
             groundTipPoints[0].translation(10,0,0);
+            IG.translatePos(10,0,0);
           break;
         case 'i':
             a.translate(0,0,-10);
             groundTipPoints[0].translation(0,0,-10);
+            IG.translatePos(0,0,-10);
           break;
         case 'n':
             a.translate(0,0,10);
             groundTipPoints[0].translation(0,0,10);
+            IG.translatePos(0,0,10);
           break;
       }
        sb.clear();
