@@ -24,6 +24,7 @@ public:
 
     void draw(ShadowBuffer &sb);
     void draw(ShadowBuffer &sb, int scaleX, int scaleY);
+    void drawName(ShadowBuffer& sb);
 
     Color ** getCached();
     Point& getWidthAndHeight();

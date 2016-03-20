@@ -36,7 +36,7 @@ void ImageGroup::insertPosition(string filename, int offsetX, int offsetY, int s
 void ImageGroup::draw(ShadowBuffer& sb) {
 	for(int i=0; i<images.size(); i++) {
 
-		images[i].draw(sb);
+		images[i].drawName(sb);
 	}
 }
 

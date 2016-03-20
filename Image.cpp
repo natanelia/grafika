@@ -30,6 +30,14 @@ void Image::draw(ShadowBuffer& sb) {
     }
 }
 
+void Image::drawName(ShadowBuffer& sb) {
+    //struct fb_var_screeninfo vinfo;
+    for (int i = 0; i < points.size(); ++i) {
+        if (points[i].x>=380 && points[i].x<=1366 && points[i].y<=768 && points[i].y>=100)
+        sb.plot((int)(points[i].x), (int)(points[i].y), colors[i]);
+    }
+}
+
 void Image::draw(ShadowBuffer& sb, int scaleX, int scaleY) {
     for (int i = 0; i < points.size(); ++i) {
         for (int j = 0; j < scaleY; ++j) {

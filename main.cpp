@@ -80,6 +80,9 @@ int main(int argc, char *argv[]) {
     int grassTextureWidth = grassTextureWH.x;
     int grassTextureHeight = grassTextureWH.y;
 
+    Image logo = util.convertImageFile("assets/logo.txt", ct);
+    logo.translate(80,30,0);
+
     const int edgeCount = 4;
     Point backgroundEdgePoints[edgeCount] = {
       Point(sb.offsetX, sb.offsetY, 0),
@@ -107,13 +110,14 @@ int main(int argc, char *argv[]) {
 
     ImageGroup IG("assets/nama/nama","assets/nama/positionTable.txt",screenMiddleX-325,screenMiddleY-300, 5);
     Image petunjuk = util.convertImageFile("assets/petunjuk.txt", ct);
-    petunjuk.scale(Point(0,0,0),0.75,0);
+    petunjuk.scale(Point(0,0,0),0.75,1);
     petunjuk.translate(0,200,0);
     
     b.drawTextured(sb,screenMiddleX-325,screenMiddleY-300,grassTextureAnchor,grassTextureWidth,grassTextureHeight,grassTextureCache);
     a.draw(sb, screenMiddleX, screenMiddleY);
     IG.draw(sb);
     petunjuk.draw(sb);
+    logo.draw(sb);
     fb.draw(sb);
 
     int c = 0;
@@ -195,6 +199,7 @@ int main(int argc, char *argv[]) {
       //cout << IG.images[2].points[0].x << "," << IG.images[2].points[0].y << endl;
       IG.draw(sb);
       petunjuk.draw(sb);
+      logo.draw(sb);
       fb.draw(sb);
     }
     resetTermios();
