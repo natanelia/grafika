@@ -89,7 +89,7 @@ int main(int argc, char *argv[]) {
     Point * tipPoints = backgroundImage.getTipPoints();
     
     ShapeGroup a(filename, screenMiddleX, screenMiddleY, 5);
-    ShapeGroup b("ground", screenMiddleX-325,screenMiddleY-300, 5);
+    ShapeGroup b("ground", screenMiddleX-300,screenMiddleY-275, 5);
 
     Point * groundTipPoints = a.getGroundTipPoints();
     Point * groundTipPointsB = b.getGroundTipPoints();
