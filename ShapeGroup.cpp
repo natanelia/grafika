@@ -18,8 +18,8 @@ ShapeGroup::ShapeGroup(string objName, float offsetX, float offsetY, int scale) 
 
 void ShapeGroup::draw(ShadowBuffer& sb, float offsetX, float offsetY) {
     projectTo2D(offsetX,offsetY);
-    Point p1(0,0,0);
-    Point p2(sb.width, 0, 0);
+    Point p1(0,100,0);
+    Point p2(sb.width, 100, 0);
     Point p3(sb.width, sb.height, 0);
     Point p4(0, sb.height, 0);
     vector<Point> temp;
@@ -28,13 +28,15 @@ void ShapeGroup::draw(ShadowBuffer& sb, float offsetX, float offsetY) {
     temp.push_back(p3);
     temp.push_back(p4);
     Shape view(temp);
+    Color c(0,0,255);
+    //view.drawBorder(sb,c);
     scanLineFill3D(sb,view);
 }
 
 void ShapeGroup::drawTextured(ShadowBuffer& sb, int offsetX, int offsetY, Point const textureAnchor, int textureWidth, int textureHeight, Color ** textureCache) {
     projectTo2D(offsetX,offsetY);
-    Point p1(0,0,0);
-    Point p2(sb.width, 0, 0);
+    Point p1(0,100,0);
+    Point p2(sb.width, 100, 0);
     Point p3(sb.width, sb.height, 0);
     Point p4(0, sb.height, 0);
     vector<Point> temp;
@@ -43,6 +45,8 @@ void ShapeGroup::drawTextured(ShadowBuffer& sb, int offsetX, int offsetY, Point 
     temp.push_back(p3);
     temp.push_back(p4);
     Shape view(temp);
+    // Color c(0,0,255);
+    // view.drawBorder(sb,c);
     scanLineFill3D(sb,view,textureWidth, textureHeight, textureCache); 
 }
 

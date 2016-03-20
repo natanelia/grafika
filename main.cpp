@@ -107,7 +107,8 @@ int main(int argc, char *argv[]) {
 
     ImageGroup IG("assets/nama/nama","assets/nama/positionTable.txt",screenMiddleX-325,screenMiddleY-300, 5);
     Image petunjuk = util.convertImageFile("assets/petunjuk.txt", ct);
-    petunjuk.scale(Point(0,0,0),1.5,2.3);
+    petunjuk.scale(Point(0,0,0),0.75,0);
+    petunjuk.translate(0,200,0);
     
     b.drawTextured(sb,screenMiddleX-325,screenMiddleY-300,grassTextureAnchor,grassTextureWidth,grassTextureHeight,grassTextureCache);
     a.draw(sb, screenMiddleX, screenMiddleY);
