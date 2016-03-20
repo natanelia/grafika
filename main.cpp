@@ -103,7 +103,7 @@ int main(int argc, char *argv[]) {
     //delete [] groundTipPoints;
 
     Point lightSource(screenMiddleX, screenMiddleY, height * 1.2f);
-    a.build3D(lightSource, height * 20);
+    a.build3D(lightSource, height * 30);
 
     // sb.clear();
     backgroundImage.drawTextured(sb, cloudTextureAnchor, cloudTextureWidth, cloudTextureHeight, cloudTextureCache);
@@ -177,14 +177,14 @@ int main(int argc, char *argv[]) {
             groundTipPointsB[0].translation(10,0,0);
             IG.translatePos(10,0,0);
           break;
-        case 'i':
+        case 'n':
             a.translate(0,0,-10);
             groundTipPoints[0].translation(0,0,-10);
             b.translate(0,0,-10);
             groundTipPointsB[0].translation(0,0,-10);
             IG.translatePos(0,0,-10);
           break;
-        case 'n':
+        case 'i':
             a.translate(0,0,10);
             groundTipPoints[0].translation(0,0,10);
             b.translate(0,0,10);

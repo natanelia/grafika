@@ -722,7 +722,7 @@ void ShapeGroup::build3D(Point& lightSource, int const lightRadius) {
             float percentage = ((float)lightSource.getDistance(shapes[k].points[i]) / (float)lightRadius);
             if (percentage > 1) percentage = 1;
             percentage = 1 - percentage;
-            percentage = pow(percentage, 3);
+            percentage = pow(percentage, 2);
             // c.r = 0;
             // c.b = 150;
             // c.r = 0;
@@ -744,7 +744,7 @@ void ShapeGroup::build3D(Point& lightSource, int const lightRadius) {
         float percentage = ((float)lightSource.getDistance(shapes[k].points[0]) / (float)lightRadius);
         if (percentage > 1) percentage = 1;
         percentage = 1 - percentage;
-        percentage = pow(percentage, 3);
+        percentage = pow(percentage, 2);
         // c.r = rand() % 255;
         // c.b = rand() % 255;
         // c.r = rand() % 255;
