@@ -239,7 +239,7 @@ void ShapeGroup::sortLayer(){
     for(j = 1; j < numLength; j++) { // Start with 1 (not 0)
         key = pointToPrint[j];
         temp = colorToPrint[j];
-        //for(i = j - 1; (i >= 0) && (findZMax(pointToPrint[i]) > findZMax(key)); i--) { // Smaller values move up
+        //for(i = j - 1; (i >= 0) && (findZMax(pointToPrint[i]) < findZMax(key)); i--) { // Smaller values move up
         for(i = j - 1; (i >= 0) && (getFront(pointToPrint[i],key)==2); i--) { // Smaller values move up
             pointToPrint[i+1] = pointToPrint[i];
             colorToPrint[i+1] = colorToPrint[i];
@@ -525,7 +525,6 @@ void ShapeGroup::scanLineFill3D(ShadowBuffer& sb, Shape form) {
     Point * tipPoints = form.getTipPoints();
     int start = tipPoints[0].y;
     int end = tipPoints[1].y;
-    delete [] tipPoints;
     for (int i = start; i <= end ; i++) {
         Point * tp = getProjected3DTipPoints();
         if (i < tp[0].y){
@@ -727,7 +726,10 @@ void ShapeGroup::build3D(Point& lightSource, int const lightRadius) {
             // c.r = 0;
             // c.b = 150;
             // c.r = 0;
-            s.setColor(shapes[k].color);
+            c.r = (int) (float)shapes[k].color.r * percentage;
+            c.g = (int) (float)shapes[k].color.g * percentage;
+            c.b = (int) (float)shapes[k].color.b * percentage;
+            s.setColor(c);
             // c.print();
 
             shapes.push_back(s);
@@ -746,7 +748,10 @@ void ShapeGroup::build3D(Point& lightSource, int const lightRadius) {
         // c.r = rand() % 255;
         // c.b = rand() % 255;
         // c.r = rand() % 255;
-        s.setColor(shapes[k].color);
+        c.r = (int) (float)shapes[k].color.r * percentage;
+        c.g = (int) (float)shapes[k].color.g * percentage;
+        c.b = (int) (float)shapes[k].color.b * percentage;
+        s.setColor(c);
         shapes.push_back(s);
     }
 }

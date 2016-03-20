@@ -7,7 +7,7 @@ using namespace std;
 ImageGroup::ImageGroup(string filename, string posname, float offsetX, float offsetY, int scale) {
 	ColorTable ct("assets/ColorTable.ct");
 	Util util;
-	for (int i=1; i<=40; i++) {
+	for (int i=1; i<=42; i++) {
 		ostringstream ss;
     	ss << i;
 
