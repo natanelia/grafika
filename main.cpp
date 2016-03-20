@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
     if (argc > 1) {
       filename = argv[1];
     } else {
-      filename = "default";
+      filename = "default2";
     }
 
     int height;
@@ -65,11 +65,23 @@ int main(int argc, char *argv[]) {
 
     ColorTable ct("assets/ColorTable.ct");
     Image cloudTexture = util.convertImageFile("assets/texture-clouds.txt", ct);
+    cloudTexture.scale(Point(0,0,0),2.4,5.1);
     Color ** cloudTextureCache = cloudTexture.getCached();
     Point cloudTextureAnchor(0,0,0);
     Point cloudTextureWH = cloudTexture.getWidthAndHeight();
     int cloudTextureWidth = cloudTextureWH.x;
     int cloudTextureHeight = cloudTextureWH.y;
+
+    Image grassTexture = util.convertImageFile("assets/texture-grass.txt", ct);
+    grassTexture.scale(Point(0,0,0),0.5,0.5);
+    Color ** grassTextureCache = grassTexture.getCached();
+    Point grassTextureAnchor(0,0,0);
+    Point grassTextureWH = grassTexture.getWidthAndHeight();
+    int grassTextureWidth = grassTextureWH.x;
+    int grassTextureHeight = grassTextureWH.y;
+
+    Image logo = util.convertImageFile("assets/logo.txt", ct);
+    logo.translate(80,30,0);
 
     const int edgeCount = 4;
     Point backgroundEdgePoints[edgeCount] = {
@@ -82,25 +94,35 @@ int main(int argc, char *argv[]) {
     Point * tipPoints = backgroundImage.getTipPoints();
     
     ShapeGroup a(filename, screenMiddleX, screenMiddleY, 5);
+    ShapeGroup b("ground", screenMiddleX-300,screenMiddleY-275, 5);
 
     Point * groundTipPoints = a.getGroundTipPoints();
+    Point * groundTipPointsB = b.getGroundTipPoints();
+
     a.translate((groundTipPoints[0].x - groundTipPoints[1].x) / 2, (groundTipPoints[0].y - groundTipPoints[1].y) / 2, 0);
-    delete [] groundTipPoints;
+    //delete [] groundTipPoints;
 
     Point lightSource(screenMiddleX, screenMiddleY, height * 1.2f);
-    a.build3D(height, lightSource, height * 20);
+    a.build3D(lightSource, height * 20);
 
     // sb.clear();
     backgroundImage.drawTextured(sb, cloudTextureAnchor, cloudTextureWidth, cloudTextureHeight, cloudTextureCache);
 
-    ImageGroup IG("assets/nama/nama","assets/nama/positionTable.txt",screenMiddleX,screenMiddleY, 5);
-    IG.draw(sb);
-
+    ImageGroup IG("assets/nama/nama","assets/nama/positionTable.txt",screenMiddleX-325,screenMiddleY-300, 5);
+    Image petunjuk = util.convertImageFile("assets/petunjuk.txt", ct);
+    petunjuk.scale(Point(0,0,0),0.75,1);
+    petunjuk.translate(0,200,0);
+    
+    b.drawTextured(sb,screenMiddleX-325,screenMiddleY-300,grassTextureAnchor,grassTextureWidth,grassTextureHeight,grassTextureCache);
     a.draw(sb, screenMiddleX, screenMiddleY);
+    IG.draw(sb);
+    petunjuk.draw(sb);
+    logo.draw(sb);
     fb.draw(sb);
 
     int c = 0;
     groundTipPoints = a.getGroundTipPoints();
+    groundTipPointsB = b.getGroundTipPoints();
 
     initTermios(0);
     while (c != '=') {
@@ -109,50 +131,75 @@ int main(int argc, char *argv[]) {
       switch(c) {
         case 'a':
             a.rotateY(-2, (groundTipPoints[0].x + groundTipPoints[1].x) / 2, (groundTipPoints[0].y + groundTipPoints[1].y) / 2, groundTipPoints[0].z);
+            b.rotateY(-2, (groundTipPointsB[0].x + groundTipPointsB[1].x) / 2, (groundTipPointsB[0].y + groundTipPointsB[1].y) / 2, groundTipPointsB[0].z);            
             IG.rotatePositionY(-2, (groundTipPoints[0].x + groundTipPoints[1].x) / 2, (groundTipPoints[0].y + groundTipPoints[1].y) / 2, groundTipPoints[0].z);
           break;
         case 's':
             a.rotateX(-10, (groundTipPoints[0].x + groundTipPoints[1].x) / 2, (groundTipPoints[0].y + groundTipPoints[1].y) / 2, groundTipPoints[0].z);
+            b.rotateX(-10, (groundTipPointsB[0].x + groundTipPointsB[1].x) / 2, (groundTipPointsB[0].y + groundTipPointsB[1].y) / 2, groundTipPointsB[0].z);            
             IG.rotatePositionX(-10, (groundTipPoints[0].x + groundTipPoints[1].x) / 2, (groundTipPoints[0].y + groundTipPoints[1].y) / 2, groundTipPoints[0].z);
           break;
         case 'd':
             a.rotateY(2, (groundTipPoints[0].x + groundTipPoints[1].x) / 2, (groundTipPoints[0].y + groundTipPoints[1].y) / 2, groundTipPoints[0].z);
+            b.rotateY(2, (groundTipPointsB[0].x + groundTipPointsB[1].x) / 2, (groundTipPointsB[0].y + groundTipPointsB[1].y) / 2, groundTipPointsB[0].z);            
             IG.rotatePositionY(2, (groundTipPoints[0].x + groundTipPoints[1].x) / 2, (groundTipPoints[0].y + groundTipPoints[1].y) / 2, groundTipPoints[0].z);
           break;
         case 'w':
             a.rotateX(10, (groundTipPoints[0].x + groundTipPoints[1].x) / 2, (groundTipPoints[0].y + groundTipPoints[1].y) / 2, groundTipPoints[0].z);
-             IG.rotatePositionX(10, (groundTipPoints[0].x + groundTipPoints[1].x) / 2, (groundTipPoints[0].y + groundTipPoints[1].y) / 2, groundTipPoints[0].z);
+            b.rotateX(10, (groundTipPointsB[0].x + groundTipPointsB[1].x) / 2, (groundTipPointsB[0].y + groundTipPointsB[1].y) / 2, groundTipPointsB[0].z);            
+            IG.rotatePositionX(10, (groundTipPoints[0].x + groundTipPoints[1].x) / 2, (groundTipPoints[0].y + groundTipPoints[1].y) / 2, groundTipPoints[0].z);
           break;
         case 'u':
             a.translate(0,-10,0);
             groundTipPoints[0].translation(0,-10,0);
+            b.translate(0,-10,0);
+            groundTipPointsB[0].translation(0,-10,0);
+            IG.translatePos(0,-10,0);
           break;
         case 'j':
             a.translate(0,10,0);
             groundTipPoints[0].translation(0,10,0);
+            b.translate(0,10,0);
+            groundTipPointsB[0].translation(0,10,0);
+            IG.translatePos(0,10,0);
           break;
         case 'h':
             a.translate(-10,0,0);
             groundTipPoints[0].translation(-10,0,0);
+            b.translate(-10,0,0);
+            groundTipPointsB[0].translation(-10,0,0);
+            IG.translatePos(-10,0,0);
           break;
         case 'k':
             a.translate(10,0,0);
             groundTipPoints[0].translation(10,0,0);
+            b.translate(10,0,0);
+            groundTipPointsB[0].translation(10,0,0);
+            IG.translatePos(10,0,0);
           break;
         case 'i':
             a.translate(0,0,-10);
             groundTipPoints[0].translation(0,0,-10);
+            b.translate(0,0,-10);
+            groundTipPointsB[0].translation(0,0,-10);
+            IG.translatePos(0,0,-10);
           break;
         case 'n':
             a.translate(0,0,10);
             groundTipPoints[0].translation(0,0,10);
+            b.translate(0,0,10);
+            groundTipPointsB[0].translation(0,0,10);
+            IG.translatePos(0,0,10);
           break;
       }
-       sb.clear();
+      sb.clear();
       backgroundImage.drawTextured(sb, cloudTextureAnchor, cloudTextureWidth, cloudTextureHeight, cloudTextureCache);
+      b.drawTextured(sb,screenMiddleX-325,screenMiddleY-300,grassTextureAnchor,grassTextureWidth,grassTextureHeight,grassTextureCache);
       a.draw(sb, screenMiddleX, screenMiddleY);   
       //cout << IG.images[2].points[0].x << "," << IG.images[2].points[0].y << endl;
       IG.draw(sb);
+      petunjuk.draw(sb);
+      logo.draw(sb);
       fb.draw(sb);
     }
     resetTermios();
@@ -160,6 +207,9 @@ int main(int argc, char *argv[]) {
     delete [] * cloudTextureCache;
     delete [] cloudTextureCache;
     delete [] groundTipPoints;
+
+    delete [] * grassTextureCache;
+    delete [] grassTextureCache;
 
     return 0;
 }

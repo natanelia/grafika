@@ -26,7 +26,7 @@ class Drawing {
         virtual void draw(ShadowBuffer& sb)=0;
 
         virtual void rotate(Point axis, float angle);
-        virtual void translate(float dX, float dY);
+        virtual void translate(float dX, float dY, float dZ);
         virtual void scale(Point axis, float scalingFactorX, float scalingFactorY);
         virtual void clip(Point min, Point max, float scale);
 

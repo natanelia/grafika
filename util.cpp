@@ -45,11 +45,12 @@ public:
     }
 
     static vector<vector<Point> > convertPoint(map<string, vector<Point> > object, string word, int a, int b, int c, float x, float y, float z) {
-        Point p;
+        Point p, p2;
 
         vector<vector<Point> > image;
         vector<Point> points = object.find(word)->second;
         vector<Point> component;
+        vector<Point> heights;
         for (int j = 0; j < points.size(); j++) {
             while (!(points[j].x == -1000 && points[j].y == -1000 && points[j].z == -1000) && j < points.size()) {
                 p.x = a + points[j].x * x;
@@ -60,15 +61,21 @@ public:
                 j++;
             }
             component.pop_back();
-            p.x = points[j - 1].x;
-            p.y = points[j - 1].y;
-            p.z = points[j - 1].z;
+            component.pop_back();
+            
+            p.x = points[j - 2].x;
+            p.y = points[j - 2].y;
+            p.z = points[j - 2].z;
             component.push_back(p);
+
+            p2.x = points[j - 1].x;
+            p2.y = points[j - 1].y;
+            p2.z = points[j - 1].z;
+            component.push_back(p2);
 
             image.push_back(component);
             component.clear();
         }
-
         return image;
     }
 

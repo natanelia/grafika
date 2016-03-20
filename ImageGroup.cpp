@@ -29,20 +29,20 @@ void ImageGroup::insertPosition(string filename, int offsetX, int offsetY, int s
 	for (int i=0; i<images.size(); i++) {
 		Point p(points[i].x * scale + offsetX, points[i].y * scale + offsetY, 0);
 		images[i].position=p;
-		images[i].translate(p.x,p.y);
+		images[i].translate(p.x,p.y,0);
 	}
 }
 
 void ImageGroup::draw(ShadowBuffer& sb) {
 	for(int i=0; i<images.size(); i++) {
 
-		images[i].draw(sb);
+		images[i].drawName(sb);
 	}
 }
 
 void ImageGroup::translate(float dX, float dY,float dZ){
 	for(int i=0; i<images.size(); i++) {
-		images[i].translate(dX,dY);
+		images[i].translate(dX,dY,0);
 	}
 }
 
@@ -96,6 +96,18 @@ void ImageGroup::rotatePositionZ(float degree, float offsetX, float offsetY, flo
 
         temp.translation(offsetX,offsetY, offsetZ);
         images[i].setPosition(temp);
+	}
+}
+
+void ImageGroup::translatePos(float offsetX, float offsetY, float offsetZ){
+	for (int i=0; i<images.size();i++){
+		
+		images[i].position.translation(offsetX,offsetY,offsetZ);
+		if (offsetZ!=0){
+			images[i].project2dPos();
+		} else{
+			images[i].translate(offsetX,offsetY,offsetZ);
+		}
 	}
 }
 

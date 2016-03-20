@@ -32,10 +32,11 @@ void Drawing::rotate(Point axis, float angle) {
     }
 }
 
-void Drawing::translate(float dX, float dY) {
+void Drawing::translate(float dX, float dY, float dZ) {
     for (int i = 0; i < points.size(); i++) {
         points[i].x += dX;
         points[i].y += dY;
+        points[i].z += dY;
     }
 }
 

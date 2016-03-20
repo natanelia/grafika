@@ -24,6 +24,7 @@ public:
     void rotatePositionX(float degree, float offsetX, float offsetY, float offsetZ);
     void rotatePositionY(float degree, float offsetX, float offsetY, float offsetZ);
     void rotatePositionZ(float degree, float offsetX, float offsetY, float offsetZ);
+    void translatePos(float offsetX, float offsetY, float offsetZ);
 };
 
 #endif

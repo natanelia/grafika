@@ -21,7 +21,8 @@ public:
     //int type;
     Color color;
     Color borderColor;
-
+    int height;
+    
     Shape();
     Shape(vector<Point>& points);
     Shape(Point points[], int n);

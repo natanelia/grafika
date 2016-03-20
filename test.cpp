@@ -32,7 +32,7 @@ public:
             Point midAxis((tipPoints[0].x + tipPoints[1].x) / 2, (tipPoints[0].y + tipPoints[1].y) / 2, 0 , 0);
             //kapal.rotate(midAxis, 5);
             //kapal.scale(midAxis, 1.005, 1.005);
-            kapal.translate(1,0);
+            //kapal.translate(1,0);
 
             sb.clear();
             kapal.draw(sb);
