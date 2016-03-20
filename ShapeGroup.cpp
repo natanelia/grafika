@@ -208,42 +208,19 @@ int ShapeGroup::getFront(vector<Point> plane1, vector<Point> plane2) //harusnya 
         if (plane1[i].z < plane1[index].z)
             index = i;
     }
-    Shape s1(plane1);
-    Point * tipPoints1 = s1.getTipPoints();
-    Point middleOfPlane1((tipPoints1[0].x + tipPoints1[1].x) / 2, (tipPoints1[0].y + tipPoints1[1].y) / 2, (tipPoints1[0].z + tipPoints1[1].z) / 2);
-    Point middleOfPlane1B(middleOfPlane1.x, middleOfPlane1.y, middleOfPlane1.z - 10);
-    vector<Point> middleOfPlane1ZVector;
-    middleOfPlane1ZVector.push_back(middleOfPlane1);
-    middleOfPlane1ZVector.push_back(middleOfPlane1B);
 
-    Shape s2(plane2);
-    Point * tipPoints2 = s2.getTipPoints();
-    Point middleOfPlane2((tipPoints2[0].x + tipPoints2[1].x) / 2, (tipPoints2[0].y + tipPoints2[1].y) / 2, (tipPoints2[0].z + tipPoints2[1].z) / 2);
-    Point middleOfPlane2B(middleOfPlane2.x, middleOfPlane2.y, middleOfPlane2.z - 10);
-    vector<Point> middleOfPlane2ZVector;
-    middleOfPlane2ZVector.push_back(middleOfPlane2);
-    middleOfPlane2ZVector.push_back(middleOfPlane2B);
-
-    Point plane1IntersectOnPlane2 = findIntersection(middleOfPlane1ZVector, plane2);
-    Point plane2IntersectOnPlane1 = findIntersection(middleOfPlane2ZVector, plane1);
-
-    if (plane1IntersectOnPlane2.z <= plane2IntersectOnPlane1.z) {
-        return 1;
-    } else {
-        return 2;
-    }
-
-    /*Point p1(plane1[index].x,plane1[index].y,plane1[index].z);
+    Point p1(plane1[index].x,plane1[index].y,plane1[index].z);
     Point p2(plane1[index].x,plane1[index].y,plane1[index].z + 10);
     vector<Point> line;
     line.push_back(p1);
+
     line.push_back(p2);
     Point intersect1 = findIntersection(line,plane1);
     Point intersect2 = findIntersection(line,plane2);
     if (intersect1.z > intersect2.z)
         return 1;
     else
-        return 2;*/
+        return 2;
 }
 
 int ShapeGroup::findZMax(vector<Point> plan){
@@ -265,34 +242,44 @@ int ShapeGroup::getHighestZIndexShape(Shape& plane1, Shape& plane2) //harusnya d
     middleOfPlane1ZVector.push_back(middleOfPlane1);
     middleOfPlane1ZVector.push_back(middleOfPlane1B);
 
-    Point * tipPoints2 = plane2.getTipPoints();
-    Point middleOfPlane2((tipPoints2[0].x + tipPoints2[1].x) / 2, (tipPoints2[0].y + tipPoints2[1].y) / 2, (tipPoints2[0].z + tipPoints2[1].z) / 2);
-    Point middleOfPlane2B(middleOfPlane2.x, middleOfPlane2.y, middleOfPlane2.z - 10);
-    vector<Point> middleOfPlane2ZVector;
-    middleOfPlane2ZVector.push_back(middleOfPlane2);
-    middleOfPlane2ZVector.push_back(middleOfPlane2B);
-
     Point plane1IntersectOnPlane2 = findIntersection(middleOfPlane1ZVector, plane2.points);
-    Point plane2IntersectOnPlane1 = findIntersection(middleOfPlane2ZVector, plane1.points);
 
-    return (plane1IntersectOnPlane2.z < plane2IntersectOnPlane1.z);
+    delete [] tipPoints1;
+    return (plane1IntersectOnPlane2.z > middleOfPlane1.z);
 }
 
 void ShapeGroup::sortLayer(){
     int i, j, numLength = pointToPrint.size();
     vector<Point> key;
+    Color temp;
     for(j = 1; j < numLength; j++) { // Start with 1 (not 0)
         key = pointToPrint[j];
-        for(i = j - 1; (i >= 0) && (getFront(pointToPrint[i],key)==1); i--) { // Smaller values move up
+        temp = colorToPrint[j];
+        for(i = j - 1; (i >= 0) && (getFront(pointToPrint[i],key)==2); i--) { // Smaller values move up
             pointToPrint[i+1] = pointToPrint[i];
+            colorToPrint[i+1] = colorToPrint[i];
         }
         pointToPrint[i+1] = key;    //Put key into its proper location
+        colorToPrint[i+1] = temp;
     }
 }
 
 vector<Shape> * ShapeGroup::getSortedShapes() {
     vector<Shape> * shapesClone = new vector<Shape>(shapes);
-    for (int i = shapesClone->size() - 1; i >= 0; i--) {
+    for (int j = 0; j < shapesClone->size(); j++) {
+        Shape max = shapesClone->at(j);
+        int idMax = j;
+        for (int i = j + 1; i < shapesClone->size(); i++) {
+            if (getHighestZIndexShape(shapesClone->at(i), max)) {
+                max = shapesClone->at(i);
+                idMax = i;
+            }
+        }
+        Shape temp = shapesClone->at(j);
+        shapesClone->at(j) = max;
+        shapesClone->at(idMax) = temp;
+    }
+/*    for (int i = shapesClone->size() - 1; i >= 0; i--) {
         Shape key = shapesClone->at(i);
         int j = i - 1;
         while (j >= 0 && getHighestZIndexShape(shapesClone->at(j), key)) {
@@ -300,7 +287,7 @@ vector<Shape> * ShapeGroup::getSortedShapes() {
             j--;
         }
         shapesClone->at(j + 1) = key;
-    }
+    }*/
 /*
     for (int j = 1; j < shapesClone->size(); j++) {
         Shape key = shapesClone->at(j);
@@ -315,10 +302,17 @@ vector<Shape> * ShapeGroup::getSortedShapes() {
 }
 
 void ShapeGroup::projectTo2D(float offsetX, float offsetY){
-    vector<Shape> * sC = this->getSortedShapes();
-    vector<Shape> shapesClone = * sC;
+    vector<Shape> shapesClone = * this->getSortedShapes();
+    cout << "SIZE: " << shapesClone.size() << endl;
+    for (int i = 0; i < shapesClone.size(); i++) {
+        Point * tP = shapesClone[i].getTipPoints();
+        Point mP((tP[0].x + tP[1].x) / 2, (tP[0].y + tP[1].y) / 2, (tP[0].z + tP[1].z) / 2);
+        cout << i << ": "; mP.print();
+        delete [] tP;
+    }
     // vector<Shape> shapesClone = shapes;
     pointToPrint.clear();
+    colorToPrint.clear();
     int a = 0;
     for(int i = shapesClone.size() - 1; i >= 0; --i){
         vector<Point> temp;
@@ -328,6 +322,7 @@ void ShapeGroup::projectTo2D(float offsetX, float offsetY){
             Point p(newX, newY, shapesClone[i].points[j].z);
             temp.push_back(p);
         }
+        colorToPrint.push_back(shapesClone[i].color);
         pointToPrint.push_back(temp);
     }
     // sortLayer();
@@ -559,47 +554,55 @@ void ShapeGroup::splitAvailable(vector<Line>  &available, vector<Point> demand, 
 
 void ShapeGroup::splitAvailable(vector<Line> &available, vector<Point> demand, Color c, ShadowBuffer& sb) {
     for (int j=0; j<demand.size()-1;j+=2) {
-        vector<Line> newAvailable;
-
-        for (int i= 0; i < available.size(); i++ ) {
+        //vector<Line> newAvailable;
+        int i=0;
+        while(i< available.size()){
+        //for (int i= 0; i < available.size(); i++ ) {
             if (available[i].getPoint2().x<=available[i].getPoint1().x) { //sudah tidak ada slot
-                   
+                i++;         
             } else if (demand[j].x > available[i].getPoint2().x) { //demand berada di kanan available
-                newAvailable.push_back(available[i]); 
+                //newAvailable.push_back(available[i]);
+                i++; 
             } else if (demand[j+1].x < available[i].getPoint1().x) { //demand di kiri available
-                newAvailable.push_back(available[i]); 
+                //newAvailable.push_back(available[i]);
+                i++; 
             } else if ((available[i].getPoint1().x <= demand[j].x) && (demand[j+1].x <= available[i].getPoint2().x)) { //demand berada di tengah
                 Line split1(available[i].getPoint1(), Point(demand[j].x-1, available[i].getPoint1().y,0));
 
                 Line split2(Point(demand[j+1].x+1,available[i].getPoint2().y,0), available[i].getPoint2());
-
-                newAvailable.push_back(split1);
-                newAvailable.push_back(split2);
+                available.push_back(split1);
+                available.push_back(split2);
+                //newAvailable.push_back(split1);
+                //newAvailable.push_back(split2);
 
                 Line line(demand[j], demand[j+1]);
                 line.color = c;
                 line.draw(sb);
+                available.erase(available.begin()+i);
             } else if (available[i].getPoint1().x <= demand[j].x) { //demand lebih banyak kebelakang
                 Line split(available[i].getPoint1(), Point(demand[j].x-1, available[i].getPoint1().y,0));
-                newAvailable.push_back(split);
+                //newAvailable.push_back(split);
+                available.push_back(split);
 
                 Line line(demand[j], Point(available[i].getPoint2().x,demand[j].y,0));
                 line.color = c;
                 line.draw(sb);
+                available.erase(available.begin()+i);
 
             } else if (demand[j+1].x <= available[i].getPoint2().x) { //demand lebih banyak di depan
                 Line split(Point(demand[j+1].x+1,available[i].getPoint2().y,0), available[i].getPoint2());
-
+                available.push_back(split);
                 Line line(Point(available[i].getPoint1().x,demand[j+1].y,0),demand[j+1]);
                 line.color = c;
                 line.draw(sb);
-
-                newAvailable.push_back(split);
+                available.erase(available.begin()+i);
+                //newAvailable.push_back(split);
             } else {
-                newAvailable.push_back(available[i]); 
+                //newAvailable.push_back(available[i]);
+                i++;
             }
         }
-        available = newAvailable;
+        //available = newAvailable;
     }
     
         
@@ -807,7 +810,7 @@ void ShapeGroup::scanLineFill3D(ShadowBuffer& sb, Shape form) {
                     if(ListOfIntersectPoints.size() > 0) {
                         vector<Point> result = sortVector(ListOfIntersectPoints);
                     //if (result.size() > 0) {
-                        splitAvailable(available, result, shapes[k].color, sb);            
+                        splitAvailable(available, result, colorToPrint[k] , sb);            
                     }
                 }
             } 
@@ -819,7 +822,7 @@ void ShapeGroup::scanLineFill3D(ShadowBuffer& sb, Shape form) {
 void ShapeGroup::build3D(int height, Point& lightSource, int const lightRadius) {
     int batas = shapes.size();
     for (int k = 0; k < batas; k++) {
-        for(int i = 0; i < shapes[k].points.size(); i++){
+        /*for(int i = 0; i < shapes[k].points.size(); i++){
             int j;
             if (i  != shapes[k].points.size() - 1) {
                 j = i + 1;
@@ -852,7 +855,7 @@ void ShapeGroup::build3D(int height, Point& lightSource, int const lightRadius) 
             // c.print();
 
             shapes.push_back(s);
-        }
+        }*/
         vector<Point > p;
         for(int i = 0; i < shapes[k].points.size();i++){
             Point temp(shapes[k].points[i].x,shapes[k].points[i].y,height,shapes[k].points[i].tag);

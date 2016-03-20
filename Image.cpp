@@ -14,6 +14,14 @@ Image::Image(Point points[], Color colors[], int n) : Drawing(points, n) {
     }
 }
 
+Image::Image(vector<Point>& points, vector<Color>& colors, Point position){
+    for (int i = 0; i < colors.size(); ++i) {
+        this->colors.push_back(colors[i]);
+    }
+    this->position = position;
+    translate(position.x, position.y);
+}
+
 void Image::draw(ShadowBuffer& sb) {
     for (int i = 0; i < points.size(); ++i) {
         sb.plot((int)(points[i].x), (int)(points[i].y), colors[i]);
@@ -61,4 +69,9 @@ Point& Image::getWidthAndHeight() {
 
     Point * ret = new Point(width, height, 0);
     return *ret;
+}
+
+void Image::setPosition(Point p) {
+    translate(p.x - position.x, p.y - position.y);
+    this->position = p;    
 }

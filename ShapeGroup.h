@@ -29,7 +29,7 @@ public:
     Color color;
     vector<Shape> shapes;
     vector<vector<Point> > pointToPrint;
-
+    vector<Color> colorToPrint;
     ShapeGroup(string objName, float offsetX, float offsetY, int scale);
 
     void draw(ShadowBuffer& sb, float offsetX, float offsetY);
