@@ -719,9 +719,9 @@ void ShapeGroup::build3D(Point& lightSource, int const lightRadius) {
             if (percentage > 1) percentage = 1;
             percentage = 1 - percentage;
             percentage = pow(percentage, 3);
-            c.r = rand() % 255;
-            c.b = rand() % 255;
-            c.r = rand() % 255;
+            c.r = 0;
+            c.b = 150;
+            c.r = 0;
             s.setColor(c);
             // c.print();
 

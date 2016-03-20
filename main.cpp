@@ -65,6 +65,7 @@ int main(int argc, char *argv[]) {
 
     ColorTable ct("assets/ColorTable.ct");
     Image cloudTexture = util.convertImageFile("assets/texture-clouds.txt", ct);
+    cloudTexture.scale(Point(0,0,0),2.4,5.1);
     Color ** cloudTextureCache = cloudTexture.getCached();
     Point cloudTextureAnchor(0,0,0);
     Point cloudTextureWH = cloudTexture.getWidthAndHeight();
@@ -72,6 +73,7 @@ int main(int argc, char *argv[]) {
     int cloudTextureHeight = cloudTextureWH.y;
 
     Image grassTexture = util.convertImageFile("assets/texture-grass.txt", ct);
+    grassTexture.scale(Point(0,0,0),0.5,0.5);
     Color ** grassTextureCache = grassTexture.getCached();
     Point grassTextureAnchor(0,0,0);
     Point grassTextureWH = grassTexture.getWidthAndHeight();
@@ -104,10 +106,13 @@ int main(int argc, char *argv[]) {
     backgroundImage.drawTextured(sb, cloudTextureAnchor, cloudTextureWidth, cloudTextureHeight, cloudTextureCache);
 
     ImageGroup IG("assets/nama/nama","assets/nama/positionTable.txt",screenMiddleX-325,screenMiddleY-300, 5);
+    Image petunjuk = util.convertImageFile("assets/petunjuk.txt", ct);
+    petunjuk.scale(Point(0,0,0),1.5,2.3);
     
     b.drawTextured(sb,screenMiddleX-325,screenMiddleY-300,grassTextureAnchor,grassTextureWidth,grassTextureHeight,grassTextureCache);
     a.draw(sb, screenMiddleX, screenMiddleY);
     IG.draw(sb);
+    petunjuk.draw(sb);
     fb.draw(sb);
 
     int c = 0;
@@ -188,6 +193,7 @@ int main(int argc, char *argv[]) {
       a.draw(sb, screenMiddleX, screenMiddleY);   
       //cout << IG.images[2].points[0].x << "," << IG.images[2].points[0].y << endl;
       IG.draw(sb);
+      petunjuk.draw(sb);
       fb.draw(sb);
     }
     resetTermios();
